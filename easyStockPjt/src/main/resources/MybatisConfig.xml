@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.easystock.domain.FilesVO" alias="fvo"/>
+		<typeAlias type="com.easystock.domain.AccountVO" alias="avo"/>
+		<typeAlias type="com.easystock.domain.CommentVO" alias="cvo"/>
+		<typeAlias type="com.easystock.domain.DailyValueVO" alias="dvvo"/>
+		<typeAlias type="com.easystock.domain.EarningVO" alias="evo"/>
+		<typeAlias type="com.easystock.domain.MemberVO" alias="mvo"/>
+		<typeAlias type="com.easystock.domain.NewsVO" alias="nvo"/>
+		<typeAlias type="com.easystock.domain.StockVO" alias="svo"/>
+	</typeAliases>
+</configuration>

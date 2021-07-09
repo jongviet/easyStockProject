@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.bold {
+	font-weight:bolder;
+}
+
+
+#daily, #monthly {
+	width:100px;
+}
+
+#canvasDiv {
+	border-top: 1px solid black; 
+	border-bottom: 1px solid black; 
+	clear: both;
+}

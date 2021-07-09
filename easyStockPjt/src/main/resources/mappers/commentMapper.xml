@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommentMapper">
+	<insert id="post" parameterType="cvo">
+		insert into comment(symbol, writer, comment)
+		values (#{symbol}, #{writer}, #{comment})
+	</insert>
+	<select id="c_list" parameterType="String" resultType="cvo">
+		select * from comment where symbol = #{symbol}
+	</select>
+	
+	<!-- 좋아요 처리 -->
+	<update id="t_up" parameterType="HashMap">
+		update comment set t_up = t_up + #{num} where cNum = #{cNum}
+	</update>
+	<select id="chkliked" parameterType="HashMap" resultType="Int">
+		select count(likeNum) from liked where writer = #{writer} and cNum = #{cNum}
+	</select>
+	<insert id="onLiked" parameterType="HashMap">
+		insert into liked(cNum, writer) values(#{cNum}, #{writer})
+	</insert>
+	<delete id="offLiked" parameterType="HashMap">
+		delete from liked where cNum = #{cNum} and writer = #{writer}
+	</delete>
+</mapper>

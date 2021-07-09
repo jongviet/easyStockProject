@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StockMapper">
+	
+	<!-- company overview 데이터 등록용 -->
+	<insert id="s_insert" parameterType="svo">
+		insert into stock (symbol, fullName, description, sector, m_capitalization,
+		per, eps, pxt_insiders, pxt_institutions, year_high, year_low, avg_target)
+		values (#{symbol}, #{fullName}, #{description}, #{sector},
+		#{m_capitalization}, #{per}, #{eps}, #{pxt_insiders},
+		#{pxt_institutions}, #{year_high}, #{year_low}, #{avg_target})
+	</insert>
+	<!-- earning 데이터 등록용 -->
+	<insert id="e_insert" parameterType="evo">
+		insert into earning(symbol, reportedDate, reportedEPS, estimatedEPS)
+		values (#{symbol}, #{reportedDate}, #{reportedEPS}, #{estimatedEPS})
+	</insert>
+	
+	<select id="s_list" resultType="svo">
+		select * from stock order by m_capitalization desc
+	</select>
+	<select id="s_detail" parameterType="String" resultType="svo">
+		select * from stock where symbol = #{symbol}
+	</select>
+	<select id="e_list" parameterType="String" resultType="evo">
+		select * from earning where symbol = #{symbol} and reportedDate > '2017-12-31'
+	</select>
+</mapper>
