@@ -95,7 +95,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>실적발표일</th>
+							<th>reportedDate</th>
 							<th>reportedEPS</th>
 							<th>estimatedEPS</th>
 						</tr>
