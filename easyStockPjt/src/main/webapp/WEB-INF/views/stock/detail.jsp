@@ -33,7 +33,7 @@
 			<tr>
 				<td>Sector</td>
 				<td class="bold">${svo.sector}</td>
-				<td>MarketCapitalization</td>
+				<td>Market Capitalization</td>
 				<td class="bold"><fmt:formatNumber
 						value="${svo.m_capitalization}" pattern="#,###" />&nbsp;USD</td>
 			</tr>
