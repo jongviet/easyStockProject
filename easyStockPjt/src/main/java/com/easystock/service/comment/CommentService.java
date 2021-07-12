@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.easystock.domain.CommentVO;
+import com.easystock.domain.ReportVO;
 import com.easystock.persistence.comment.CommentDAORule;
 
 @Service
@@ -40,5 +41,15 @@ public class CommentService implements CommentServiceRule {
 			cdao.offLiked(cNum, writer);
 			return cdao.update(cNum, -1) > 0 ? 1 : 0;
 		}
+	}
+
+	@Override
+	public int delete(int cNum) {
+		return cdao.delete(cNum);
+	}
+
+	@Override
+	public int report(ReportVO rvo) {
+		return cdao.report(rvo);
 	}
 }

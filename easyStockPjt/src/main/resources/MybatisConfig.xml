@@ -10,5 +10,6 @@
 		<typeAlias type="com.easystock.domain.MemberVO" alias="mvo"/>
 		<typeAlias type="com.easystock.domain.NewsVO" alias="nvo"/>
 		<typeAlias type="com.easystock.domain.StockVO" alias="svo"/>
+		<typeAlias type="com.easystock.domain.ReportVO" alias="rvo"/>
 	</typeAliases>
 </configuration>
