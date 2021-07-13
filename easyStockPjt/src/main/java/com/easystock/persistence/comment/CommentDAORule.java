@@ -8,6 +8,9 @@ import java.util.List;
 public interface CommentDAORule {
 	public int insert(CommentVO cvo);
 	public List<CommentVO> selectList(String symbol);
+	
+	//좋아요삭제 후 댓글 삭제
+	public int cmtDel(int cNum);
 	public int delete(int cNum);
 
 	//좋아요처리
@@ -18,5 +21,6 @@ public interface CommentDAORule {
 	
 	//신고처리
 	public int report(ReportVO rvo);
+
 
 }

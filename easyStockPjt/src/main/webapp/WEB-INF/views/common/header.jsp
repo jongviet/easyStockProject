@@ -22,8 +22,10 @@
 
   <!-- 아이콘  -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-
 </head>
+<script>
+const ses = "<%=(String)session.getAttribute("ses")%>";
+</script>
 <body>
 <div class="jumbotron text-center" style="margin-bottom:0">
   <h1>HEADER</h1>

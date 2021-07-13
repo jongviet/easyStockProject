@@ -35,7 +35,6 @@ public class StockDAO implements StockDAORule {
   @Override
   public List<StockVO> selectList(PageVO pgvo) {
 	pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 12);
-	System.out.println(">>>>>>>>>>>>>" + pgvo.getCal_idx());
     return sql.selectList(NS+"s_list", pgvo);
   }
   

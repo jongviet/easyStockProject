@@ -110,6 +110,7 @@
 	</div>
 </div>
 
+
 <script src="/resources/bootstrap/js/bundle.js"></script>
 <script src="/resources/bootstrap/js/detail.js"></script>
 <jsp:include page="../common/footer.jsp" />

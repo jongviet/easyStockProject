@@ -33,6 +33,11 @@ public class CommentDAO implements CommentDAORule {
 	}
 	
 	@Override
+	public int cmtDel(int cNum) {
+		return sql.delete(NS+"like_del", cNum);
+	}
+	
+	@Override
 	public int delete(int cNum) {
 		return sql.delete(NS+"del", cNum);
 	}
@@ -73,4 +78,6 @@ public class CommentDAO implements CommentDAORule {
 	public int report(ReportVO rvo) {
 		return sql.insert(NS+"report", rvo);
 	}
+
+
 }

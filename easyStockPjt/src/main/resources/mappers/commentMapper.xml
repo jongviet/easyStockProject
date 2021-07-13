@@ -8,6 +8,9 @@
 	<select id="c_list" parameterType="String" resultType="cvo">
 		select * from comment where symbol = #{symbol}
 	</select>
+	<delete id="like_del">
+		delete from liked where cNum = #{cNum}
+	</delete>	
 	<delete id="del">
 		delete from comment where cNum = #{cNum}
 	</delete>

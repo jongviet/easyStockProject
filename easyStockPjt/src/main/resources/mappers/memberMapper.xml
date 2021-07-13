@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberMapper">
+	<insert id="join" parameterType="mvo">
+		insert into member (email, pwd) values (#{email}, #{pwd})
+	</insert>
+	<select id="login" parameterType="mvo" resultType="mvo">
+		select * from member where email = #{email} and pwd = #{pwd}
+	</select>
+	
+	<select id="e_chk" parameterType="String" resultType="int">
+		select count(email) from member where email = #{email}
+	</select>
+	<select id="t_chk" parameterType="String" resultType="int">
+		select count(email) from member where email = #{tester}
+	</select>
+	<insert id="t_join">
+		insert into member (email, pwd) values (#{tester}, #{pwd})	
+	</insert>
 
+	
 </mapper>

@@ -1,6 +1,5 @@
 /* Detail page 차트 시작 */
 
-
 /* 차트용 key */
     /**
      * Init Alpha Vantage with your API key.
@@ -202,7 +201,7 @@ function alpha_input_monthly(input) {
 		$(document).on("click", "#t_up", function(e) {
 			e.preventDefault();
 			let cNum = $(this).parent().parent("div.comment-footer").find("input[name='cNum']").val();
-			let writer = 'jongviet@gmail.com';  /* 로그인한 이메일로 변경 필요! */
+			let writer = ses;  /* 로그인한 이메일로 변경 필요! */
 			
 			let url_val = "/comment/cNum/"+cNum+"/"+writer + ".json";
 			
@@ -224,7 +223,7 @@ function alpha_input_monthly(input) {
 			let cNum = $(this).parent().parent().find("div.comment-footer").find("input[name='cNum']").val();
 			let symbol_val = $("#symbol").text();
 			
-			if(cmtWriter == 'jongviet@gmail.com') {
+			if(cmtWriter == ses) {
 			
 				var cfmDel = confirm('정말 삭제하시겠습니까?');
 				
@@ -284,7 +283,7 @@ function alpha_input_monthly(input) {
 	/* 댓글 쓰기  */
 	function posting() {
 		let symbol_val = $("#symbol").text();
-		let writer_val = 'jongviet@gmail.com';  /* 로그인한 이메일로 변경 필요! */
+		let writer_val = ses;  /* 로그인한 이메일로 변경 필요! */
 		let comment_val = $("#comment").val();
 
 		if (comment_val == null || comment_val == '') {
