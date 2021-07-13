@@ -47,8 +47,7 @@ public class CommentController {
 		return csv.delete(cNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@GetMapping(value = "/symbol/{symbol}", produces = { MediaType.APPLICATION_ATOM_XML_VALUE,
-			MediaType.APPLICATION_JSON_UTF8_VALUE })
+	@GetMapping(value = "/symbol/{symbol}", produces= {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public ResponseEntity<List<CommentVO>> list(@PathVariable String symbol) {
 		return new ResponseEntity<List<CommentVO>>(csv.getList(symbol), HttpStatus.OK);
 	}

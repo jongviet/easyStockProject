@@ -16,9 +16,8 @@
 	<button type="button" class="btn btn-light btn-md" id="monthly">Monthly</button>
 </div>
 <div class="text-right">
-	<a data-toggle="modal" data-target="#earningModal" id="earning"
-		href="#" style="font-weight: bold;">최근실적조회</a> | <a href="/stock/list"
-		style="font-weight: bold;">종목 리스트</a>
+	<a data-toggle="modal" data-target="#earningModal" id="earning" href="#" style="font-weight: bold;">최근실적조회</a> | 
+	<a href="/stock/list" style="font-weight: bold;">종목 리스트</a>
 </div>
 
 <div>
@@ -75,7 +74,7 @@
 	</form>
 </div>
 
-<div id="cmtBox"></div>
+<div id="cmtBox" onload="commentList(${svo.symbol});"></div>
 
 <!-- 실적 modal -->
 <div class="modal fade" id="earningModal" tabindex="-1"
@@ -110,4 +109,7 @@
 		</div>
 	</div>
 </div>
+
+<script src="/resources/bootstrap/js/bundle.js"></script>
+<script src="/resources/bootstrap/js/detail.js"></script>
 <jsp:include page="../common/footer.jsp" />

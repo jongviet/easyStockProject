@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.easystock.domain.EarningVO;
+import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
 import com.easystock.persistence.stock.StockDAORule;
 
@@ -30,8 +31,8 @@ public class StockService implements StockServiceRule {
 	}
 
 	@Override
-	public List<StockVO> getList() {
-		return sdao.selectList();
+	public List<StockVO> getList(PageVO pgvo) {
+		return sdao.selectList(pgvo);
 	}
 
 	@Override
@@ -42,5 +43,10 @@ public class StockService implements StockServiceRule {
 	@Override
 	public List<EarningVO> getEarningList(String symbol) {
 		return sdao.getEarningList(symbol);
+	}
+
+	@Override
+	public int getTotalCnt(PageVO pgvo) {
+		return sdao.selectOne(pgvo);
 	}
 }

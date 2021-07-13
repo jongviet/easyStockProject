@@ -1,5 +1,15 @@
 /* Detail page 차트 시작 */
 
+
+/* 차트용 key */
+    /**
+     * Init Alpha Vantage with your API key.
+     *
+     * @param {String} key
+     *   Your Alpha Vantage API key.
+     */
+    const alpha = alphavantage({ key: '72FY7BZXTG91TJBV' });
+
 /* 최초 로딩  */
 $(document).ready(function() {
 	let symbol = $("#symbol").text();
@@ -262,7 +272,7 @@ function alpha_input_monthly(input) {
 
 	/* 댓글 리스트 가져오기  */
 	function commentList(symbol) {
-		let url_val = "/comment/symbol/"+symbol;
+		let url_val = "/comment/symbol/"+symbol+".json";
 		
 		$.getJSON(url_val, function(result) {
 			print_commentList(result);
@@ -331,12 +341,11 @@ function alpha_input_monthly(input) {
         	return false;
         }
     });
-	
-	/* 페이지 로딩 후 댓글 리스트 */
+    
+    /* 최초 댓글 로딩 */
 	$(function() {
-		commentList($("#symbol").text());
+		commentList($("#symbol").text());		
 	});
-
-
+   
 /* Detail page 댓글 끝 */
 

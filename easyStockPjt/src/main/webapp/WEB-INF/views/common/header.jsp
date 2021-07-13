@@ -22,16 +22,7 @@
 
   <!-- 아이콘  -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-  <script src="/resources/bootstrap/js/bundle.js"></script>
-  <script type="application/javascript">
-    /**
-     * Init Alpha Vantage with your API key.
-     *
-     * @param {String} key
-     *   Your Alpha Vantage API key.
-     */
-    const alpha = alphavantage({ key: '72FY7BZXTG91TJBV' });
-  </script>
+
 </head>
 <body>
 <div class="jumbotron text-center" style="margin-bottom:0">

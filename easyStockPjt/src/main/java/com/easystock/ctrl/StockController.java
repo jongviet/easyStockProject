@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easystock.domain.EarningVO;
+import com.easystock.domain.PageVO;
+import com.easystock.domain.StockVO;
+import com.easystock.handler.PagingHandler;
 import com.easystock.service.stock.StockServiceRule;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -25,7 +28,16 @@ public class StockController {
 	@Inject
 	private StockServiceRule ssv;
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	
+	//신규 종목 등록
+	@RequestMapping(value = "/c_register", method = RequestMethod.POST)
+	public String register(@RequestParam StockVO svo) {
+		ssv.register(svo);
+		return "index";
+	}
+	
+	//어닝 등록
+	@RequestMapping(value = "/e_register", method = RequestMethod.POST)
 	public String register(@RequestParam String jsonData) {
 		JSONArray ja = new JSONArray(jsonData);
 		for (int i = 0; i < ja.length(); i++) {
@@ -40,10 +52,13 @@ public class StockController {
 		}
 		return "index";
 	}
-
+	
 	@GetMapping("/list")
-	public void list(Model model) {
-		model.addAttribute("s_list", ssv.getList());
+	public void list(Model model, PageVO pgvo) {
+		model.addAttribute("s_list", ssv.getList(pgvo));
+		int totalCnt = ssv.getTotalCnt(pgvo);
+		model.addAttribute("pghdl", new PagingHandler(totalCnt, pgvo));
+		
 	}
 
 	@GetMapping("/detail")

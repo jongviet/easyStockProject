@@ -10,19 +10,56 @@
 		#{m_capitalization}, #{per}, #{eps}, #{pxt_insiders},
 		#{pxt_institutions}, #{year_high}, #{year_low}, #{avg_target})
 	</insert>
-	<!-- earning 데이터 등록용 -->
+	<!-- earning -->
 	<insert id="e_insert" parameterType="evo">
 		insert into earning(symbol, reportedDate, reportedEPS, estimatedEPS)
 		values (#{symbol}, #{reportedDate}, #{reportedEPS}, #{estimatedEPS})
 	</insert>
-	
-	<select id="s_list" resultType="svo">
-		select * from stock order by m_capitalization desc
-	</select>
-	<select id="s_detail" parameterType="String" resultType="svo">
-		select * from stock where symbol = #{symbol}
-	</select>
 	<select id="e_list" parameterType="String" resultType="evo">
 		select * from earning where symbol = #{symbol} and reportedDate > '2017-12-31'
 	</select>
+	
+	<!-- stock -->
+	<select id="s_list" parameterType="pgvo" resultType="svo">
+		select @rownum:=@rownum+1 rowNum, s.* from stock s, (select @rownum:=0) temp
+		where symbol is not null <include refid="search"/>
+		order by m_capitalization desc
+		limit #{cal_idx}, #{countPerPage}
+	</select>
+	
+
+	<select id="s_detail" parameterType="String" resultType="svo">
+		select * from stock where symbol = #{symbol}
+	</select>
+
+	
+	
+	<!-- paging & searching -->
+	<select id="tc" parameterType="pgvo" resultType="int">
+		select count(symbol) as cnt from stock where symbol is not null
+		<include refid="search"/>
+	</select>
+	
+	<sql id="search">
+		<if test="range != null">
+			<trim prefix="and" suffix="">
+				<choose>
+					<when test="range == 'snc'.toString()">
+						symbol like CONCAT('%',#{keyword},'%') or
+						fullName like CONCAT('%',#{keyword},'%') or
+						sector like CONCAT('%',#{keyword},'%')
+					</when>
+					<when test="range == 's'.toString()">
+						symbol like CONCAT('%',#{keyword},'%')
+					</when>
+					<when test="range == 'n'.toString()">
+						fullName like CONCAT('%',#{keyword},'%')
+					</when>
+					<when test="range == 'c'.toString()">
+						sector like CONCAT('%',#{keyword},'%')
+					</when>
+				</choose>
+			</trim>
+		</if>
+	</sql>
 </mapper>

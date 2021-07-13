@@ -9,23 +9,29 @@
 <div class="form-group float-right">
 	<form action="/stock/list" class="form-inline">
 		<select class="form-control" name="range">
-			<option value="tcw"
-				<c:out value="${pghdl.pgvo.range eq 'tcw' ? 'selected' : '' }"/>>
+			<option value="snc"
+				<c:out value="${pghdl.pgvo.range eq 'snc' ? 'selected' : '' }"/>>
 				전체</option>
-			<option value="t"
-				<c:out value="${pghdl.pgvo.range eq 't' ? 'selected' : '' }"/>>
+			<option value="s"
+				<c:out value="${pghdl.pgvo.range eq 's' ? 'selected' : '' }"/>>
 				Symbol</option>
+			<option value="n"
+				<c:out value="${pghdl.pgvo.range eq 'n' ? 'selected' : '' }"/>>
+				Name</option>
 			<option value="c"
 				<c:out value="${pghdl.pgvo.range eq 'c' ? 'selected' : '' }"/>>
-				Name</option>
-			<option value="w"
-				<c:out value="${pghdl.pgvo.range eq 'w' ? 'selected' : '' }"/>>
 				Sector</option>
 		</select> 
 		<input class="form-control" type="text" name="keyword" value='<c:out value="${pghdl.pgvo.keyword }"/>'>
 		<button type="submit" class="btn btn-info">조회</button>
 	</form>
 </div>
+
+<script>
+	
+</script>
+
+
 <div style="overflow-x:auto; clear:both;">
 <table class="table table-hover">
 	<thead>
@@ -42,7 +48,7 @@
 		<c:forEach items="${s_list}" var="svo">
 			<tr>
 				<td>${svo.symbol }</td>
-				<td><a class="text-primary" href="/stock/detail?symbol=${svo.symbol}">${svo.fullName}</a></td>
+				<td><a href="/stock/detail?symbol=${svo.symbol}" class="text-info">${svo.fullName}</a></td>
 				<td>${svo.sector }</td>
 				<td>${svo.per }&nbsp;&nbsp;&nbsp;&nbsp;</td>
 				<td>${svo.eps }</td>
@@ -50,6 +56,11 @@
 			</tr>
 		</c:forEach>
 	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="6"><jsp:include page="../common/paging.jsp" /></td>
+		</tr>
+	</tfoot>	
 </table>
 </div>
 

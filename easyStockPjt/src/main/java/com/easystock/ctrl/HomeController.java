@@ -18,4 +18,9 @@ public class HomeController {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		return "index";
 	}
+	
+	@RequestMapping(value = { "/admin" }, method = { RequestMethod.GET })
+	public String admin() {
+		return "admin/admin";
+	}
 }

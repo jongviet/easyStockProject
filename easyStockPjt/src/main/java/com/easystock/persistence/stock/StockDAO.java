@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.easystock.domain.EarningVO;
+import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
 
 @Repository
@@ -30,9 +31,12 @@ public class StockDAO implements StockDAORule {
 	    return sql.insert(NS+"e_insert", evo);
 	  }
   
+  //페이징에 따른 리스트
   @Override
-  public List<StockVO> selectList() {
-    return sql.selectList(NS+"s_list");
+  public List<StockVO> selectList(PageVO pgvo) {
+	pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 10);
+	System.out.println(">>>>>>>>>>>>>" + pgvo.getCal_idx());
+    return sql.selectList(NS+"s_list", pgvo);
   }
   
   @Override
@@ -44,4 +48,9 @@ public class StockDAO implements StockDAORule {
   public List<EarningVO> getEarningList(String symbol) {
     return sql.selectList(NS+"e_list", symbol);
   }
+
+@Override
+public int selectOne(PageVO pgvo) {
+	return sql.selectOne(NS+"tc", pgvo);
+}
 }

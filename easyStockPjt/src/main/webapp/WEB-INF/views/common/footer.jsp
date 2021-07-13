@@ -10,7 +10,4 @@
   <p>FOOTER</p>
 </div>
 </body>
-
-
-<script src="/resources/bootstrap/js/custom.js"></script>
 </html>
