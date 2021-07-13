@@ -34,7 +34,7 @@ public class StockDAO implements StockDAORule {
   //페이징에 따른 리스트
   @Override
   public List<StockVO> selectList(PageVO pgvo) {
-	pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 10);
+	pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 12);
 	System.out.println(">>>>>>>>>>>>>" + pgvo.getCal_idx());
     return sql.selectList(NS+"s_list", pgvo);
   }

@@ -17,7 +17,7 @@
 </div>
 <div class="text-right">
 	<a data-toggle="modal" data-target="#earningModal" id="earning" href="#" style="font-weight: bold;">최근실적조회</a> | 
-	<a href="/stock/list" style="font-weight: bold;">종목 리스트</a>
+	<a href="/stock/list?pageIndex=${pgvo.pageIndex}&countPerPage=${pgvo.countPerPage}&range=${pgvo.range}&keyword=${pgvo.keyword}" style="font-weight: bold;">종목 리스트</a>
 </div>
 
 <div>

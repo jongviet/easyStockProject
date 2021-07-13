@@ -1,16 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:include page="common/header.jsp" />
-<jsp:include page="common/nav.jsp" />
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/bootstrap/css/custom.css">
 
-<ul>
-	<li><a href="/stock/list">종목리스트 : 페이징, 종목디테일, 댓글토론</a></li>
-	<li><a href="#">마이페이지 : 매수, 환전(모달?), 예수금 등</a></li>
-	<li><a href="#">메인페이지 : 3대지수, 환율정보, CNBC 주요 뉴스 등</a></li>
-	<li><a href="/admin">관리자페이지 : 종목 등록 처리</a></li>
-</ul>
+<c:if test="${Ses_email ne null }">
+	<script>
+		location.href = "main.jsp";
+	</script>
+</c:if>
+	<div class="container" id="memberForm">
+		<h3 style="color:#f5f5f5; font-weight:bolder;">EasyStock</h3>
+		<form method="post" id="form">
+			<input type="hidden" name="nextSt" value="login">
+			<div class="form-group">
+				<input class="form-control chk" type="email" name="email" id="email" placeholder="Email">
+			</div>
+			<div class="form-group">
+				<input class="form-control chk" type="password" name="pwd" placeholder="Password">
+			</div>
+			<div class="form-group">
+				<input class="form-control chk" type="hidden" name="pwdCfm" placeholder="Password Confirm">
+			</div>
+			<button class="btn btn-md btn-dark" id="loginBtn" type="submit">Login</button>
+			<div class="form-group text-center">
+				<a href="#" id="join" style="color:#f5f5f5">Join</a>
+				<a style="color:white">/</a>
+				<a href="#" id="look" style="color:#f5f5f5">Look Around</a>
+			</div>
+		</form>
+	</div>
 
+<script src="/resources/bootstrap/js/jquery-3.6.0.min.js"></script>
+<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+<script src="/resources/bootstrap/js/member.js"></script>
 
-
-<jsp:include page="common/footer.jsp" />

@@ -48,7 +48,7 @@
 		<c:forEach items="${s_list}" var="svo">
 			<tr>
 				<td>${svo.symbol }</td>
-				<td><a href="/stock/detail?symbol=${svo.symbol}" class="text-info">${svo.fullName}</a></td>
+				<td><a href="/stock/detail?symbol=${svo.symbol}&pageIndex=${pghdl.pgvo.pageIndex}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}" class="text-info">${svo.fullName}</a></td>
 				<td>${svo.sector }</td>
 				<td>${svo.per }&nbsp;&nbsp;&nbsp;&nbsp;</td>
 				<td>${svo.eps }</td>

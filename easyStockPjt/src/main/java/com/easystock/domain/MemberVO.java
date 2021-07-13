@@ -7,6 +7,11 @@ public class MemberVO {
 	private double deposit_usd;
 
 	public MemberVO() {}
+	
+	public MemberVO(String email, String pwd) {
+		this.email = email;
+		this.pwd = pwd;
+	}
 
 	public String getEmail() {
 		return email;
