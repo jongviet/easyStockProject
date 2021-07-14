@@ -7,4 +7,6 @@ public interface MemberServiceRule {
 	public int chkEmail(String email);
 	public MemberVO login(MemberVO mvo);
 	public int chkTester(String tester);
+	
+	public int chkDeposit(String email); //잔고 체크
 }

@@ -18,5 +18,8 @@
 		insert into member (email, pwd) values (#{tester}, #{pwd})	
 	</insert>
 
+	<select id="deposit" parameterType="String" resultType="int">
+		select deposit_usd from member where email = #{email}	
+	</select>
 	
 </mapper>

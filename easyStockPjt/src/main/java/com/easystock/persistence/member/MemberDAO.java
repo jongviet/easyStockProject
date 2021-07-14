@@ -48,4 +48,9 @@ public class MemberDAO implements MemberDAORule {
 		map.put("pwd",(String)pwd);
 		return sql.insert(NS+"t_join", map);
 	}
+
+	@Override
+	public int selectDeposit(String email) {
+		return sql.selectOne(NS+"deposit", email);
+	}
 }

@@ -42,4 +42,9 @@ public class MemberService implements MemberServiceRule {
 			return 0; //실패
 		}
 	}
+
+	@Override
+	public int chkDeposit(String email) {
+		return mdao.selectDeposit(email);
+	}
 }

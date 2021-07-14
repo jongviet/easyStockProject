@@ -23,4 +23,9 @@ public class HomeController {
 	public String admin() {
 		return "admin/admin";
 	}
+	
+	@RequestMapping(value = { "/test" }, method = { RequestMethod.GET })
+	public String test() {
+		return "test";
+	}
 }

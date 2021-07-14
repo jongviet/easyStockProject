@@ -16,17 +16,21 @@
   
   <!-- favicon -->
   <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico" />
-  
-  <!-- 차트 -->
-  <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
 
   <!-- 아이콘  -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
 </head>
 <script>
 const ses = "<%=(String)session.getAttribute("ses")%>";
+const ses_id = "<%=(String)session.getAttribute("ses_id")%>";
 </script>
 <body>
 <div class="jumbotron text-center" style="margin-bottom:0">
-  <h1>HEADER</h1>
+
+<a href="/stock/list">종목리스트 - 완료</a><br>
+<a href="#">거래소 : 매수&매도, 예수금 현황, 환전, 수익률</a><br>
+<a href="#">메인페이지 : 3대지수, 환율정보, CNBC 주요 뉴스 등</a><br>
+<a href="/admin">관리자페이지 : 종목 등록, 회원 댓글 처리</a><br>
+<a href="/test">테스트페이지</a>
+
 </div>

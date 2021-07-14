@@ -11,4 +11,6 @@ public interface MemberDAORule {
 	//테스터 생성
 	public int selectTester(String tester);
 	public int insert(String tester);
+	//잔고확인
+	public int selectDeposit(String email);
 }

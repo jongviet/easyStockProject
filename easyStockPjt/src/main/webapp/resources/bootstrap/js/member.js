@@ -7,7 +7,7 @@ $("#join").on("click", function() {
     $("input[name=pwdCfm]").prop("type", "password");
     $("#loginBtn").attr("id", "joinBtn");
     $("#joinBtn").attr("disabled", true);
-    $("#joinBtn").attr("class", "btn btn-md btn-dark");
+    $("#joinBtn").attr("class", "btn btn-md mb-1");
     $("input[name=email]").val("");
     $("input[name=pwd]").val("");
     $("#form").attr("action","/member/join");
@@ -29,11 +29,11 @@ $(".chk").on("input", function() {
     if (pwd == pwdCfm && email != null && email != "" && pwd != null && pwd != ""
         && pwdCfm != null && pwdCfm != "") {
         $("#joinBtn").attr("disabled", false);
-        $("#joinBtn").attr("class", "btn btn-md btn btn-dark");
+        $("#joinBtn").attr("class", "btn btn-md mb1");
     }
     if (pwd != pwdCfm || email == null || email == "") {
         $("#joinBtn").attr("disabled", true);
-        $("#joinBtn").attr("class", "btn btn-md btn btn-dark");
+        $("#joinBtn").attr("class", "btn btn-md mb1");
     }
 });
 

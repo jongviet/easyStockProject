@@ -4,6 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:include page="../common/header.jsp" />
 <jsp:include page="../common/nav.jsp" />
+<!-- 디테일용 chartjs -->
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
 
 <h3 style="float: left">${svo.fullName}</h3>
 <h5 style="float: right;">Avg-Target : ${svo.avg_target} USD</h5>
@@ -17,7 +19,8 @@
 </div>
 <div class="text-right">
 	<a data-toggle="modal" data-target="#earningModal" id="earning" href="#" style="font-weight: bold;">최근실적조회</a> | 
-	<a href="/stock/list?pageIndex=${pgvo.pageIndex}&countPerPage=${pgvo.countPerPage}&range=${pgvo.range}&keyword=${pgvo.keyword}" style="font-weight: bold;">종목 리스트</a>
+	<a href="/stock/exchange" style="font-weight: bold;">거래하기</a> |
+	<a href="/stock/list?pageIndex=${pgvo.pageIndex}&countPerPage=${pgvo.countPerPage}&range=${pgvo.range}&keyword=${pgvo.keyword}" style="font-weight: bold;">종목 리스트</a> 
 </div>
 
 <div>

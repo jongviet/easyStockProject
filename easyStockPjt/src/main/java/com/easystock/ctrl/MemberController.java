@@ -32,6 +32,10 @@ public class MemberController {
 		int result = msv.chkTester(tester);
 		if(result > 0) {
 			ses.setAttribute("ses", tester);
+			String[] array = tester.split("@");
+			String ses_id = array[0];
+			System.out.println(ses_id);
+			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
 			return "1";
 		}
@@ -63,6 +67,10 @@ public class MemberController {
 		MemberVO member = msv.login(mvo);
 		if(member != null) {
 			ses.setAttribute("ses", member.getEmail());
+			String[] array = member.getEmail().split("@");
+			String ses_id = array[0];
+			System.out.println(ses_id);
+			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
 		}
 		reAttr.addFlashAttribute("result", ses.getAttribute("ses") != null ? 
@@ -80,6 +88,12 @@ public class MemberController {
 		ses.invalidate();
 		reAttr.addFlashAttribute("result", "로그아웃 되었습니다.");
 		return "redirect:/";
+	}
+	
+	//잔고 체크
+	@PostMapping("/chkDeposit")
+	public int chkDeposit(@RequestParam("email") String email) {
+		return msv.chkDeposit(email);
 	}
 	
 }
