@@ -15,4 +15,7 @@ public interface StockServiceRule {
   public List<EarningVO> getEarningList(String symbol); //어닝리스트
   
   public int getTotalCnt(PageVO pgvo); //스톡 페이징용
+  
+  public int update(StockVO svo); //거래소 가격 데이터 업데이트
+  public List<StockVO> getPriceList(); //스톡 가격 추출 -> account 가격 업데이트용
 }

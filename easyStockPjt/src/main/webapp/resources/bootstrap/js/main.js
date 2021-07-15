@@ -1,19 +1,3 @@
-/* 자산현황 */
-$(document).ready(function() {
-	var email_val = ses;	
-	$.ajax({
-		url : '/member/chkDeposit',
-		type : 'post',
-		data : {
-			email : email_val,
-		},
-	}).done(function(result) {
-		console.log(typeof result);
-		console.log(parseInt(result));
-		$("#deposit").text(parseInt(result));
-	});
-});
-
 /* chartjs tooltip 용 */
 $(document).ready(function() {
 	var ctx = document.getElementById("myChartTwo");

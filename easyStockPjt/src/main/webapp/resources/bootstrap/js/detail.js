@@ -7,7 +7,7 @@
      * @param {String} key
      *   Your Alpha Vantage API key.
      */
-    const alpha = alphavantage({ key: '72FY7BZXTG91TJBV' });
+    const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
 
 /* 최초 로딩  */
 $(document).ready(function() {

@@ -2,17 +2,46 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 <jsp:include page="common/header.jsp" />
 <jsp:include page="common/nav.jsp" />
 <!-- 메인용 chartjs -->
 <script src="/resources/bootstrap/js/Chart.min.js"></script>
+<script src="/resources/bootstrap/js/bundle.js"></script>
 <script src="/resources/bootstrap/js/main.js"></script>
+
+<script>
+/* 종목 보유 내역 있을 시 작동 */
+<c:if test="${h_list ne null}">
+	var symbol_arr = [];
+	var h_price_arr = [];
+	var h_qty_arr = [];
+	
+
+	/* 해당 종목의 현재가 가져오기 */
+	<c:forEach items="${h_list}" var="avo">
+		var symbol = "${avo.symbol}";
+		var h_price = "${avo.avg_h_price}";
+		var h_qty = "${avo.h_qty}";
+		symbol_arr.unshift(symbol);
+		h_price_arr.unshift(Number(h_price));
+		h_qty_arr.unshift(Number(h_qty));
+		
+	</c:forEach>
+	
+/* 	console.log(h_price_arr[0] * h_qty_arr[0]); */
+
+</c:if>
+</script>
+
+
 
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6 col-md-6 mx-auto float-left text-center">
 			<h3 class="mb-4 text-center bold" style="color: #1F9688">${ses_id}<span style="color:#767675; !important">님의 자산현황</span></h3>
-			<h5 class="text-center bold mb-3" style="color: #1F9688">총자산&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="deposit"></span>USD</h5>
+			<h5 class="text-center bold mb-3" style="color: #1F9688">총자산&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span id="deposit">${deposit}</span>&nbsp;USD</h5>
 			<table class="mb-5" style="width: 525px; height: 200px;">
 				<tbody>
 					<tr style="border-top: 1.8px solid #1F9688">
@@ -212,4 +241,5 @@ function current_asset(dataArr) {
 		</div>
 	</div>
 </div>
+
 <jsp:include page="common/footer.jsp" />

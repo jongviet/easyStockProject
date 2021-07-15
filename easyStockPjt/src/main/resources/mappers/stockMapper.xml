@@ -26,12 +26,18 @@
 		order by m_capitalization desc
 		limit #{cal_idx}, #{countPerPage}
 	</select>
-	
-
 	<select id="s_detail" parameterType="String" resultType="svo">
 		select * from stock where symbol = #{symbol}
 	</select>
 
+	<!-- stock price update -->
+	<update id="p_insert" parameterType="svo">
+		update stock set cur_price = #{cur_price} where symbol = #{symbol}
+	</update>
+	
+	<select id="s_list_account" resultType="HashMap">
+		select symbol, cur_price from stock
+	</select>
 	
 	
 	<!-- paging & searching -->

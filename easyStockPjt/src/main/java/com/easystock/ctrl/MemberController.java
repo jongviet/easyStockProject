@@ -1,5 +1,9 @@
 package com.easystock.ctrl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -12,10 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.StockVO;
 import com.easystock.service.member.MemberServiceRule;
+import com.easystock.service.stock.StockServiceRule;
 
 @RequestMapping("/member/*")
 @Controller
@@ -24,6 +29,9 @@ public class MemberController {
 
 	@Inject
 	private MemberServiceRule msv;
+	
+	@Inject
+	private StockServiceRule ssv;
 	
 	//테스터 계정 체크, 가입 후, session 부여
 	@ResponseBody
@@ -63,36 +71,50 @@ public class MemberController {
 	
 	//로그인
 	@PostMapping("/login")
-	public String login(MemberVO mvo, HttpSession ses, RedirectAttributes reAttr) {
+	public String login(MemberVO mvo, HttpSession ses, Model model) {
 		MemberVO member = msv.login(mvo);
+		
 		if(member != null) {
+			
+			//1.세션 처리
 			ses.setAttribute("ses", member.getEmail());
 			String[] array = member.getEmail().split("@");
 			String ses_id = array[0];
 			System.out.println(ses_id);
 			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
+			
+			//2.예수금, 종목 보유 현황, stock 전일 종가
+			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
+			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
+			
+			//3.Stock의 cur_price 가져와서 모든 Account 테이블 row 업데이트
+			List<StockVO> s_list = ssv.getPriceList();			
+			msv.updatePrice(s_list);
+			
+			return "main";
+			
+		} else {
+			model.addAttribute("msg", "아이디나 비밀번호가 올바르지 않습니다.");
+			model.addAttribute("url", "/");
+			return "temp";
 		}
-		reAttr.addFlashAttribute("result", ses.getAttribute("ses") != null ? 
-				"로그인 성공" : "로그인 실패");
-		return "redirect:/";
 	}
-	
 	@GetMapping("/main")
 	public String main() {
 		return "main";	
 	}
 	
 	@GetMapping("/logout")
-	public String logout(RedirectAttributes reAttr, HttpSession ses) {
+	public String logout(HttpSession ses) {
 		ses.invalidate();
-		reAttr.addFlashAttribute("result", "로그아웃 되었습니다.");
 		return "redirect:/";
 	}
 	
 	//잔고 체크
+	@ResponseBody
 	@PostMapping("/chkDeposit")
-	public int chkDeposit(@RequestParam("email") String email) {
+	public String chkDeposit(@RequestParam("email") String email) {
 		return msv.chkDeposit(email);
 	}
 	

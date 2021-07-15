@@ -5,7 +5,7 @@
      * @param {String} key
      *   Your Alpha Vantage API key.
      */
-    const alpha = alphavantage({ key: '72FY7BZXTG91TJBV' });
+    const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
     
     $("#inputBtn").on("click", function() {
 	let input_val = $("#input").val();

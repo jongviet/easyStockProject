@@ -52,4 +52,15 @@ public class StockDAO implements StockDAORule {
 public int selectOne(PageVO pgvo) {
 	return sql.selectOne(NS+"tc", pgvo);
 }
+
+@Override
+public int updatePrice(StockVO svo) {
+	return sql.update(NS+"p_insert", svo);
+}
+
+@Override
+public List<StockVO> getPriceList() {
+	return sql.selectList(NS+"s_list_account");  //스톡 가격 추출 -> account 가격 업데이트용
+}
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
+import com.easystock.persistence.member.MemberDAORule;
 import com.easystock.persistence.stock.StockDAORule;
 
 @Service
@@ -19,6 +20,9 @@ public class StockService implements StockServiceRule {
 
 	@Inject
 	private StockDAORule sdao;
+	
+	@Inject
+	private MemberDAORule mdao;
 
 	@Override
 	public int register(StockVO svo) {
@@ -48,5 +52,15 @@ public class StockService implements StockServiceRule {
 	@Override
 	public int getTotalCnt(PageVO pgvo) {
 		return sdao.selectOne(pgvo);
+	}
+
+	@Override
+	public int update(StockVO svo) {
+		return sdao.updatePrice(svo);
+	}
+
+	@Override
+	public List<StockVO> getPriceList() {
+		return sdao.getPriceList();
 	}
 }

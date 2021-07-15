@@ -14,6 +14,7 @@ public class StockVO {
 	private double year_high;
 	private double year_low;
 	private double avg_target;
+	private double cur_price; //거래용, 4개 종목만 업데이트하기
 
 	public StockVO() {}
 
@@ -32,6 +33,15 @@ public class StockVO {
 		this.year_high = year_high;
 		this.year_low = year_low;
 		this.avg_target = avg_target;
+	}
+
+	
+	public double getCur_price() {
+		return cur_price;
+	}
+
+	public void setCur_price(double cur_price) {
+		this.cur_price = cur_price;
 	}
 
 	public String getSymbol() {

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.easystock.domain.CommentVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.ReportVO;
+import com.easystock.domain.StockVO;
 import com.easystock.service.comment.CommentServiceRule;
 import com.easystock.service.stock.StockServiceRule;
 
@@ -76,4 +77,13 @@ public class CommentController {
 	public ResponseEntity<List<EarningVO>> earning(@PathVariable String symbol) {
 		return new ResponseEntity<List<EarningVO>>(ssv.getEarningList(symbol), HttpStatus.OK);
 	}
+	
+	//거래 종목 단가 업데이트 위치 애매해서 commentController에서 작업!
+	@PostMapping(value = "/trade", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> trade(@RequestBody StockVO svo) {
+		int isUp = ssv.update(svo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 }

@@ -31,6 +31,5 @@ const ses_id = "<%=(String)session.getAttribute("ses_id")%>";
 <a href="#">거래소 : 매수&매도, 예수금 현황, 환전, 수익률</a><br>
 <a href="#">메인페이지 : 3대지수, 환율정보, CNBC 주요 뉴스 등</a><br>
 <a href="/admin">관리자페이지 : 종목 등록, 회원 댓글 처리</a><br>
-<a href="/test">테스트페이지</a>
 
 </div>

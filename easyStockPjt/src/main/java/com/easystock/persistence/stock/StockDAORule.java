@@ -15,4 +15,8 @@ public interface StockDAORule {
 	public List<EarningVO> getEarningList(String symbol);
 	
 	public int selectOne(PageVO pgvo);
+	
+	public int updatePrice(StockVO svo);//거래 가격업뎃
+	public List<StockVO> getPriceList(); //스톡 가격 추출 -> account 가격 업데이트용
+
 }

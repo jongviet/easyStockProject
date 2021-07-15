@@ -1,6 +1,7 @@
 package com.easystock.persistence.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -10,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.StockVO;
 
 @Repository
 public class MemberDAO implements MemberDAORule {
@@ -50,7 +53,18 @@ public class MemberDAO implements MemberDAORule {
 	}
 
 	@Override
-	public int selectDeposit(String email) {
+	public String selectDeposit(String email) {
 		return sql.selectOne(NS+"deposit", email);
 	}
+
+	@Override
+	public List<AccountVO> chk_h_list(String email) {
+		return sql.selectList(NS+"h_list", email);
+	}
+
+	@Override
+	public void updatePrice(List<StockVO> s_list) {
+		sql.update(NS+"update_price", s_list);
+	}
+
 }
