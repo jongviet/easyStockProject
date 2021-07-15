@@ -12,12 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
 import com.easystock.service.member.MemberServiceRule;
 import com.easystock.service.stock.StockServiceRule;
@@ -36,14 +38,15 @@ public class MemberController {
 	//테스터 계정 체크, 가입 후, session 부여
 	@ResponseBody
 	@PostMapping("/chkTester")
-	public String chkTester(@RequestParam("tester") String tester, HttpSession ses) {
-		int result = msv.chkTester(tester);
+	public String chkTester(@RequestParam("email") String email, HttpSession ses, Model model) {
+		int result = msv.chkTester(email);
 		if(result > 0) {
-			ses.setAttribute("ses", tester);
-			String[] array = tester.split("@");
+			ses.setAttribute("ses", email);
+			String[] array = email.split("@");
 			String ses_id = array[0];
-			System.out.println(ses_id);
 			ses.setAttribute("ses_id", ses_id);
+			String ses_tester = array[0].substring(0, 6);
+			ses.setAttribute("ses_tester", ses_tester);
 			ses.setMaxInactiveInterval(15 * 60);
 			return "1";
 		}
@@ -80,18 +83,12 @@ public class MemberController {
 			ses.setAttribute("ses", member.getEmail());
 			String[] array = member.getEmail().split("@");
 			String ses_id = array[0];
-			System.out.println(ses_id);
 			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
 			
-			//2.예수금, 종목 보유 현황, stock 전일 종가
+			//2.예수금, 종목 보유 현황
 			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
 			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
-			
-			//3.Stock의 cur_price 가져와서 모든 Account 테이블 row 업데이트
-			List<StockVO> s_list = ssv.getPriceList();			
-			msv.updatePrice(s_list);
-			
 			return "main";
 			
 		} else {
@@ -100,8 +97,14 @@ public class MemberController {
 			return "temp";
 		}
 	}
+
 	@GetMapping("/main")
-	public String main() {
+	public String main(Model model, @RequestParam(value = "email", required=false) String email) {
+		
+		if(email != null) {
+			model.addAttribute("deposit", msv.chkDeposit(email));
+			model.addAttribute("h_list", msv.chk_h_list(email));
+		}
 		return "main";	
 	}
 	
@@ -117,5 +120,7 @@ public class MemberController {
 	public String chkDeposit(@RequestParam("email") String email) {
 		return msv.chkDeposit(email);
 	}
+	
+	
 	
 }

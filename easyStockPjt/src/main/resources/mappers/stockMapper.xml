@@ -31,8 +31,12 @@
 	</select>
 
 	<!-- stock price update -->
-	<update id="p_insert" parameterType="svo">
+	<update id="s_price_update" parameterType="svo">
 		update stock set cur_price = #{cur_price} where symbol = #{symbol}
+	</update>
+	<!-- account price update -->	
+	<update id="a_price_update" parameterType="avo">
+		update account set cur_price = #{cur_price} where symbol = #{symbol}
 	</update>
 	
 	<select id="s_list_account" resultType="HashMap">

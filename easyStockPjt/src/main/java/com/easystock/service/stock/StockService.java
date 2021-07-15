@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.easystock.domain.AccountVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
@@ -53,14 +54,16 @@ public class StockService implements StockServiceRule {
 	public int getTotalCnt(PageVO pgvo) {
 		return sdao.selectOne(pgvo);
 	}
-
+	
+	//stock 테이블
 	@Override
 	public int update(StockVO svo) {
 		return sdao.updatePrice(svo);
 	}
 
+	//account 테이블
 	@Override
-	public List<StockVO> getPriceList() {
-		return sdao.getPriceList();
+	public int update(AccountVO avo) {
+		return sdao.updatePrice(avo);
 	}
 }

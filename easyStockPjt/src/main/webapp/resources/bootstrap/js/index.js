@@ -33,9 +33,14 @@ $(document).ready(function() {
 	
 	today = year + "" + month + "" + date+ "" + hour; //오늘 날짜 완성
 	
-	if((hour == 8) && (min == 30)) {
+	if((hour == 10) && (min == 0)) {
 		tradeable();
 	}
+	
+	if((hour == 10) && (min == 0)) {
+		tradeable_account();
+	}
+	
 });
 	
 function tradeable() {
@@ -48,6 +53,18 @@ function tradeable() {
 		adjusted_close(tradeableList[idx]);
 	};
 };
+
+function tradeable_account() {
+	
+	var tradeableList = ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'FB', 'TSLA', 'TSM', 'BABA', 'V', 'NVDA', 'JPM', 'JNJ', 'WMT', 'UNH', 'MA',
+			'BAC', 'HD', 'PG', 'DIS', 'XOM', 'NKE', 'NFLX', 'VZ', 'KO', 'INTC', 'ORCL', 'PFE', 'CVX', 'UPS', 'COST', 
+			'TXN', 'MCD', 'QCOM', 'HON', 'BMY', 'NEE', 'BA', 'UBER', 'FDX', 'ATVI', 'F', 'SPG', 'LUV', 'O', 'OHI'];																			
+
+	for(let idx in tradeableList) {
+		adjusted_close_account(tradeableList[idx]);
+	};
+};
+
 
 function adjusted_close(input_val) { 
 	
@@ -68,6 +85,32 @@ function adjusted_close(input_val) {
 			};
 			$.ajax({
 				url : "/comment/trade",
+				type : "post",
+				data : JSON.stringify(price_data),
+				contentType : "application/json; charset=utf-8"
+			});
+  });
+};
+
+
+function adjusted_close_account(input_val) { 
+	
+	alpha.data.daily_adjusted(input_val).then((data) => {
+		
+ 		var bigObj = data["Time Series (Daily)"];
+		
+		/* JSON Object -> array[array(0), array(1), array(2)....] */
+		var jsonArray = Object.entries(bigObj);
+		
+		var cur_price_val = jsonArray[0][1]["5. adjusted close"];
+		
+		/* input_val : symbol, cur_price_val : cur_price */
+			let price_data = {
+				symbol : input_val,
+				cur_price : cur_price_val
+			};
+			$.ajax({
+				url : "/comment/account",
 				type : "post",
 				data : JSON.stringify(price_data),
 				contentType : "application/json; charset=utf-8"

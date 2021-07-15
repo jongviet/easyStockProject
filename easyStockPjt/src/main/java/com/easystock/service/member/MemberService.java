@@ -39,9 +39,9 @@ public class MemberService implements MemberServiceRule {
 	
 	@Transactional
 	@Override
-	public int chkTester(String tester) {
-		if(mdao.selectTester(tester) == 0) {
-			return mdao.insert(tester);
+	public int chkTester(String email) {
+		if(mdao.selectTester(email) == 0) {
+			return mdao.insert(email);
 		} else {
 			return 0; //실패
 		}

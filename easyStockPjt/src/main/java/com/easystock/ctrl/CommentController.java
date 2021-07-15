@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.easystock.domain.AccountVO;
 import com.easystock.domain.CommentVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.ReportVO;
@@ -86,4 +87,11 @@ public class CommentController {
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	//account 테이블 단가 업데이트
+	@PostMapping(value = "/account", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> account(@RequestBody AccountVO avo) {
+		int isUp = ssv.update(avo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

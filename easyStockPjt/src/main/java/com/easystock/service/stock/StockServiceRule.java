@@ -1,5 +1,6 @@
 package com.easystock.service.stock;
 
+import com.easystock.domain.AccountVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
@@ -17,5 +18,5 @@ public interface StockServiceRule {
   public int getTotalCnt(PageVO pgvo); //스톡 페이징용
   
   public int update(StockVO svo); //거래소 가격 데이터 업데이트
-  public List<StockVO> getPriceList(); //스톡 가격 추출 -> account 가격 업데이트용
+  public int update(AccountVO avo); //어카운트 가격 데이터 업데이트
 }

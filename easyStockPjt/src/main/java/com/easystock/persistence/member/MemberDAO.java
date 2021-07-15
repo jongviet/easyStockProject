@@ -39,15 +39,15 @@ public class MemberDAO implements MemberDAORule {
 	}
 
 	@Override
-	public int selectTester(String tester) {
-		return sql.selectOne(NS+"t_chk", tester);
+	public int selectTester(String email) {
+		return sql.selectOne(NS+"t_chk", email);
 	}
 
 	@Override
-	public int insert(String tester) {
+	public int insert(String email) {
 		String pwd = "1234";
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("tester",(String)tester);
+		map.put("tester",(String)email);
 		map.put("pwd",(String)pwd);
 		return sql.insert(NS+"t_join", map);
 	}

@@ -11,90 +11,82 @@
 <script src="/resources/bootstrap/js/main.js"></script>
 
 <script>
-/* 종목 보유 내역 있을 시 작동 */
+/* 종목 보유 내역 있을 시 가격 업데이트 */
 <c:if test="${h_list ne null}">
 	var symbol_arr = [];
 	var h_price_arr = [];
 	var h_qty_arr = [];
+	var c_price_arr = [];
 	
-
-	/* 해당 종목의 현재가 가져오기 */
+	var deposit = "${deposit}";
+	var deposit_val = Number(deposit);
+	
+	/* 해당 종목 가져오기 */
 	<c:forEach items="${h_list}" var="avo">
 		var symbol = "${avo.symbol}";
 		var h_price = "${avo.avg_h_price}";
 		var h_qty = "${avo.h_qty}";
+		var c_price = "${avo.cur_price}";			
 		symbol_arr.unshift(symbol);
 		h_price_arr.unshift(Number(h_price));
 		h_qty_arr.unshift(Number(h_qty));
-		
+		c_price_arr.unshift(Number(c_price));
 	</c:forEach>
 	
-/* 	console.log(h_price_arr[0] * h_qty_arr[0]); */
-
-</c:if>
-</script>
-
-
-
-<div class="container">
-	<div class="row">
-		<div class="col-lg-6 col-md-6 mx-auto float-left text-center">
-			<h3 class="mb-4 text-center bold" style="color: #1F9688">${ses_id}<span style="color:#767675; !important">님의 자산현황</span></h3>
-			<h5 class="text-center bold mb-3" style="color: #1F9688">총자산&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<span id="deposit">${deposit}</span>&nbsp;USD</h5>
-			<table class="mb-5" style="width: 525px; height: 200px;">
-				<tbody>
-					<tr style="border-top: 1.8px solid #1F9688">
-						<td colspan="2" class="bold">예수금</td>
-						<td colspan="2" class="bold">2,000 USD</td>
-					</tr>
-					<tr style="border-top: 1px solid #1F968880">
-						<td colspan="2" class="bold">주식</td>
-						<td colspan="2" class="bold">3,100 USD</td>
-					</tr>
-					<tr style="border-top: 1px solid #1F968880">
-						<td colspan="2" class="bold">손익</td>
-						<td colspan="2" class="bold">100 USD</td>
-					</tr>
-					<tr style="border-top: 1px solid #1F968880">
-						<td colspan="2" class="bold">수익률</td>
-						<td colspan="2" class="bold">2%</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="mt-7">
-				<canvas id="myChartTwo" style="background-color: white;" width="525"
-					height="460"></canvas>
-			</div>
-		</div>
-<script>
-$(document).ready(function() {
-	var deposit = 2000;
-	var aapl = 2000;
-	var amzn = 500;
-	var msft = 600;
-	var cost = 300;
-	var uber = 500;
+	/* asset 처리 */
+	var asset = 0.0;
+	var asset_input = 0.0;
 	
-	var dataArr = [];
-	dataArr.unshift(deposit);
-	dataArr.unshift(aapl);
-	dataArr.unshift(amzn);
-	dataArr.unshift(msft);
-	dataArr.unshift(cost);
-	dataArr.unshift(uber);
-	current_asset(dataArr);
-});
+	for(let i = 0; i < h_qty_arr.length; i++) {
+		asset += c_price_arr[i] * h_qty_arr[i];
+	}
+	
+	for(let i = 0; i < h_qty_arr.length; i++) {
+		asset_input += h_price_arr[i] * h_qty_arr[i];
+	}
+	
+	/* 매매 기준 전체 총 평가액 */
+	var asset_input_val = (deposit_val + asset_input).toFixed(2);
+	
+	/* 현재 기준 전체 총 평가액 */
+	var asset_val = (deposit_val + asset).toFixed(2);
+	
+	/* 현재 기준 주식 총 평가액 */
+ 	var stock_val = asset.toFixed(2);
+ 	
+	var earning = (asset_val - asset_input_val).toFixed(2);
+	var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
+	
+	$(function() {
+		$("#percentage").text(earningPer);
+		$("#profit").text(earning);
+		$("#stock").text(stock_val);
+		$("#asset").text(asset_val);
+		
+		/* 예수금 포함 각 주식 별 금액 던지기 */
+		var eachStockVal = [];
+		
+		for(let i = 0; i < c_price_arr.length; i++) {
+			eachStockVal.unshift(c_price_arr[i] * h_qty_arr[i]);
+		}
+		
+		/* 예수금 추가 */
+		symbol_arr.unshift('예수금');
+		eachStockVal.unshift(deposit_val);
+		
+		current_asset(symbol_arr, eachStockVal);
+	});
+</c:if>
 
-function current_asset(dataArr) {
+function current_asset(symbol_arr, eachStockVal) {
 	var ctx = document.getElementById('myChartTwo');
 	var config = {
 		type: 'doughnut',
 		data: {
-			labels: ['예수금', 'AAPL', 'AMZN', 'MSFT', 'COST', 'UBER'],
+			labels: symbol_arr,
 			datasets: [{
-				label: '# of Votes',
-				data: dataArr,
+				label: 'Stock',
+				data: eachStockVal,
 				backgroundColor: [
 					'#99E6B2',
 					'#7AD2A8',
@@ -140,8 +132,53 @@ function current_asset(dataArr) {
 	};
 	var myDoughnutChart = new Chart(ctx, config);
 };
+
+if(ses_tester != null && ses_tester != "") {
+	
+	var checkEvent = getCookie("Ck_01");
+	
+	if(checkEvent == "on") {
+		
+	} else {
+		var trigger = document.getElementById("reload");
+		trigger.click();
+		setCookie("Ck_01","on","1");
+	}
+};
+
 </script>
 
+<div class="container">
+	<div class="row">
+		<div class="col-lg-6 col-md-6 mx-auto float-left text-center">
+			<h3 class="mb-4 text-center bold" style="color: #1F9688">${ses_id}<span style="color:#767675; !important">님의 자산현황</span></h3>
+			<h5 class="text-center bold mb-3" style="color: #1F9688"><span>총자산&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span id="asset"></span>
+			<span>&nbsp;USD</span></h5>
+			<table class="mb-5" style="width: 525px; height: 200px;">
+				<tbody>
+					<tr style="border-top: 1.8px solid #1F9688">
+						<td colspan="2" class="bold" >예수금</td>
+						<td colspan="2" class="bold" id="deposit">${deposit}<span>&nbsp;USD</span></td>
+					</tr>
+					<tr style="border-top: 1px solid #1F968880">
+						<td colspan="2" class="bold">주식</td>
+						<td colspan="2" class="bold"><span id="stock"></span><span>&nbsp;USD</span></td>
+					</tr>
+					<tr style="border-top: 1px solid #1F968880">
+						<td colspan="2" class="bold">손익</td>
+						<td colspan="2" class="bold"><span id="profit"></span><span>&nbsp;USD</span></td>
+					</tr>
+					<tr style="border-top: 1px solid #1F968880">
+						<td colspan="2" class="bold">수익률</td>
+						<td colspan="2" class="bold"><span id="percentage"></span><span>&nbsp;%</span></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="mt-7">
+				<canvas id="myChartTwo" style="background-color: white;" width="525"
+					height="460"></canvas>
+			</div>
+		</div>
 <!-- trading view chart import -->
 		<div class="col-lg-6 col-md-6 ml-10 pl-10"
 			style="float: right; text-align: center;">

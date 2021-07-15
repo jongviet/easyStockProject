@@ -7,9 +7,16 @@ public class AccountVO {
 	private String symbol;
 	private double avg_h_price;
 	private int h_qty;
+	private double cur_price;
 	
 	public AccountVO() {}
 
+	public double getCur_price() {
+		return cur_price;
+	}
+	public void setCur_price(double cur_price) {
+		this.cur_price = cur_price;
+	}
 	public int getH_num() {
 		return h_num;
 	}

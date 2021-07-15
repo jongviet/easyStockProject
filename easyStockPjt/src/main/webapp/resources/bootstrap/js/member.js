@@ -78,9 +78,9 @@ $(function() {
                 url : '/member/chkTester',
                 type : 'post',
                 data : {
-                    tester : "tester"+num+"@tester.com"
+                    email : "tester"+num+"@tester.com"
                 },
-                success : function(result) {
+               success : function(result) {
                     if (result > 0) {
                     	var id = "tester" + num + "@tester.com";
                     	alert('[Notice]\n' + '1) "' + id + '"' + '으로 접속하였습니다.\n2) 초기 비밀번호는 "1234"입니다.\n3) 익일 오전9시 모든 테스터 계정은 자동 삭제됩니다.\n4) 데이터 보존을 원하시면 회원가입 후 사용하시기 바랍니다.');

@@ -13,7 +13,7 @@ public interface MemberDAORule {
 	public MemberVO selectOne(MemberVO mvo);
 	
 	//테스터 생성
-	public int selectTester(String tester);
+	public int selectTester(String email);
 	public int insert(String tester);
 	//잔고확인
 	public String selectDeposit(String email);

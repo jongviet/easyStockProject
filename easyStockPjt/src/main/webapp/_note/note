@@ -78,6 +78,53 @@ cNum int(10) not null
 
 
 
+-- RAW DATA
+insert into account(email, symbol, avg_h_price, h_qty) values
+('rawdata@rawdata.com', 'AAPL', 10, 1),
+('rawdata@rawdata.com', 'MSFT', 10, 1),
+('rawdata@rawdata.com', 'AMZN', 10, 1),
+('rawdata@rawdata.com', 'GOOG', 10, 1),
+('rawdata@rawdata.com', 'FB', 10, 1),
+('rawdata@rawdata.com', 'TSLA', 10, 1),
+('rawdata@rawdata.com', 'TSM', 10, 1),
+('rawdata@rawdata.com', 'BABA', 10, 1),
+('rawdata@rawdata.com', 'V', 10, 1),
+('rawdata@rawdata.com', 'JPM', 10, 1),
+('rawdata@rawdata.com', 'JNJ', 10, 1),
+('rawdata@rawdata.com', 'WMT', 10, 1),
+('rawdata@rawdata.com', 'UNH', 10, 1),
+('rawdata@rawdata.com', 'MA', 10, 1),
+('rawdata@rawdata.com', 'BAC', 10, 1),
+('rawdata@rawdata.com', 'HD', 10, 1),
+('rawdata@rawdata.com', 'PG', 10, 1),
+('rawdata@rawdata.com', 'DIS', 10, 1),
+('rawdata@rawdata.com', 'XOM', 10, 1),
+('rawdata@rawdata.com', 'NKE', 10, 1),
+('rawdata@rawdata.com', 'NFLX', 10, 1),
+('rawdata@rawdata.com', 'VZ', 10, 1),
+('rawdata@rawdata.com', 'KO', 10, 1),
+('rawdata@rawdata.com', 'INTC', 10, 1),
+('rawdata@rawdata.com', 'ORCL', 10, 1),
+('rawdata@rawdata.com', 'PFE', 10, 1),
+('rawdata@rawdata.com', 'CVX', 10, 1),
+('rawdata@rawdata.com', 'UPS', 10, 1),
+('rawdata@rawdata.com', 'COST', 10, 1),
+('rawdata@rawdata.com', 'TXN', 10, 1),
+('rawdata@rawdata.com', 'MCD', 10, 1),
+('rawdata@rawdata.com', 'QCOM', 10, 1),
+('rawdata@rawdata.com', 'HON', 10, 1),
+('rawdata@rawdata.com', 'BMY', 10, 1),
+('rawdata@rawdata.com', 'NEE', 10, 1),
+('rawdata@rawdata.com', 'NVDA', 10, 1),
+('rawdata@rawdata.com', 'BA', 10, 1),
+('rawdata@rawdata.com', 'UBER', 10, 1),
+('rawdata@rawdata.com', 'FDX', 10, 1),
+('rawdata@rawdata.com', 'ATVI', 10, 1),
+('rawdata@rawdata.com', 'F', 10, 1),
+('rawdata@rawdata.com', 'SPG', 10, 1),
+('rawdata@rawdata.com', 'LUV', 10, 1),
+('rawdata@rawdata.com', 'O', 10, 1),
+('rawdata@rawdata.com', 'OHI', 10, 1);
 
 
 

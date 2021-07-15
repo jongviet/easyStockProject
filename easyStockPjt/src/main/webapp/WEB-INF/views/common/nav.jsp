@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-	<a class="navbar-brand" href="/">Main</a>
+	<a class="navbar-brand" id="reload" href="/member/main/?email=${ses}">Main</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 		data-target="#collapsibleNavbar">
 		<span class="navbar-toggler-icon"></span>
@@ -11,9 +11,24 @@
 	<div class="collapse navbar-collapse" id="collapsibleNavbar">
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link" href="">${ses}님 환영합니다.</a></li>
-			<li class="nav-item"><a class="nav-link" href="/member/logout">로그아웃</a></li>
+			<li class="nav-item"><a class="nav-link" id="logout" href="/member/logout">로그아웃</a></li>
 		</ul>
 	</div>
 </nav>
+
+<script>
+$("#logout").on("click", function(e) {
+	e.preventDefault();
+	
+	$(function() {
+		setCookie('Ck_01', '', -1);
+		alert("쿠키삭제");
+		$('#logout').unbind();
+		var logout_t = document.getElementById("logout");
+		logout_t.click();
+	});
+
+});
+</script>
 
 <div class="container" style="margin-top: 30px">

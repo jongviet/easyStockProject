@@ -10,7 +10,7 @@ public interface MemberServiceRule {
 	public int join(MemberVO mvo);
 	public int chkEmail(String email);
 	public MemberVO login(MemberVO mvo);
-	public int chkTester(String tester);
+	public int chkTester(String email);
 	
 	public String chkDeposit(String email); //잔고 체크
 	public List<AccountVO> chk_h_list(String email); //보유 종목 체크
