@@ -55,8 +55,8 @@ return unescape(cValue);
 <div class="jumbotron text-center" style="margin-bottom:0">
 
 <a href="/stock/list">종목리스트 - 완료</a><br>
-<a href="#">거래소 : 매수&매도, 예수금 현황, 환전, 수익률</a><br>
-<a href="#">메인페이지 : 3대지수, 환율정보, CNBC 주요 뉴스 등</a><br>
-<a href="/admin">관리자페이지 : 종목 등록, 회원 댓글 처리</a><br>
+<a href="#">메인페이지 - 완료</a><br>
+<a href="/admin">관리자페이지 : 종목 등록, 댓글 처리(신고 들어온 내용에 대해 조치 or 미조치 가능) - 거의 완료</a><br>
+<a href="#">주식 거래소 : 보유종목 현황 테이블(각 종목별 손익, 수익률, 예수금, investing 형식), 매수&매도 버튼, 환전(정회원만 가능), CNBC 뉴스(파이썬)</a><br>
 
 </div>

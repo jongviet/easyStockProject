@@ -25,16 +25,4 @@
 		select * from account where email = #{email}
 	</select>
 	
-	<!-- account 가격 업데이트 -->
-<!-- 	<update id="update_price" parameterType="java.util.List">
-		update account set cur_price = 
-		<foreach item="svo" collection="list">
-			#{svo.cur_price} 
-		</foreach>	
-			where symbol = 
-		<foreach item="svo" collection="list">	
-			#{svo.symbol}
-		</foreach>
-	</update> -->
-	
 </mapper>

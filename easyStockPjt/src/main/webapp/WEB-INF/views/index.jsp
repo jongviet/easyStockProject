@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/bootstrap/css/custom.css">
+<!-- favicon -->
+<link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico" />
 <style>
 body { overflow: auto; } 
 body::before { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: url(/resources/assets/img/bg.jpg); background-size: cover; -webkit-filter: blur(5px); -moz-filter: blur(5px); -o-filter: blur(5px); -ms-filter: blur(5px); filter: blur(5px); transform: scale(1.02); z-index: -1; content: ""; }

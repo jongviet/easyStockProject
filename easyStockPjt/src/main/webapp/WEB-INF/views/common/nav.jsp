@@ -22,7 +22,6 @@ $("#logout").on("click", function(e) {
 	
 	$(function() {
 		setCookie('Ck_01', '', -1);
-		alert("쿠키삭제");
 		$('#logout').unbind();
 		var logout_t = document.getElementById("logout");
 		logout_t.click();
