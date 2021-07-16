@@ -33,11 +33,13 @@ $(document).ready(function() {
 	
 	today = year + "" + month + "" + date+ "" + hour; //오늘 날짜 완성
 	
-	if((hour == 10) && (min == 0)) {
+
+	
+	if((hour == 19) && (min == 23)) {
 		tradeable();
 	}
 	
-	if((hour == 10) && (min == 0)) {
+	if((hour == 19) && (min == 23)) {
 		tradeable_account();
 	}
 	

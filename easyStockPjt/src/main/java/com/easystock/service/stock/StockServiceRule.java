@@ -4,6 +4,8 @@ import com.easystock.domain.AccountVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
+import com.easystock.domain.WatchVO;
+
 import java.util.List;
 
 public interface StockServiceRule {
@@ -19,4 +21,6 @@ public interface StockServiceRule {
   
   public int update(StockVO svo); //거래소 가격 데이터 업데이트
   public int update(AccountVO avo); //어카운트 가격 데이터 업데이트
+  
+  public List<WatchVO> insertAndList(WatchVO wvo); //관심종목추가 -> symbol만 담긴 watchVO List 리턴
 }

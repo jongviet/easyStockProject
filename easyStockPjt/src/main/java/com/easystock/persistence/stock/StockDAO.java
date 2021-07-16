@@ -13,6 +13,7 @@ import com.easystock.domain.AccountVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
+import com.easystock.domain.WatchVO;
 
 @Repository
 public class StockDAO implements StockDAORule {
@@ -35,7 +36,7 @@ public class StockDAO implements StockDAORule {
 	// 페이징에 따른 리스트
 	@Override
 	public List<StockVO> selectList(PageVO pgvo) {
-		pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 12);
+		pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 5);
 		return sql.selectList(NS + "s_list", pgvo);
 	}
 
@@ -62,6 +63,11 @@ public class StockDAO implements StockDAORule {
 	@Override
 	public int updatePrice(AccountVO avo) {
 		return sql.update(NS + "a_price_update", avo);
+	}
+
+	@Override
+	public int insert(WatchVO wvo) {
+		return sql.insert(NS+"add_watch", wvo);
 	}
 
 }

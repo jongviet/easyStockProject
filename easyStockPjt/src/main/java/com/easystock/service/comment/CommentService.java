@@ -44,13 +44,12 @@ public class CommentService implements CommentServiceRule {
 	}
 
 	//특정 댓글의 좋아요 삭제 -> 댓글 삭제
-	@Transactional(isolation = Isolation.READ_COMMITTED)
 	@Override
 	public int delete(int cNum) {
 		if(cdao.cmtDel(cNum) == 1) {
 			return cdao.delete(cNum);
 		} else {
-			return 0; //삭제 실패
+			return cdao.delete(cNum);
 		}
 	}
 

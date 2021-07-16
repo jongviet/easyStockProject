@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/bootstrap/css/custom.css">
-<!-- favicon -->
 <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico" />
 <style>
 body { overflow: auto; } 

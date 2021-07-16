@@ -4,14 +4,7 @@
 <jsp:include page="../common/header.jsp" />
 <jsp:include page="../common/nav.jsp" />
 
-
-<div class="form-group">
-	<form class="form-inline">
-		<input type="text" id="input">
-		<button type="button" class="btn btn-info btn-md ml-1" id="inputBtn">종목 등록</button>
-	</form>
-</div>
+<h3>거래소</h3>
 
 
-<script src="/resources/bootstrap/js/admin.js"></script>
 <jsp:include page="../common/footer.jsp" />

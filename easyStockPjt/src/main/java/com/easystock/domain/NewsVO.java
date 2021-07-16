@@ -7,8 +7,6 @@ public class NewsVO {
 	private String title;
 	private String content;
 
-	public NewsVO() {}
-
 	public int getNewsNum() {
 		return newsNum;
 	}

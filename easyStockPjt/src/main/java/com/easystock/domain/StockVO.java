@@ -139,4 +139,14 @@ public class StockVO {
 	public void setAvg_target(double avg_target) {
 		this.avg_target = avg_target;
 	}
+
+	@Override
+	public String toString() {
+		return "StockVO [symbol=" + symbol + ", fullName=" + fullName + ", description=" + description + ", sector="
+				+ sector + ", m_capitalization=" + m_capitalization + ", per=" + per + ", eps=" + eps
+				+ ", pxt_insiders=" + pxt_insiders + ", pxt_institutions=" + pxt_institutions + ", year_high="
+				+ year_high + ", year_low=" + year_low + ", avg_target=" + avg_target + ", cur_price=" + cur_price
+				+ "]";
+	}
+	
 }

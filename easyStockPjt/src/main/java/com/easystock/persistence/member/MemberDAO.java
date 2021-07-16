@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
 import com.easystock.domain.StockVO;
+import com.easystock.domain.WatchVO;
 
 @Repository
 public class MemberDAO implements MemberDAORule {
@@ -65,6 +66,31 @@ public class MemberDAO implements MemberDAORule {
 	@Override
 	public void updatePrice(List<StockVO> s_list) {
 		sql.update(NS+"update_price", s_list);
+	}
+
+	@Override
+	public int delTester() {
+		return sql.delete(NS+"delTester");
+	}
+
+	@Override
+	public List<WatchVO> chk_w_list(String email) {
+		return sql.selectList(NS+"w_list", email);
+	}
+
+	@Override
+	public List<StockVO> chk_s_list(List<WatchVO> wlist) {
+		return sql.selectList(NS+"s_list", wlist);
+	}
+
+	@Override
+	public int hasWatchList(String email) {
+		return sql.selectOne(NS+"hasWatchList", email);
+	}
+
+	@Override
+	public int hasHoldList(String email) {
+		return sql.selectOne(NS+"hasHoldList", email);
 	}
 
 }

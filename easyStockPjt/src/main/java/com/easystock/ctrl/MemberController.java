@@ -1,9 +1,5 @@
 package com.easystock.ctrl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -12,15 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.easystock.domain.MemberVO;
-import com.easystock.domain.PageVO;
-import com.easystock.domain.StockVO;
 import com.easystock.service.member.MemberServiceRule;
 import com.easystock.service.stock.StockServiceRule;
 
@@ -86,9 +79,16 @@ public class MemberController {
 			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
 			
-			//2.예수금, 종목 보유 현황
+			//2.예수금, 보유종목, 관심종목 현황
 			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
 			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
+			
+			System.out.println(">>>>" + msv.chk_h_list(mvo.getEmail()));
+
+			if(msv.hasWatchList(mvo.getEmail()) > 0) {
+				model.addAttribute("w_list", msv.chk_w_list(mvo.getEmail()));
+			}
+
 			return "main";
 			
 		} else {
@@ -103,7 +103,11 @@ public class MemberController {
 		
 		if(email != null) {
 			model.addAttribute("deposit", msv.chkDeposit(email));
-			model.addAttribute("h_list", msv.chk_h_list(email));
+			model.addAttribute("h_list", msv.chk_h_list(email));				
+
+			if(msv.hasWatchList(email) > 0) {
+				model.addAttribute("w_list", msv.chk_w_list(email)); //wvo가 아닌 svo가 리턴됨! 주의!
+			}
 		}
 		return "main";	
 	}

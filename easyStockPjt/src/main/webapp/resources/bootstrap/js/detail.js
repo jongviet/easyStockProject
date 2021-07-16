@@ -126,9 +126,14 @@ function alpha_input_monthly(input) {
 			      {
 			        label: input.toUpperCase(),
 			        data: valArray,
-			        backgroundColor: "lightblue",
-			        borderColor: 'rgb(75, 192, 192)',
-			        tension: 0.1
+			        fill: true,
+			        backgroundColor: 'rgba(61, 170, 147, 0.12)',    
+			        borderColor: 'rgba(61, 170, 147, 1)',
+			        tension: 0.1,
+			        pointBackgroundColor: "rgba(61, 170, 147, 0.12)",
+				    pointBorderColor: "rgba(61, 170, 147, 1)",
+				    pointHoverBackgroundColor: "rgba(61, 170, 147, 0.12)",
+				    pointHoverBorderColor: "rgba(61, 170, 147, 1)"
 			      },
 			    ],
 			  },
@@ -148,9 +153,14 @@ function alpha_input_monthly(input) {
 			      {
 			        label: input.toUpperCase(),
 			        data: valArray,
-			        backgroundColor: "lightblue",
-			        borderColor: 'rgb(75, 192, 192)',
-			        tension: 0.1
+			        fill: true,
+			        backgroundColor: 'rgba(61, 170, 147, 0.12)',    
+			        borderColor: 'rgba(61, 170, 147, 1)',
+			        tension: 0.1,
+			        pointBackgroundColor: "rgba(61, 170, 147, 0.12)",
+				    pointBorderColor: "rgba(61, 170, 147, 1)",
+				    pointHoverBackgroundColor: "rgba(61, 170, 147, 0.12)",
+				    pointHoverBorderColor: "rgba(61, 170, 147, 1)"
 			      },
 			    ],
 			  },
@@ -258,11 +268,11 @@ function alpha_input_monthly(input) {
 			cmtBox.empty();
 			
 			for(let cvo of list) {
-				let cmtList = '<div class="d-flex flex-row comment-row"><div class="comment-text w-150"><h5>'+cvo.writer+'</h5>';
-				cmtList += '<a href="" style="color:black" id="cmtDel"><i class="fa fa-trash-o"></i></a>';
-				cmtList += '<i class="fa fa-minus-circle ml-2" style="color:black; cursor:pointer;" data-cNum="'+cvo.cNum+'" data-writer="'+cvo.writer+'"></i>';
+				let cmtList = '<div class="d-flex flex-row comment-row"><div class="comment-text w-150"><h5 class="grayFontBold">'+cvo.writer+'</h5>';
+				cmtList += '<a href="" style="color:#1F9688" id="cmtDel"><i class="fa fa-trash-o" style="font-size:20px;"></i></a>';
+				cmtList += '<i class="fa fa-minus-circle ml-2" style="color:#1F9688; font-size:20px; cursor:pointer;" data-cNum="'+cvo.cNum+'" data-writer="'+cvo.writer+'"></i>';
 				cmtList += '<div class="comment-footer"><span class="mr-2">'+cvo.regdate+'</span>'
-				cmtList += '<span><a href="" id="t_up"><i class="fa fa-thumbs-o-up"></i></a></span><span id="t_count">'+cvo.t_up+'</span>';
+				cmtList += '<span><a href="" id="t_up"><i class="fa fa-thumbs-o-up" style="color:#1F9688; font-size:20px;"></i></a></span><span id="t_count">'+cvo.t_up+'</span>';
 				cmtList += '<input type="hidden" name="cNum" value="'+cvo.cNum+'"></div><p class="mt-1">'+cvo.comment+'</p></div></div><hr>';
 				cmtBox.append(cmtList);
 			}

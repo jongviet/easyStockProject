@@ -11,5 +11,6 @@
 		<typeAlias type="com.easystock.domain.StockVO" alias="svo"/>
 		<typeAlias type="com.easystock.domain.ReportVO" alias="rvo"/>
 		<typeAlias type="com.easystock.domain.PageVO" alias="pgvo"/>
+		<typeAlias type="com.easystock.domain.WatchVO" alias="wvo"/>
 	</typeAliases>
 </configuration>

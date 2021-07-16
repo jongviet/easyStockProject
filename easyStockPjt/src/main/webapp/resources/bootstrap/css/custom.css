@@ -1,9 +1,43 @@
 @charset "UTF-8";
 
-.bold {
+.grayLight {
+	color:#767675B3;
+}
+
+.grayFontBold {
 	font-weight:bolder;
 	color:#767675;
 }
+
+.grayFont {
+	color:#767675;
+}
+
+.greenFont {
+	color: #1F9688;
+}
+
+.greenFontBold {
+	font-weight:bolder;
+	color: #1F9688;
+}
+
+.greenLine {
+	border-top: 1px solid #1F9688;
+}
+
+.greenLineBold {
+	border-top: 1.8px solid #1F9688;
+}
+
+.minus {
+	color: blue;
+}
+
+.plus {
+	color: red;
+}
+
 
 
 #daily, #monthly {

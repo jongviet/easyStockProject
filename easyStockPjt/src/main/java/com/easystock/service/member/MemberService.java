@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
 import com.easystock.domain.StockVO;
+import com.easystock.domain.WatchVO;
 import com.easystock.persistence.member.MemberDAORule;
 
 @Service
@@ -60,5 +61,21 @@ public class MemberService implements MemberServiceRule {
 	@Override
 	public void updatePrice(List<StockVO> s_list) {
 		mdao.updatePrice(s_list);
+	}
+
+	@Override
+	public List<StockVO> chk_w_list(String email) {
+		List<WatchVO> wlist = mdao.chk_w_list(email); //관심종목 symbol 리스트
+		return mdao.chk_s_list(wlist);//관심종목 symbol 리스트에 따른 StockVO List
+	}
+
+	@Override
+	public int hasWatchList(String email) {
+		return mdao.hasWatchList(email);
+	}
+
+	@Override
+	public int hasHoldList(String email) {
+		return mdao.hasHoldList(email);
 	}
 }

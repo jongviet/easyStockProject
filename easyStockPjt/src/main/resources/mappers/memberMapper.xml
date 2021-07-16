@@ -24,5 +24,27 @@
 	<select id="h_list" parameterType="String" resultType="avo">
 		select * from account where email = #{email}
 	</select>
+		
+	<!-- 관심 종목의 symbol 조회 -->
+	<select id="w_list" parameterType="String" resultType="wvo">
+		select symbol from watch where email = #{email}
+	</select>
+	<!-- 관심종목에 포함되어 있는 stock List 출력; symbol만 담긴 wvo 리스트로 select한 구문 -->
+	<select id="s_list" parameterType="wvo" resultType="svo">
+		select * from stock where symbol in
+		<foreach collection="list" item="wvo" open="(" separator="," close=")">#{wvo.symbol}</foreach>
+	</select>
+	<!-- 관심 종목 보유 여부 -->
+	<select id="hasWatchList" parameterType="String" resultType="int">
+		select count(email) from watch where email = #{email}
+	</select>
+	<!-- 보유 종목 보유 여부 -->
+	<select id="hasHoldList" parameterType="String" resultType="int">
+		select count(email) from account where email = #{email}
+	</select>
 	
+	
+	<delete id="delTester">
+		delete from member where email like 'tester%'
+	</delete>
 </mapper>

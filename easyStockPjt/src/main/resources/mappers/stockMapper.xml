@@ -43,6 +43,10 @@
 		select symbol, cur_price from stock
 	</select>
 	
+	<!-- 관심종목 추가 -->
+	<insert id="add_watch" parameterType="wvo">
+		insert into watch(email, symbol) values(#{email}, #{symbol})	
+	</insert>
 	
 	<!-- paging & searching -->
 	<select id="tc" parameterType="pgvo" resultType="int">

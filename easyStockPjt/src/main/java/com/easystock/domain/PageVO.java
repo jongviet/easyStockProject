@@ -8,7 +8,7 @@ public class PageVO {
 	private int cal_idx;
 
 	public PageVO() {
-		this(1, 12); //페이징 최초
+		this(1, 5); //페이징 최초
 	}
 	
 	public PageVO(int pageIndex, int countPerPage) {

@@ -5,6 +5,7 @@ import java.util.List;
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
 import com.easystock.domain.StockVO;
+import com.easystock.domain.WatchVO;
 
 public interface MemberDAORule {
 
@@ -21,4 +22,14 @@ public interface MemberDAORule {
 	public List<AccountVO> chk_h_list(String email);
 	//account 가격 업데이트
 	public void updatePrice(List<StockVO> s_list);
+	//테스터 계정 정기 삭제
+	public int delTester();
+	//관심종목확인
+	public List<WatchVO> chk_w_list(String email);
+	//관심 종목 기준 svo
+	public List<StockVO> chk_s_list(List<WatchVO> wlist);
+	//관심 종목 보유 현황 점검
+	public int hasWatchList(String email);
+	//보유 종목 현황 점검
+	public int hasHoldList(String email);
 }
