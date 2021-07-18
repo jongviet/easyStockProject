@@ -43,6 +43,15 @@
 		select count(email) from account where email = #{email}
 	</select>
 	
+	<!-- WatchVO List 리턴 to stock/list; 사용안함 -->
+	<select id="getWatchList" parameterType="String" resultType="wvo">
+		select symbol from watch where email =#{email}
+	</select>
+	<!-- // detail 관심 종목 아이콘 처리용 -->
+	<select id="inYourWatchList" parameterType="HashMap" resultType="int">
+		select count(symbol) from watch where email = #{email} and symbol = #{symbol};
+	</select>
+	
 	
 	<delete id="delTester">
 		delete from member where email like 'tester%'

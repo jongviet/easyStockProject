@@ -139,11 +139,12 @@
 		}
 	};
 </script>
+
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6 col-md-6 mx-auto float-left text-center">
 			<h3 class="mb-4 text-center greenFontBold">${ses_id}<span
-					class="grayFontBold">님의 자산현황</span>
+					class="grayFontBold mr-2">님의 자산현황</span><a href="/member/main/?email=${ses}"><i class="fa fa-refresh" style='font-size: 22px; color: #1F9688;'></i></a>
 			</h3>
 			<h5 class="text-center greenFontBold mb-3">
 				<span>총자산&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span id="asset"></span>
@@ -207,7 +208,7 @@
 				<c:if test="${h_list[0] eq null }">
 				<tfoot>
 					<tr>
-						<td colspan="5" class="grayLight">보유 종목을 추가 해보세요!&nbsp;&nbsp;<a href="/stock/trade"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
+						<td colspan="5" class="grayLight">거래를 시작해보세요&nbsp;&nbsp;<a href="#"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
 					</tr>
 				</tfoot>
 				</c:if>
@@ -218,18 +219,21 @@
 					<tr class="greenLineBold">
 						<th class="grayFontBold">종목명</th>
 						<th class="grayFontBold">현재가</th>
-						<th class="grayFontBold">평균목표가</th>
+						<th class="grayFontBold">목표가</th>
 						<th class="grayFontBold">52주 최고가</th>
+						<th class="grayFontBold">상세정보</th>
 						<th class="grayFontBold">거래하기</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${w_list}" var="svo">
-						<tr>
+						<tr>  
 							<td class="grayFont">${svo.symbol }</td>
 							<td class="grayFont">${svo.cur_price }</td>
 							<td class="grayFont">${svo.avg_target }</td>
 							<td class="grayFont">${svo.year_high }</td>
+							<td class="grayFont"><a href="/stock/detail?symbol=${svo.symbol}&email=${ses}"><i class="fas fa-info-circle"
+									style='font-size: 24px; color: #1F9688;'></i></a></td>
 							<td class="grayFont"><a href="#"><i class="fas fa-cart-plus"
 									style='font-size: 24px; color: #1F9688;'></i></a></td>
 						</tr>
@@ -238,12 +242,13 @@
 				<c:if test="${w_list eq null}">
 				<tfoot>
 					<tr>
-						<td colspan="5" class="grayLight">관심 종목을 추가 해보세요!&nbsp;&nbsp;<a href="/stock/list"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
-					</tr>
+						<td colspan="6" class="grayLight">종목 리스트를 둘러보세요&nbsp;&nbsp;<a href="/stock/list/?email=${ses}"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
+					</tr>                                                    
 				</tfoot>
 				</c:if>
 			</table>
 		</div>
 	</div>
 </div>
+
 <jsp:include page="common/footer.jsp" />

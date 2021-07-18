@@ -32,4 +32,8 @@ public interface MemberDAORule {
 	public int hasWatchList(String email);
 	//보유 종목 현황 점검
 	public int hasHoldList(String email);
+	//WatchVO List 리턴 to stock/list; 사용 안함
+	public List<WatchVO> getWatchList(String email);
+	//detail 관심 종목 아이콘 처리용
+	public int inYourWatchList(String email, String symbol);
 }

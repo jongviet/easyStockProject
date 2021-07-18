@@ -78,4 +78,16 @@ public class MemberService implements MemberServiceRule {
 	public int hasHoldList(String email) {
 		return mdao.hasHoldList(email);
 	}
+
+	//WatchVO List 리턴 to stock/list
+	@Override
+	public List<WatchVO> getWatchList(String email) {
+		return mdao.getWatchList(email);
+	}
+
+	// detail 관심 종목 아이콘 처리용
+	@Override
+	public int inYourWatchList(String email, String symbol) {
+		return mdao.inYourWatchList(email, symbol);
+	}
 }

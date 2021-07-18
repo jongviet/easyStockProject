@@ -19,4 +19,7 @@ public interface MemberServiceRule {
 	public List<StockVO> chk_w_list(String email); //관심종목
 	public int hasWatchList(String email); //관심종목 보유 현황 체크
 	public int hasHoldList(String email); // 보유 종목 체크
+	
+	public List<WatchVO> getWatchList(String email); //WatchVO List 리턴 to stock/list; 사용 안함
+	public int inYourWatchList(String email, String symbol); // detail 관심 종목 아이콘 처리용
 }

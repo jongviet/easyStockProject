@@ -358,3 +358,48 @@ function alpha_input_monthly(input) {
    
 /* Detail page 댓글 끝 */
 
+
+/* Detail 관심 종목 시작 */
+
+	/* 관심종목 추가 */
+    $(document).on("click", "#add_watch",  function(e) {
+         e.preventDefault();
+         let symbol_val =  $("#symbol").text();
+         let email_val = ses;
+         let pageIndex =  "${pghdl.pgvo.pageIndex}";
+         let countPerPage =  "${pghdl.pgvo.countPerPage}";
+         let range = "${pghdl.pgvo.range}";
+         let keyword = "${pghdl.pgvo.keyword}";
+                          
+         let url_val =  "/stock/add_watch/"+symbol_val+"/"+email_val + ".json";
+         
+         $.getJSON(url_val, function(result) {
+        	 alert(symbol_val + '을/를 관심 종목에 추가하였습니다.');
+        	 window.location.reload();
+         }).fail(function(err) {
+               console.log(err);
+         });
+    });
+	
+	/* 관심종목 제거 */
+     $(document).on("click", "#remove_watch",  function(e) {
+         e.preventDefault();
+         let symbol_val =  $("#symbol").text();
+         let email_val = ses;
+         let pageIndex =  "${pghdl.pgvo.pageIndex}";
+         let countPerPage =  "${pghdl.pgvo.countPerPage}";
+         let range = "${pghdl.pgvo.range}";
+         let keyword = "${pghdl.pgvo.keyword}";
+                          
+         let url_val =  "/stock/remove_watch/"+symbol_val+"/"+email_val + ".json";
+         
+         $.getJSON(url_val, function(result) {
+        	 alert(symbol_val + '을/를 관심 종목에서 제거하였습니다.');
+        	 window.location.reload();
+         }).fail(function(err) {
+               console.log(err);
+         });
+    });
+
+/* Detail 관심 종목 끝 */
+

@@ -71,12 +71,14 @@ public class StockService implements StockServiceRule {
 		return sdao.updatePrice(avo);
 	}
 
-	@Transactional(isolation =  Isolation.READ_COMMITTED)
+	//관종 추가
 	@Override
-	public List<WatchVO> insertAndList(WatchVO wvo) {
-		sdao.insert(wvo); //관심종목삽입
-		List<WatchVO> w_list = mdao.chk_w_list(wvo.getEmail()); //symbol만 담긴 watchVO의 리스트
-		
-		return w_list;
+	public int insert(WatchVO wvo) {
+		return sdao.insert(wvo);
+	}
+
+	@Override
+	public int delete(WatchVO wvo) {
+		return sdao.remove(wvo);
 	}
 }

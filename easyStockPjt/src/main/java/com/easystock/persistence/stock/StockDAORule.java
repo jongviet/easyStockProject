@@ -22,5 +22,6 @@ public interface StockDAORule {
 	public int updatePrice(StockVO svo);//거래 가격업뎃
 	public int updatePrice(AccountVO avo);  //어카운트 가격 데이터 업데이트
 	public int insert(WatchVO wvo); //관종추가
+	public int remove(WatchVO wvo);
 
 }

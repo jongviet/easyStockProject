@@ -48,6 +48,12 @@
 		insert into watch(email, symbol) values(#{email}, #{symbol})	
 	</insert>
 	
+	<!-- 관심종목 제거 -->
+	<delete id="remove_watch">
+		delete from watch where email = #{email} and symbol = #{symbol}
+	</delete>
+	
+	
 	<!-- paging & searching -->
 	<select id="tc" parameterType="pgvo" resultType="int">
 		select count(symbol) as cnt from stock where symbol is not null

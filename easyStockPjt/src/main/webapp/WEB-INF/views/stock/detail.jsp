@@ -7,7 +7,17 @@
 <!-- 디테일용 chartjs -->
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
 
-<h3 class="greenFontBold" style="float: left">${svo.fullName}<button type="submit" class="btn ml-3" style="background-color: #1F9688; color: white">거래하기</button></h3>
+<h3 class="greenFontBold" style="float: left">${svo.fullName}
+<a href="#"><i class="fas fa-cart-plus ml-2" style='font-size: 24px; color: #1F9688;'></i></a>
+<c:choose>
+	<c:when test="${hasWatch eq 1}">
+		<a href='#'><i class='fa fa-star' id='remove_watch' style='font-size: 24px; color: #1F9688;'></i></a>
+	</c:when>
+	<c:otherwise>
+		<a href='#'><i class='fa fa-star-o' id='add_watch' style='font-size: 24px; color: #1F9688;'></i></a>
+	</c:otherwise>
+</c:choose>
+</h3>
 <h5 class="grayFontBold" style="float: right;">Avg-Target : ${svo.avg_target} USD</h5>
 
 <div id="canvasDiv">

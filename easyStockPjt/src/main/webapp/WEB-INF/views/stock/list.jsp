@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="../common/header.jsp" />
 <jsp:include page="../common/nav.jsp" />
 
@@ -37,7 +38,6 @@
 						<th class="grayFontBold">Name</th>
 						<th class="grayFontBold">Sector</th>
 						<th class="text-right grayFontBold">Market_Capitalization</th>
-						<th class="grayFontBold">관심종목</th>
 						<th class="grayFontBold">거래하기</th>
 					</tr>
 				</thead>
@@ -46,14 +46,12 @@
 						<tr>
 							<td class="grayFont" id="symbol_watch">${svo.symbol }</td>
 							<td class="grayFont"><a
-								href="/stock/detail?symbol=${svo.symbol}&pageIndex=${pghdl.pgvo.pageIndex}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}"
+								href="/stock/detail?symbol=${svo.symbol}&pageIndex=${pghdl.pgvo.pageIndex}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}&email=${ses}"
 								class="greenFont">${svo.fullName}</a></td>
 							<td class="grayFont">${svo.sector }</td>
 							<td class="text-right grayFont">$<fmt:formatNumber
 									value="${svo.m_capitalization}" pattern="#,###" />&nbsp;&nbsp;&nbsp;
 							</td>
-							<td class="grayFontBold"><a href="" style="color:#1F9688" id="add_watch">
-							<i class="fa fa-star-o" style='font-size: 24px; color: #1F9688;'></i></a></td>
 							<td><a href="#"><i class="fas fa-cart-plus"
 									style='font-size: 24px; color: #1F9688;'></i></a></td>
 						</tr>
@@ -66,41 +64,13 @@
 				</tfoot>
 			</table>
 		</div>
-		<!-- 관심 종목 추가 / 삭제 / 페이징 -->
-		<script>
-		/* 관심종목 추가  */
-			$(function () {
-				$(document).on("click", "#add_watch", function(e) {
-					e.preventDefault();
-					let symbol_val = $(this).parent().parent().find("#symbol_watch").text();
-					let email_val = ses;
-					let pageIndex = "${pghdl.pgvo.pageIndex}";
-					let countPerPage = "${pghdl.pgvo.countPerPage}";
-					let range = "${pghdl.pgvo.range}";
-					let keyword = "${pghdl.pgvo.keyword}";
-								
-					let url_val = "/stock/add_watch/"+symbol_val+"/"+email_val + ".json";
-					
-					$.getJSON(url_val, function(result) {
-						console.log(result);
-						/* 배열안에 든 JSON 객체 형태로 리스트 가져옴~ */
-						
-						
-					}).fail(function(err) {
-						console.log(err);
-					});
-					
-					
-				});
-			});
-		</script>
-		
 		<div class="col-lg-6 col-md-6 ml-10 pl-10"
 			style="float: left; border: 1px solid black; text-align: center;">
 			<h1>NEWS!</h1>
 		</div>
 		<!-- trading view chart import -->
-		<div class="col-lg-6 col-md-6 ml-10 pl-10" style="float: right; text-align: center;">
+		<div class="col-lg-6 col-md-6 ml-10 pl-10"
+			style="float: right; text-align: center;">
 			<div class="tradingview-widget-container">
 				<div class="tradingview-widget-container__widget"></div>
 				<script type="text/javascript"

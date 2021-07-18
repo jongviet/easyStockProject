@@ -1,7 +1,5 @@
 package com.easystock.ctrl;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -22,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.easystock.domain.EarningVO;
-import com.easystock.domain.NewsVO;
 import com.easystock.domain.PageVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
 import com.easystock.handler.PagingHandler;
+import com.easystock.service.member.MemberServiceRule;
 import com.easystock.service.stock.StockServiceRule;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -38,6 +36,9 @@ public class StockController {
 
 	@Inject
 	private StockServiceRule ssv;
+	
+	@Inject
+	private MemberServiceRule msv;
 
 	//신규 종목 등록
 	@PostMapping(value = "/c_register", consumes = "application/json", produces = "application/text; charset=UTF-8")
@@ -72,8 +73,14 @@ public class StockController {
 	}
 
 	@GetMapping("/detail")
-	public void detail(Model model, @RequestParam("symbol") String symbol, @ModelAttribute("pgvo") PageVO pgvo) {
+	public void detail(Model model, @RequestParam("symbol") String symbol, @ModelAttribute("pgvo") PageVO pgvo, @RequestParam String email) {
 		model.addAttribute("svo", ssv.detail(symbol));
+
+		 if(msv.hasWatchList(email) > 0) {
+			 if(msv.inYourWatchList(email, symbol) > 0) {
+				 model.addAttribute("hasWatch", 1);
+			 }
+		 }
 	}
 	
 	@GetMapping("/trade")
@@ -84,15 +91,28 @@ public class StockController {
 	//관심종목 추가
 	@ResponseBody
 	@GetMapping(value = {"/add_watch/{symbol}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<List<WatchVO>> add_watch(@PathVariable String symbol, @PathVariable String email) {
+	public ResponseEntity<String> add_watch(@PathVariable String symbol, @PathVariable String email) {
 		
-		//관심 종목 추가만~ 일단~
 		WatchVO wvo = new WatchVO();
 		wvo.setEmail(email);
 		wvo.setSymbol(symbol);
 		
-		List<WatchVO> w_list = ssv.insertAndList(wvo);
+		int isUp = ssv.insert(wvo);
 		
-		return new ResponseEntity<List<WatchVO>> (w_list, HttpStatus.OK);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	//관심종목 제거
+	@ResponseBody
+	@GetMapping(value = {"/remove_watch/{symbol}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<String> remove_watch(@PathVariable String symbol, @PathVariable String email) {
+		
+		WatchVO wvo = new WatchVO();
+		wvo.setEmail(email);
+		wvo.setSymbol(symbol);
+		
+		int isUp = ssv.delete(wvo);
+		
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

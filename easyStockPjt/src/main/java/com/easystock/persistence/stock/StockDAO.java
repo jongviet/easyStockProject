@@ -65,9 +65,15 @@ public class StockDAO implements StockDAORule {
 		return sql.update(NS + "a_price_update", avo);
 	}
 
+	//관심종목 추가
 	@Override
 	public int insert(WatchVO wvo) {
 		return sql.insert(NS+"add_watch", wvo);
+	}
+
+	@Override
+	public int remove(WatchVO wvo) {
+		return sql.delete(NS+"remove_watch", wvo);
 	}
 
 }

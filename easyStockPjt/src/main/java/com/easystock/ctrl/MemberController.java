@@ -83,8 +83,6 @@ public class MemberController {
 			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
 			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
 			
-			System.out.println(">>>>" + msv.chk_h_list(mvo.getEmail()));
-
 			if(msv.hasWatchList(mvo.getEmail()) > 0) {
 				model.addAttribute("w_list", msv.chk_w_list(mvo.getEmail()));
 			}
