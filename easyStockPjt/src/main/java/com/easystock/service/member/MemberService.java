@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.PageVO;
 import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
@@ -93,12 +94,17 @@ public class MemberService implements MemberServiceRule {
 	}
 
 	@Override
-	public List<ReportVO> getReportList() {
-		return mdao.getReportList();
+	public List<ReportVO> getReportList(PageVO pgvo) {
+		return mdao.getReportList(pgvo);
 	}
 
 	@Override
 	public int deleteReport(int cNum) {
 		return mdao.deleteReport(cNum);
+	}
+
+	@Override
+	public int getReportCnt(PageVO pgvo) {
+		return mdao.getReportCnt(pgvo);
 	}
 }

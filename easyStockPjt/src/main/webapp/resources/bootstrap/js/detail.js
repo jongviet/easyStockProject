@@ -323,19 +323,34 @@ function alpha_input_monthly(input) {
 	/* 댓글 쓰기 */
 	$(document).on("click", "#posting", posting);
 	
+	/* 신고 글자수 40자 제한 */
+    function textLengthOverCut(txt) {
+	    var length = 40;
+		var lastTxt = "...";
+
+	    if (txt.length > length) {
+	        txt = txt.substr(0, length) + lastTxt;
+	    }
+	    return txt;
+	}
+	
 	/* 댓글 신고 */
     $(document).on("click", ".fa-minus-circle", function() {
         let cNum_val = $(this).data("cnum");
         let writer_val = $(this).data("writer");
         let reporter_val = ses;
-        var reportContent = prompt('허위 신고는 제재의 대상이 될 수 있습니다. 신고하시려면 사유를 적어주세요.');
+        var reportContent = prompt('허위 신고는 제재의 대상이 될 수 있습니다. 신고하시려면 사유를 적어주세요. [40자 제한]');
+        
+        var cut_content = textLengthOverCut(reportContent);
+        
+        console.log(cut_content);
                 
         if(reportContent != null) {
             let reportData = {
     				cNum : cNum_val,
     				writer : writer_val,
     				reporter : reporter_val,
-    				content : reportContent
+    				content : cut_content
     			};
     			$.ajax({
     				url : "/comment/report",

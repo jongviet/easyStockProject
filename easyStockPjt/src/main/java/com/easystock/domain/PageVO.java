@@ -74,5 +74,11 @@ public class PageVO {
 	public void setCal_idx(int cal_idx) {
 		this.cal_idx = cal_idx;
 	}
+
+	@Override
+	public String toString() {
+		return "PageVO [range=" + range + ", keyword=" + keyword + ", pageIndex=" + pageIndex + ", countPerPage="
+				+ countPerPage + ", cal_idx=" + cal_idx + "]";
+	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.PageVO;
 import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
@@ -39,6 +40,7 @@ public interface MemberDAORule {
 	public int inYourWatchList(String email, String symbol);
 	
 	//신고처리
-	public List<ReportVO> getReportList();
+	public List<ReportVO> getReportList(PageVO pgvo);
 	public int deleteReport(int cNum);
+	public int getReportCnt(PageVO pgvo);
 }

@@ -6,17 +6,17 @@
 <ul class="pagination justify-content-center pagination-sm">
 	<c:if test="${pghdl.prev}">
 		<li class="page-item"><a class="page-link"
-			href="/stock/list?pageIndex=${pghdl.firstPageIndex-1}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}">
+			href="/member/admin?pageIndex=${pghdl.firstPageIndex-1}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}">
 				Prev</a></li>
 	</c:if>
 	<c:forEach begin="${pghdl.firstPageIndex}" end="${pghdl.lastPageIndex}" var="i">
 		<li class="page-item ${pghdl.pgvo.pageIndex == i ? 'active' : ''}"><a class="page-link"
-			href="/stock/list?pageIndex=${i}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}">
+			href="/member/admin?pageIndex=${i}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}">
 				${i}</a></li>
 	</c:forEach>
 	<c:if test="${pghdl.next}">
 		<li class="page-item"><a class="page-link"
-			href="/stock/list?pageIndex=${pghdl.lastPageIndex+1}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}">
+			href="/member/admin?pageIndex=${pghdl.lastPageIndex+1}&countPerPage=${pghdl.pgvo.countPerPage}&range=${pghdl.pgvo.range}&keyword=${pghdl.pgvo.keyword}">
 				Next</a></li>
 	</c:if>
 </ul>

@@ -6,9 +6,9 @@
 <div class="col-lg-12 col-md-12 mx-auto">
 	<h3 class="float-left grayFontBold mt-1">신고내역</h3>
 	<h6 class="grayFont mb-4" style="clear:both;">이용 회원들이 신고한 내역 및 신고 당한 댓글 내용을 확인할 수 있습니다. 관리자 확인 후 적절한 조치를 취할 수 있습니다.</h6>
-	<table class="table table-hover">
+	<table class="table table-hover text-center">
 		<thead>
-			<tr class="greenLineBold text-center">
+			<tr class="greenLineBold">
 				<th class="grayFontBold">cNum</th>
 				<th colspan="3" class="grayFontBold">신고내용</th>
 				<th class="grayFontBold">조치사항</th>
@@ -17,7 +17,7 @@
 		<tbody>
 			<c:forEach items="${r_list}" var="rvo">
 				<tr>
-					<td class="grayFont text-center">
+					<td class="grayFont">
 					<a data-toggle="modal" data-target="#commentModal" id="comment" href="#" class="greenFontBold">${rvo.cNum }</a>
 					</td>
 					<td colspan="3" class="grayFont">${rvo.content}</td>
@@ -32,14 +32,12 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="6"><jsp:include page="../common/paging.jsp" /></td>
+				<td colspan="5" class="text-center"><jsp:include page="../common/paging_report.jsp" /></td>
 			</tr>
 		</tfoot>
 	</table>
 </div>
 <hr>
-
-
 
 <!-- comment modal -->
 <div class="modal fade" id="commentModal" tabindex="-1"
@@ -63,9 +61,6 @@
 		</div>
 	</div>
 </div>
-
-
-
 
 
 <div class="col-lg-12 col-md-12 mx-auto">

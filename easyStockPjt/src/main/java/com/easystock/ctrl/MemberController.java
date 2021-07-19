@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.PageVO;
+import com.easystock.handler.PagingHandler;
 import com.easystock.service.member.MemberServiceRule;
 import com.easystock.service.stock.StockServiceRule;
 
@@ -126,9 +128,12 @@ public class MemberController {
 	
 	//신고내역 처리
 	@RequestMapping(value = { "/admin" }, method = { RequestMethod.GET })
-	public String admin(Model model) {
+	public String admin(Model model, PageVO pgvo) {
 		
-		model.addAttribute("r_list", msv.getReportList());
+		model.addAttribute("r_list", msv.getReportList(pgvo));
+		int totalCnt = msv.getReportCnt(pgvo); //pgvo 신고 리스트 상 검색 기능 없기에 큰 의미는 없음
+		
+		model.addAttribute("pghdl", new PagingHandler(totalCnt, pgvo));
 		return "admin/admin";
 	}
 	

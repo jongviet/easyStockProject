@@ -53,12 +53,16 @@
 	</select>
 	
 	<!-- reportList -->
-	<select id="getReportList" resultType="rvo">
-	 	select * from report order by reportNum
+	<select id="getReportList" resultType="rvo" parameterType="pgvo">
+	 	select @rownum:=@rownum+1 rowNum, r.* from report r, (select @rownum:=0) temp
+		order by reportNum limit #{cal_idx}, #{countPerPage}
 	</select>
 	<delete id="deleteReport" parameterType="int">
 		delete from report where cNum = #{cNum}
 	</delete>
+	<select id="getReportCnt" parameterType="pgvo" resultType="int">
+		select count(reportNum) as cnt from report
+	</select>
 	
 	
 	<delete id="delTester">

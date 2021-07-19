@@ -59,7 +59,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="6"><jsp:include page="../common/paging.jsp" /></td>
+						<td colspan="5"><jsp:include page="../common/paging.jsp" /></td>
 					</tr>
 				</tfoot>
 			</table>

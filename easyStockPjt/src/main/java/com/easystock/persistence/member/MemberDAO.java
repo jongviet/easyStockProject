@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.PageVO;
 import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
@@ -113,13 +114,19 @@ public class MemberDAO implements MemberDAORule {
 	}
 
 	@Override
-	public List<ReportVO> getReportList() {
-		return sql.selectList(NS+"getReportList");
+	public List<ReportVO> getReportList(PageVO pgvo) {
+		pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 5);
+		return sql.selectList(NS+"getReportList", pgvo);
 	}
 
 	@Override
 	public int deleteReport(int cNum) {
 		return sql.delete(NS+"deleteReport", cNum);
+	}
+
+	@Override
+	public int getReportCnt(PageVO pgvo) {
+		return sql.selectOne(NS+"getReportCnt", pgvo);
 	}
 
 }
