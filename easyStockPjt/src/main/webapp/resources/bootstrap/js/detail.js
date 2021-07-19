@@ -293,7 +293,7 @@ function alpha_input_monthly(input) {
 	/* 댓글 쓰기  */
 	function posting() {
 		let symbol_val = $("#symbol").text();
-		let writer_val = ses;  /* 로그인한 이메일로 변경 필요! */
+		let writer_val = ses;
 		let comment_val = $("#comment").val();
 
 		if (comment_val == null || comment_val == '') {
@@ -327,12 +327,14 @@ function alpha_input_monthly(input) {
     $(document).on("click", ".fa-minus-circle", function() {
         let cNum_val = $(this).data("cnum");
         let writer_val = $(this).data("writer");
+        let reporter_val = ses;
         var reportContent = prompt('허위 신고는 제재의 대상이 될 수 있습니다. 신고하시려면 사유를 적어주세요.');
                 
         if(reportContent != null) {
             let reportData = {
     				cNum : cNum_val,
     				writer : writer_val,
+    				reporter : reporter_val,
     				content : reportContent
     			};
     			$.ajax({
@@ -366,10 +368,6 @@ function alpha_input_monthly(input) {
          e.preventDefault();
          let symbol_val =  $("#symbol").text();
          let email_val = ses;
-         let pageIndex =  "${pghdl.pgvo.pageIndex}";
-         let countPerPage =  "${pghdl.pgvo.countPerPage}";
-         let range = "${pghdl.pgvo.range}";
-         let keyword = "${pghdl.pgvo.keyword}";
                           
          let url_val =  "/stock/add_watch/"+symbol_val+"/"+email_val + ".json";
          
@@ -386,10 +384,6 @@ function alpha_input_monthly(input) {
          e.preventDefault();
          let symbol_val =  $("#symbol").text();
          let email_val = ses;
-         let pageIndex =  "${pghdl.pgvo.pageIndex}";
-         let countPerPage =  "${pghdl.pgvo.countPerPage}";
-         let range = "${pghdl.pgvo.range}";
-         let keyword = "${pghdl.pgvo.keyword}";
                           
          let url_val =  "/stock/remove_watch/"+symbol_val+"/"+email_val + ".json";
          

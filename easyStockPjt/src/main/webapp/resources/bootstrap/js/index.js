@@ -33,8 +33,6 @@ $(document).ready(function() {
 	
 	today = year + "" + month + "" + date+ "" + hour; //오늘 날짜 완성
 	
-
-	
 	if((hour == 19) && (min == 23)) {
 		tradeable();
 	}
@@ -42,7 +40,6 @@ $(document).ready(function() {
 	if((hour == 19) && (min == 23)) {
 		tradeable_account();
 	}
-	
 });
 	
 function tradeable() {

@@ -57,4 +57,9 @@ public class CommentService implements CommentServiceRule {
 	public int report(ReportVO rvo) {
 		return cdao.report(rvo);
 	}
+
+	@Override
+	public CommentVO getReportedComment(int cNum) {
+		return cdao.getReportedComment(cNum);
+	}
 }

@@ -11,4 +11,5 @@ public interface CommentServiceRule {
 	public int t_up(int cNum, String writer);
 	public int delete(int cNum);
 	public int report(ReportVO rvo);
+	public CommentVO getReportedComment(int cNum);
 }

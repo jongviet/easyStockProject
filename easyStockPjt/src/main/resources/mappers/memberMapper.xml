@@ -52,6 +52,14 @@
 		select count(symbol) from watch where email = #{email} and symbol = #{symbol};
 	</select>
 	
+	<!-- reportList -->
+	<select id="getReportList" resultType="rvo">
+	 	select * from report order by reportNum
+	</select>
+	<delete id="deleteReport" parameterType="int">
+		delete from report where cNum = #{cNum}
+	</delete>
+	
 	
 	<delete id="delTester">
 		delete from member where email like 'tester%'

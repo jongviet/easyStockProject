@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
 
@@ -36,4 +37,8 @@ public interface MemberDAORule {
 	public List<WatchVO> getWatchList(String email);
 	//detail 관심 종목 아이콘 처리용
 	public int inYourWatchList(String email, String symbol);
+	
+	//신고처리
+	public List<ReportVO> getReportList();
+	public int deleteReport(int cNum);
 }

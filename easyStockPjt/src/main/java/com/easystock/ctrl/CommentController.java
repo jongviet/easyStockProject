@@ -23,6 +23,7 @@ import com.easystock.domain.EarningVO;
 import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.service.comment.CommentServiceRule;
+import com.easystock.service.member.MemberServiceRule;
 import com.easystock.service.stock.StockServiceRule;
 
 @RequestMapping("/comment/*")
@@ -35,6 +36,9 @@ public class CommentController {
 
 	@Inject
 	private StockServiceRule ssv;
+	
+	@Inject
+	private MemberServiceRule msv;
 
 	//댓글 등록, 삭제 및 리스트
 	@PostMapping(value = "/post", consumes = "application/json", produces = "application/text; charset=UTF-8")
@@ -54,15 +58,6 @@ public class CommentController {
 		return new ResponseEntity<List<CommentVO>>(csv.getList(symbol), HttpStatus.OK);
 	}
 	
-	//신고하기
-	@PostMapping(value = "/report", consumes = "application/json", produces = "application/text; charset=UTF-8")
-	public ResponseEntity<String> report(@RequestBody ReportVO rvo) {
-		
-		int isUp = csv.report(rvo); 
-		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
-				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
 	//좋아요
 	@GetMapping(value = "/cNum/{cNum}/{writer}", produces = { MediaType.APPLICATION_ATOM_XML_VALUE,
 			MediaType.APPLICATION_JSON_UTF8_VALUE })
@@ -77,6 +72,38 @@ public class CommentController {
 			MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<List<EarningVO>> earning(@PathVariable String symbol) {
 		return new ResponseEntity<List<EarningVO>>(ssv.getEarningList(symbol), HttpStatus.OK);
+	}
+	
+	//신고하기
+	@PostMapping(value = "/report", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> report(@RequestBody ReportVO rvo) {
+		
+		int isUp = csv.report(rvo); 
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	//신고 내역 상 comment 현황
+	@GetMapping(value = "/cNum/{cNum}", produces = { MediaType.APPLICATION_ATOM_XML_VALUE,
+			MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<CommentVO> reportedCmt(@PathVariable int cNum) {
+		return new ResponseEntity<CommentVO>(csv.getReportedComment(cNum), HttpStatus.OK);
+	}
+	
+	//신고 내역 accepted -> 신고내역 + 신고 당한 댓글 제거
+	@DeleteMapping(value="/accepted/{cNum}", produces= MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> acceptedReport(@PathVariable("cNum") int cNum) {
+		//신고 내역 제거
+		msv.deleteReport(cNum);
+		//신고 당한 댓글 좋아요 -> 원댓글 제거
+		return csv.delete(cNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	//신고 내역 denied -> 신고내역 + 신고 당한 댓글 제거
+	@DeleteMapping(value="/denied/{cNum}", produces= MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> deniedReport(@PathVariable("cNum") int cNum) {
+		//신고 내역만 제거
+		return msv.deleteReport(cNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	//거래 종목 단가 업데이트 위치 애매해서 commentController에서 작업!
@@ -94,4 +121,6 @@ public class CommentController {
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	
 }

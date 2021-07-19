@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
 
@@ -109,6 +110,16 @@ public class MemberDAO implements MemberDAORule {
 		map.put("symbol", symbol);
 		
 		return sql.selectOne(NS+"inYourWatchList", map);
+	}
+
+	@Override
+	public List<ReportVO> getReportList() {
+		return sql.selectList(NS+"getReportList");
+	}
+
+	@Override
+	public int deleteReport(int cNum) {
+		return sql.delete(NS+"deleteReport", cNum);
 	}
 
 }

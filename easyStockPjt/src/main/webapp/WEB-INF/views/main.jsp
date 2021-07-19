@@ -8,8 +8,6 @@
 <script src="/resources/bootstrap/js/Chart.min.js"></script>
 <script src="/resources/bootstrap/js/main.js"></script>
 <script>
-	/* 종목 보유 내역 있을 시 가격 업데이트 */
-/*  	<c:if test="${h_list ne null}"> */
  	var symbol_arr = [];
 	var h_price_arr = [];
 	var h_qty_arr = [];
@@ -24,10 +22,10 @@
 	var h_price = "${avo.avg_h_price}";
 	var h_qty = "${avo.h_qty}";
 	var c_price = "${avo.cur_price}";
-	symbol_arr.unshift(symbol);
-	h_price_arr.unshift(Number(h_price));
-	h_qty_arr.unshift(Number(h_qty));
-	c_price_arr.unshift(Number(c_price));
+	symbol_arr.push(symbol);
+	h_price_arr.push(Number(h_price));
+	h_qty_arr.push(Number(h_qty));
+	c_price_arr.push(Number(c_price));
 	</c:forEach>
 
 	/* asset 처리 */
@@ -45,36 +43,41 @@
 	/* 매매 기준 전체 총 평가액 */
 	var asset_input_val = (deposit_val + asset_input).toFixed(2);
 
+	
 	/* 현재 기준 전체 총 평가액 */
 	var asset_val = (deposit_val + asset).toFixed(2);
+	var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 
 	/* 현재 기준 주식 총 평가액 */
 	var stock_val = asset.toFixed(2);
+	var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 
 	var earning = (asset_val - asset_input_val).toFixed(2);
-	var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100)
-			.toFixed(2);
-
+	var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	
+	var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
+	var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	
 	$(function() {
-		$("#percentage").text(earningPer);
-		$("#profit").text(earning);
-		$("#stock").text(stock_val);
-		$("#asset").text(asset_val);
+		
+		$("#percentage").text(earningPer_comma);
+		$("#profit").text(earning_comma);
+		$("#stock").text(stock_val_comma);
+		$("#asset").text(asset_val_comma);
 
 		/* 예수금 포함 각 주식 별 금액 던지기 */
 		var eachStockVal = [];
 
 		for (let i = 0; i < c_price_arr.length; i++) {
-			eachStockVal.unshift(c_price_arr[i] * h_qty_arr[i]);
+			eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
 		}
-
+		
 		/* 예수금 추가 */
-		symbol_arr.unshift('예수금');
-		eachStockVal.unshift(deposit_val);
+		symbol_arr.push('예수금');
+		eachStockVal.push(deposit_val);
 
-		current_asset(symbol_arr, eachStockVal);
+		current_asset(symbol_arr, eachStockVal);	
 	});
-/* 	</c:if> */
 
 	function current_asset(symbol_arr, eachStockVal) {
 		var ctx = document.getElementById('myChartTwo');
@@ -154,7 +157,8 @@
 				<tbody>
 					<tr class="greenLineBold">
 						<td colspan="2" class="grayFontBold">예수금</td>
-						<td colspan="2" class="grayFontBold" id="deposit">${deposit}<span>&nbsp;USD</span></td>
+						<td colspan="2" class="grayFontBold" id="deposit"><fmt:formatNumber value="${deposit}" pattern="#,###.00"/>
+						<span>&nbsp;USD</span></td>
 					</tr>
 					<tr class="greenLine">
 						<td colspan="2" class="grayFontBold">주식</td>
@@ -186,6 +190,7 @@
 						<th class="grayFontBold">현재가</th>
 						<th class="grayFontBold">매입가</th>
 						<th class="grayFontBold">보유량</th>
+						<th class="grayFontBold">평가금액</th>
 						<th class="grayFontBold">수익률</th>
 					</tr>
 				</thead>
@@ -196,6 +201,7 @@
 							<td class="grayFont">${avo.cur_price }</td>
 							<td class="grayFont">${avo.avg_h_price }</td>
 							<td class="grayFont">${avo.h_qty }</td>
+							<td class="grayFont"><fmt:formatNumber value="${avo.cur_price * avo.h_qty }" pattern="#,###.00" />&nbsp;USD</td>
 							<td
 								class="${ ((1- (avo.h_qty * avo.avg_h_price) / (avo.h_qty * avo.cur_price))) < 0 ? 'minus' : 'plus'}">
 								<fmt:formatNumber
@@ -208,7 +214,7 @@
 				<c:if test="${h_list[0] eq null }">
 				<tfoot>
 					<tr>
-						<td colspan="5" class="grayLight">거래를 시작해보세요&nbsp;&nbsp;<a href="#"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
+						<td colspan="6" class="grayLight">거래를 시작해보세요&nbsp;&nbsp;<a href="#"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
 					</tr>
 				</tfoot>
 				</c:if>

@@ -13,7 +13,7 @@
 			<li class="nav-item"><a class="nav-link" href="">${ses_id}님 환영합니다.</a></li>
 			<li class="nav-item"><a class="nav-link" href="/member/main/?email=${ses}">내 포트폴리오</a></li>
 			<li class="nav-item"><a class="nav-link" href="/stock/list">종목리스트</a></li>
-			<li class="nav-item"><a class="nav-link" href="/admin">관리자모드(종목등록, 댓글처리)</a></li>
+			<li class="nav-item"><a class="nav-link" href="/member/admin">관리자모드(종목등록, 댓글처리)</a></li>
 			<li class="nav-item"><a class="nav-link" id="logout" href="/member/logout">로그아웃</a></li>
 		</ul>
 	</div>

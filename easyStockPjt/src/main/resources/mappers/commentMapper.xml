@@ -31,6 +31,10 @@
 	
 	<!-- 신고 처리 -->
 	<insert id="report">
-		insert into report(cNum, writer, content) values (#{cNum}, #{writer}, #{content})
+		insert into report(cNum, writer, content, reporter) values (#{cNum}, #{writer}, #{content}, #{reporter})
 	</insert>
+	<select id="reported_cmt" parameterType="int" resultType="cvo">
+		select * from comment where cNum = #{cNum};
+	</select>
+	
 </mapper>

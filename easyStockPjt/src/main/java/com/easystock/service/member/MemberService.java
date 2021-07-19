@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.MemberVO;
+import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
 import com.easystock.persistence.member.MemberDAORule;
@@ -89,5 +90,15 @@ public class MemberService implements MemberServiceRule {
 	@Override
 	public int inYourWatchList(String email, String symbol) {
 		return mdao.inYourWatchList(email, symbol);
+	}
+
+	@Override
+	public List<ReportVO> getReportList() {
+		return mdao.getReportList();
+	}
+
+	@Override
+	public int deleteReport(int cNum) {
+		return mdao.deleteReport(cNum);
 	}
 }

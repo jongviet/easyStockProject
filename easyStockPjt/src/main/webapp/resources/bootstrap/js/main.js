@@ -1,4 +1,3 @@
-/* 모든 회원 현재가 업데이트 진행  */
     /**
      * Init Alpha Vantage with your API key.
      *
@@ -50,4 +49,9 @@ $(document).ready(function() {
 	  }
 	});
 });
+
+
+
+
+
 

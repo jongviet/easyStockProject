@@ -21,6 +21,7 @@ public interface CommentDAORule {
 	
 	//신고처리
 	public int report(ReportVO rvo);
+	public CommentVO getReportedComment(int cNum);
 
 
 }

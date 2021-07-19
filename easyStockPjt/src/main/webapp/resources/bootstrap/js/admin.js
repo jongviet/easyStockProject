@@ -7,9 +7,16 @@
      */
     const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
     
-    $("#inputBtn").on("click", function() {
-	let input_val = $("#input").val();
-	overview_input(input_val);
+$("#inputBtn").on("click", function() {
+	$(function() {
+		let input_val = $("#input").val();
+		
+		if(input_val == null || input_val == '') {
+			alert('symbol을 입력해주세요');
+			return false;
+		}
+		overview_input(input_val);
+	});
 });
 
 /* company_overview */
@@ -107,3 +114,159 @@ function earning_input(input_val) {
 
    });
 };
+
+
+
+
+$(document).ready(function() {
+
+	$("#priceUpdate").on("click", function() {
+		tradeable();
+		alert('전일 종가 업데이트 완료');
+	});
+	
+	$("#accountUpdate").on("click", function() {
+		tradeable_account();
+		alert('Member Account 현재가 업데이트 완료');
+	});
+});
+
+
+function tradeable() {
+	
+	var tradeableList = ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'FB', 'TSLA', 'TSM', 'BABA', 'V', 'NVDA', 'JPM', 'JNJ', 'WMT', 'UNH', 'MA',
+			'BAC', 'HD', 'PG', 'DIS', 'XOM', 'NKE', 'NFLX', 'VZ', 'KO', 'INTC', 'ORCL', 'PFE', 'CVX', 'UPS', 'COST', 
+			'TXN', 'MCD', 'QCOM', 'HON', 'BMY', 'NEE', 'BA', 'UBER', 'FDX', 'ATVI', 'F', 'SPG', 'LUV', 'O', 'OHI'];																			
+
+	for(let idx in tradeableList) {
+		adjusted_close(tradeableList[idx]);
+	};
+};
+
+function tradeable_account() {
+	
+	var tradeableList = ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'FB', 'TSLA', 'TSM', 'BABA', 'V', 'NVDA', 'JPM', 'JNJ', 'WMT', 'UNH', 'MA',
+			'BAC', 'HD', 'PG', 'DIS', 'XOM', 'NKE', 'NFLX', 'VZ', 'KO', 'INTC', 'ORCL', 'PFE', 'CVX', 'UPS', 'COST', 
+			'TXN', 'MCD', 'QCOM', 'HON', 'BMY', 'NEE', 'BA', 'UBER', 'FDX', 'ATVI', 'F', 'SPG', 'LUV', 'O', 'OHI'];																			
+
+	for(let idx in tradeableList) {
+		adjusted_close_account(tradeableList[idx]);
+	};
+};
+
+
+function adjusted_close(input_val) { 
+	
+	alpha.data.daily_adjusted(input_val).then((data) => {
+		
+ 		var bigObj = data["Time Series (Daily)"];
+		
+		var jsonArray = Object.entries(bigObj);
+		
+		var cur_price_val = jsonArray[0][1]["5. adjusted close"];
+					
+			let price_data = {
+				symbol : input_val,
+				cur_price : cur_price_val
+			};
+			$.ajax({
+				url : "/comment/trade",
+				type : "post",
+				data : JSON.stringify(price_data),
+				contentType : "application/json; charset=utf-8"
+			});
+	});
+};
+
+function adjusted_close_account(input_val) { 
+	
+	alpha.data.daily_adjusted(input_val).then((data) => {
+		
+ 		var bigObj = data["Time Series (Daily)"];
+		
+		var jsonArray = Object.entries(bigObj);
+		
+		var cur_price_val = jsonArray[0][1]["5. adjusted close"];
+		
+			let price_data = {
+				symbol : input_val,
+				cur_price : cur_price_val
+			};
+			$.ajax({
+				url : "/comment/account",
+				type : "post",
+				data : JSON.stringify(price_data),
+				contentType : "application/json; charset=utf-8"
+			});
+  });
+};
+
+
+/* 코멘트 현황 */
+function print_comment(cvo) {
+	let commentBox = $(".commentBox");
+	commentBox.empty();	
+	
+	let cmtData = '<h5 class="grayFontBold">작성자 : '+cvo.writer+'</h5><h6 class="grayFont">'+cvo.comment+'</h6>';
+	
+	$("#exampleModalLabel").text("코멘트 번호 : " + cvo.cNum + " / " + "좋아요 : " + cvo.t_up + " / " + "종목 : " + cvo.symbol);
+	commentBox.append(cmtData);
+};
+
+/* 코멘트 조회 버튼 클릭 */
+$(document).on("click", "#comment", function() {
+
+		$("#commentModal").css("z-index", "3000");
+		
+		let cNum_val = $(this).text();
+		let url_val = "/comment/cNum/"+cNum_val;
+		
+		$.getJSON(url_val, function(result) {
+			print_comment(result);
+		}).fail(function(err) {
+			console.log(err);
+		});
+});
+
+/* 신고 내역 조치  */
+/* 댓글 삭제 cNum 관련한 모든 신고 내역 삭제 및 해당 댓글 삭제  */
+$(function () {
+	$(document).on("click", "#accepted", function() {
+	let cNum_val = $(this).parent().parent().find("#comment").text();
+	
+		$.ajax({
+			url : "/comment/accepted/"+cNum_val,
+			type : "delete"		
+		}).done(function(result) {
+			if(parseInt(result) > 0) {
+				alert('신고 내역 처리 후, 댓글이 정상적으로 삭제 조치되었습니다.');
+				window.location.reload();
+			};
+		});;
+	
+	});
+});
+
+/* 삭제 사유 불충분 -> 신고 내역만 삭제  */
+$(function () {
+	$(document).on("click", "#denied", function() {
+	let cNum_val = $(this).parent().parent().find("#comment").text();
+	
+		$.ajax({
+			url : "/comment/denied/"+cNum_val,
+			type : "delete"		
+		}).done(function(result) {
+			if(parseInt(result) > 0) {
+				alert('신고 내역을 무효화 처리하였습니다.');
+				window.location.reload();
+			};
+		});;
+	
+	});
+});
+
+
+
+
+
+

@@ -79,5 +79,10 @@ public class CommentDAO implements CommentDAORule {
 		return sql.insert(NS+"report", rvo);
 	}
 
+	@Override
+	public CommentVO getReportedComment(int cNum) {
+		return sql.selectOne(NS+"reported_cmt", cNum);
+	}
+
 
 }

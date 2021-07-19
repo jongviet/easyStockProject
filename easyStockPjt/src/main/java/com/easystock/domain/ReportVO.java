@@ -5,10 +5,16 @@ public class ReportVO {
 	private int cNum;
 	private String writer;
 	private String content;
+	private String reporter;
 	
 	public ReportVO() {
 	}
-
+	public String getReporter() {
+		return reporter;
+	}
+	public void setReporter(String reporter) {
+		this.reporter = reporter;
+	}
 	public int getReportNum() {
 		return reportNum;
 	}
@@ -35,11 +41,13 @@ public class ReportVO {
 	public void setWriter(String writer) {
 		this.writer = writer;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "ReportVO [reportNum=" + reportNum + ", cNum=" + cNum + ", writer=" + writer + ", content=" + content
-				+ "]";
+				+ ", reporter=" + reporter + "]";
 	}
+
+	
 	
 }

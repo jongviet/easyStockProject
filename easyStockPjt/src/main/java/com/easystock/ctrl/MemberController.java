@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,7 +32,7 @@ public class MemberController {
 	//테스터 계정 체크, 가입 후, session 부여
 	@ResponseBody
 	@PostMapping("/chkTester")
-	public String chkTester(@RequestParam("email") String email, HttpSession ses, Model model) {
+	public String chkTester(@RequestParam("email") String email, HttpSession ses) {
 		int result = msv.chkTester(email);
 		if(result > 0) {
 			ses.setAttribute("ses", email);
@@ -123,6 +124,12 @@ public class MemberController {
 		return msv.chkDeposit(email);
 	}
 	
-	
+	//신고내역 처리
+	@RequestMapping(value = { "/admin" }, method = { RequestMethod.GET })
+	public String admin(Model model) {
+		
+		model.addAttribute("r_list", msv.getReportList());
+		return "admin/admin";
+	}
 	
 }
