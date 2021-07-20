@@ -107,4 +107,30 @@ public class MemberService implements MemberServiceRule {
 	public int getReportCnt(PageVO pgvo) {
 		return mdao.getReportCnt(pgvo);
 	}
+
+	@Override
+	public AccountVO getSpecificSymbol(String keyword, String email) {
+		return mdao.getSpecificSymbol(keyword, email);
+	}
+
+	@Override
+	public StockVO getSpecificSymbol_new(String keyword) {
+		return mdao.getSpecificSymbol_new(keyword);
+	}
+
+	@Transactional
+	@Override
+	public int newBuy(AccountVO avo) {
+		//예수금 처리
+		double price = avo.getAvg_h_price() * avo.getH_qty();
+		String email = avo.getEmail();
+		int result1 = mdao.deductDeposit(price, email);
+		int result2 = 0;
+		
+		//account 등록
+		if(result1 > 0) {
+			result2 = mdao.newBuy(avo);
+		}
+		return result2;
+	}
 }

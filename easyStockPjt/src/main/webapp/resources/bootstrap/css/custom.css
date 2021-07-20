@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+#orderSheet > tbody > tr > td {
+	word-break:break-all;
+}
+
+
 .grayLight {
 	color:#767675B3;
 }

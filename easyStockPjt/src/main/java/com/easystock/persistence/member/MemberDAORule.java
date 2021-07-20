@@ -43,4 +43,11 @@ public interface MemberDAORule {
 	public List<ReportVO> getReportList(PageVO pgvo);
 	public int deleteReport(int cNum);
 	public int getReportCnt(PageVO pgvo);
+	//매수 거래 리스트
+	public AccountVO getSpecificSymbol(String keyword, String email);
+	public StockVO getSpecificSymbol_new(String keyword);
+	//신규 매수
+	public int newBuy(AccountVO avo);
+	//예수금 처리
+	public int deductDeposit(double price, String email);
 }

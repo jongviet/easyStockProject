@@ -89,7 +89,7 @@
 					label : 'Stock',
 					data : eachStockVal,
 					backgroundColor : [ '#99E6B2', '#7AD2A8', '#5CBE9D',
-							'#3DAA93', '#1F9688', '#00827E' ],
+							'#3DAA93', '#1F9688', '#00827E', '#008562', '#009D74', '#006E50', '#00563E'],
 					borderWidth : 2
 				} ],
 			},

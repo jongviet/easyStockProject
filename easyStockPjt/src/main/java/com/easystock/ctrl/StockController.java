@@ -1,5 +1,8 @@
 package com.easystock.ctrl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.easystock.domain.AccountVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
+import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
 import com.easystock.handler.PagingHandler;
@@ -83,10 +88,34 @@ public class StockController {
 		 }
 	}
 	
-	@GetMapping("/trade")
-	public void trade() {
+	//매수, 매도 종목 조회
+	@ResponseBody
+	@GetMapping(value = {"/buyList/{keyword}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<HashMap<String, Object>> buyList(@PathVariable String keyword, @PathVariable String email) {
 		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("deposit", msv.chkDeposit(email));
+		
+		AccountVO avo = msv.getSpecificSymbol(keyword, email);
+		if(avo == null) {
+			StockVO svo = msv.getSpecificSymbol_new(keyword);
+			map.put("svo", svo);
+		} else {
+			map.put("avo", avo);
+		}
+		return (map != null) ? new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK) : new ResponseEntity<HashMap<String, Object>>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	//신규 매수
+	@PostMapping(value = "/newBuy", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> newBuy(@RequestBody AccountVO avo) {
+		
+		int isUp = msv.newBuy(avo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	
 	
 	//관심종목 추가
 	@ResponseBody

@@ -84,7 +84,7 @@ public class MemberDAO implements MemberDAORule {
 	//메인페이지 관심 종목 처리용 WatchVO -> StockVO
 	@Override
 	public List<StockVO> chk_s_list(List<WatchVO> wlist) {
-		return sql.selectList(NS+"s_list", wlist);
+		return sql.selectList(NS+"st_list", wlist);
 	}
 
 	@Override
@@ -127,6 +127,34 @@ public class MemberDAO implements MemberDAORule {
 	@Override
 	public int getReportCnt(PageVO pgvo) {
 		return sql.selectOne(NS+"getReportCnt", pgvo);
+	}
+
+	@Override
+	public AccountVO getSpecificSymbol(String keyword, String email) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("keyword", keyword);
+		
+		return sql.selectOne(NS+"getSpecificSymbol", map);
+	}
+
+	@Override
+	public StockVO getSpecificSymbol_new(String keyword) {
+		return sql.selectOne(NS+"getSpecificSymbol_new", keyword);
+	}
+
+	@Override
+	public int newBuy(AccountVO avo) {
+		return sql.insert(NS+"newBuy", avo);
+	}
+
+	@Override
+	public int deductDeposit(double price, String email) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("price", price);
+		
+		return sql.update(NS+"deductDeposit", map);
 	}
 
 }

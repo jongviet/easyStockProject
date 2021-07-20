@@ -22,7 +22,8 @@
 		select deposit_usd from member where email = #{email}	
 	</select>
 	<select id="h_list" parameterType="String" resultType="avo">
-		select * from account where email = #{email}
+		select h_num, email, symbol, avg_h_price, h_qty, cur_price,
+		cur_price * h_qty as total from account where email = #{email} order by total desc
 	</select>
 		
 	<!-- 관심 종목의 symbol 조회 -->
@@ -30,7 +31,7 @@
 		select symbol from watch where email = #{email}
 	</select>
 	<!-- 관심종목에 포함되어 있는 stock List 출력; symbol만 담긴 wvo 리스트로 select한 구문 -->
-	<select id="s_list" parameterType="wvo" resultType="svo">
+	<select id="st_list" parameterType="wvo" resultType="svo">
 		select * from stock where symbol in
 		<foreach collection="list" item="wvo" open="(" separator="," close=")">#{wvo.symbol}</foreach>
 	</select>
@@ -64,6 +65,24 @@
 		select count(reportNum) as cnt from report
 	</select>
 	
+	<!-- 매수 매도 리스트용 -->
+	<select id="getSpecificSymbol" parameterType="HashMap" resultType="avo">
+		select * from account where email = #{email} and symbol = #{keyword}
+	</select>
+	<select id="getSpecificSymbol_new" parameterType="String" resultType="svo">
+		select * from stock where symbol = #{keyword}
+	</select>
+	
+	<!-- 매수용 예수굼 차감 -->
+	<update id="deductDeposit" parameterType="HashMap">
+		update member set deposit_usd = deposit_usd - #{price} where email = #{email}
+	</update>
+	
+	<!-- 신규 매수 -->
+	<insert id="newBuy">
+		insert into account(email, symbol, avg_h_price, h_qty, cur_price)
+		values(#{email}, #{symbol}, #{avg_h_price}, #{h_qty}, #{cur_price})
+	</insert>
 	
 	<delete id="delTester">
 		delete from member where email like 'tester%'

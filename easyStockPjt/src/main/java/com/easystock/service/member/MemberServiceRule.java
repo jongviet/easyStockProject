@@ -28,4 +28,9 @@ public interface MemberServiceRule {
 	public List<ReportVO> getReportList(PageVO pgvo);
 	public int deleteReport(int cNum); //신고 내역 제거
 	public int getReportCnt(PageVO pgvo); //리포트 카운트
+	
+	public AccountVO getSpecificSymbol(String keyword, String email); //매수용 리스트
+	public StockVO getSpecificSymbol_new(String keyword); //신규 매수용 리스트
+	
+	public int newBuy(AccountVO avo); //신규 구매
 }
