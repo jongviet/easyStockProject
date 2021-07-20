@@ -35,6 +35,11 @@
 	border-top: 1.8px solid #1F9688;
 }
 
+.none {
+	color: #767675 !important;
+}
+
+
 .minus {
 	color: blue;
 }

@@ -157,4 +157,37 @@ public class MemberDAO implements MemberDAORule {
 		return sql.update(NS+"deductDeposit", map);
 	}
 
+	@Override
+	public AccountVO getCurrentAccount(String email, String symbol) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("symbol", symbol);
+		
+		return sql.selectOne(NS+"getCurrentAccount", map);
+	}
+
+	@Override
+	public int updateAccount(AccountVO new_avo) {
+		return sql.update(NS+"updateAccount", new_avo);
+	}
+
+	@Override
+	public int addDeposit(double price, String email) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("price", price);
+		
+		return sql.update(NS+"addDeposit", map);
+	}
+
+	@Override
+	public int updateAccount_sell(AccountVO avo) {
+		return sql.update(NS+"updateAccount_sell", avo);
+	}
+
+	@Override
+	public int deleteAccount_sell(AccountVO avo) {
+		return sql.delete(NS+"deleteAccouont_sell", avo);
+	}
+
 }

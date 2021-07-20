@@ -133,4 +133,56 @@ public class MemberService implements MemberServiceRule {
 		}
 		return result2;
 	}
+
+	@Transactional
+	@Override
+	public int additionalBuy(AccountVO new_avo) {
+		
+		//예수금 처리
+		double price = new_avo.getAvg_h_price() * new_avo.getH_qty();
+		String email = new_avo.getEmail();
+		mdao.deductDeposit(price, email);
+
+		//기존 계좌 정보 호출
+		AccountVO cur_avo = mdao.getCurrentAccount(new_avo.getEmail(), new_avo.getSymbol());
+		
+		//연산
+		double avg_h_price = (  (cur_avo.getAvg_h_price() * cur_avo.getH_qty()) + (new_avo.getAvg_h_price() * new_avo.getH_qty()) ) / 
+				(cur_avo.getH_qty() + new_avo.getH_qty());
+		
+		new_avo.setAvg_h_price(avg_h_price);
+		new_avo.setH_qty(cur_avo.getH_qty() + new_avo.getH_qty());
+		
+		return mdao.updateAccount(new_avo);
+	}
+	
+	@Transactional
+	@Override
+	public int sell(AccountVO avo) {
+		
+		//예수금 처리
+		//h_qty에 매도할 수량 전송, 현재가 * 매도할 수량을 예수금으로 리턴
+		double price = avo.getCur_price() * avo.getH_qty();
+		String email = avo.getEmail();
+		mdao.addDeposit(price, email);
+		
+		//기존 계좌 정보 호출
+		AccountVO cur_avo = mdao.getCurrentAccount(avo.getEmail(), avo.getSymbol());
+		
+		//보유량 전체 매도 케이스; 보유 수량 보다 더 많은 수량은 클라이언트 단에서 진입 불가
+		if(cur_avo.getH_qty() == avo.getH_qty()) {
+			return mdao.deleteAccount_sell(avo);
+		} else {
+			return mdao.updateAccount_sell(avo);
+		}
+	}
 }
+
+
+
+
+
+
+
+
+

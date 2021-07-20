@@ -90,8 +90,8 @@ public class StockController {
 	
 	//매수, 매도 종목 조회
 	@ResponseBody
-	@GetMapping(value = {"/buyList/{keyword}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<HashMap<String, Object>> buyList(@PathVariable String keyword, @PathVariable String email) {
+	@GetMapping(value = {"/list/{keyword}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<HashMap<String, Object>> list(@PathVariable String keyword, @PathVariable String email) {
 		
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("deposit", msv.chkDeposit(email));
@@ -109,13 +109,24 @@ public class StockController {
 	//신규 매수
 	@PostMapping(value = "/newBuy", consumes = "application/json", produces = "application/text; charset=UTF-8")
 	public ResponseEntity<String> newBuy(@RequestBody AccountVO avo) {
-		
 		int isUp = msv.newBuy(avo);
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	//추가 매수
+	@PostMapping(value = "/additionalBuy", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> additionalBuy(@RequestBody AccountVO new_avo) {
+		int isUp = msv.additionalBuy(new_avo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
-	
+	//매도
+	@PostMapping(value = "/sell", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> sell(@RequestBody AccountVO avo) {
+		//h_qty에 매도할 수량 전송
+		int isUp = msv.sell(avo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 	//관심종목 추가
 	@ResponseBody

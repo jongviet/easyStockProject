@@ -1,24 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:include page="common/header.jsp" />
-<jsp:include page="common/nav.jsp" />
-
-<a data-toggle="modal" data-target="#buyModal" id="buying" href="#"
-	class="greenFontBold">매수주문</a>
-	
-<a data-toggle="modal" data-target="#sellModal" id="selling" href="#"
-	class="greenFontBold">매도주문</a>
-
-<script>
 /* 매수; 거래하기 버튼 클릭 */
-$("#buying").on("click", function() {
+$(document).on("click", "#buying", function() {
 	$("#buyModal").css("z-index", "2000");
+	var symbol = $(this).data("symbol");
+	$("#keyword_buy").val(symbol);
 });
 
 /* 매도; 거래하기 버튼 클릭 */
-$("#selling").on("click", function() {
+$(document).on("click", "#selling", function() {
 	$("#sellModal").css("z-index", "2000");
+	var symbol = $(this).data("symbol");
+	$("#keyword_sell").val(symbol);
 });
 
 /* 매수하기 종목 조회  */
@@ -29,7 +20,7 @@ $(document).on("click", "#symbolSearch", function() {
 	$("#tradeQty").val("");
 	$("#balance").text("");
 	
-    let keyword_val = $("#keyword").val();
+    let keyword_val = $("#keyword_buy").val();
     let email_val = ses;
     let url_val = "/stock/list/"+keyword_val+"/"+email_val+".json";
     
@@ -42,15 +33,15 @@ $(document).on("click", "#symbolSearch", function() {
             	var avg_h_price = result.avo.avg_h_price.toFixed(2);
             	var avg_h_price_comma = avg_h_price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             	var total = (parseInt(result.avo.h_qty) * parseFloat(result.avo.cur_price)).toFixed(2);
-            	var total_comma = total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            	var total_comma = total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");   
             	
             	var deposit = result.deposit;
-            	var deposit_comma = deposit.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            	var deposit_comma = deposit.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");            	
             	
             	$("#deposit_store").val(deposit);
-            	$("#deposit").text(deposit_comma);
+            	$("#deposit_buy").text(deposit_comma);
             	$("#cur_price").text(cur_price_comma);
-            	$("#symbol").text(result.avo.symbol);
+            	$("#symbol_buy").text(result.avo.symbol);
             	$("#h_qty").text(result.avo.h_qty);
             	$("#avg_h_price").text(avg_h_price_comma);
             	$("#total").text(total_comma);
@@ -63,9 +54,9 @@ $(document).on("click", "#symbolSearch", function() {
             	var deposit_comma = deposit.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             	
             	$("#deposit_store").val(deposit);
-            	$("#deposit").text(deposit_comma);
+            	$("#deposit_buy").text(deposit_comma);
    	        	$("#cur_price").text(cur_price_comma);
-   	        	$("#symbol").text(result.svo.symbol);
+   	        	$("#symbol_buy").text(result.svo.symbol);
    	        	$("#h_qty").text(0);
    	        	$("#avg_h_price").text(0);
    	        	$("#total").text(0);
@@ -136,12 +127,17 @@ $(document).on("click", "#symbolSearch_sell", function() {
 /* 매수 거래 대금 조회 */
 $(document).on("click", "#amountSearch", function() {
 	
-	if($("#tradeQty") == null || $("#tradeQty") == '') {
-		alert('거래 수량을 입력해주세요');
+	/* 매수 수량 오류  */
+	if(parseInt($("#tradeQty").val()) <= 0 || $("#tradeQty").val() == '' || $("#tradeQty").val() == null) {
+		alert('거래 수량을 정확히 입력해주세요.');
 		return false;
 	}
 	
-	var buyingAmount = (parseInt($("#tradeQty").val()) * parseFloat($("#cur_price").text())).toFixed(2);
+	/* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */	
+	var amt = $("#cur_price").text().replace(/,/g, '');
+	var amt_no_comma = parseFloat(amt);
+	
+	var buyingAmount = (parseInt($("#tradeQty").val()) * amt_no_comma).toFixed(2);
 	var buyingAmount_comma = buyingAmount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 	
 	$("#buyingAmount").text(buyingAmount_comma);
@@ -157,12 +153,23 @@ $(document).on("click", "#amountSearch", function() {
 /* 매도 거래 대금 조회 */
 $(document).on("click", "#amountSearch_sell", function() {
 	
-	if($("#tradeQty_sell") == null || $("#tradeQty_sell") == '') {
-		alert('거래 수량을 입력해주세요');
+	/* 매도 수량 오류  */
+	if(parseInt($("#tradeQty_sell").val()) <= 0 || $("#tradeQty_sell").val() == '' || $("#tradeQty_sell").val() == null) {
+		alert('거래 수량을 정확히 입력해주세요.');
 		return false;
 	}
 	
-	var sellingAmount = (parseInt($("#tradeQty_sell").val()) * parseFloat($("#cur_price_sell").text())).toFixed(2);
+	/* 판매 수량 부족 */
+	if(parseInt($("#h_qty_sell").text()) < parseInt($("#tradeQty_sell").val())) {
+		alert('매도할 수량이 부족합니다.');
+		return false;
+	}
+	
+	/* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */	
+	var amt = $("#cur_price_sell").text().replace(/,/g, '');
+	var amt_no_comma = parseFloat(amt);
+	
+	var sellingAmount = (parseInt($("#tradeQty_sell").val()) * amt_no_comma).toFixed(2);
 	var sellingAmount_comma = sellingAmount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 	
 	$("#sellingAmount").text(sellingAmount_comma);
@@ -177,16 +184,16 @@ $(document).on("click", "#amountSearch_sell", function() {
 
 /* 매수 거래 취소 하단 거래취소 버튼 */
 $(document).on("click", "#cancel", function() {
-	$("#keyword").val("");
+	$("#keyword_buy").val("");
 	$("#tradeQty").val("");
 	
-	$("#symbol").text("");
+	$("#symbol_buy").text("");
 	$("#h_qty").text("");
 	$("#avg_h_price").text("");
 	$("#total").text("");
 	$("#cur_price").text("");
 	$("#buyingAmount").text("");
-	$("#deposit").text("");
+	$("#deposit_buy").text("");
 	$("#balance").text("");
 	$("#amountSearch").attr('disabled', true);
 });
@@ -209,16 +216,16 @@ $(document).on("click", "#cancel_sell", function() {
 
 /* 매수 거래 취소 상단 x 버튼 */
 $(document).on("click", "#cancel2", function() {
-	$("#keyword").val("");
+	$("#keyword_buy").val("");
 	$("#tradeQty").val("");
 	
-	$("#symbol").text("");
+	$("#symbol_buy").text("");
 	$("#h_qty").text("");
 	$("#avg_h_price").text("");
 	$("#total").text("");
 	$("#cur_price").text("");
 	$("#buyingAmount").text("");
-	$("#deposit").text("");
+	$("#deposit_buy").text("");
 	$("#balance").text("");
 	$("#amountSearch").attr('disabled', true);
 });
@@ -240,21 +247,36 @@ $(document).on("click", "#cancel2_sell", function() {
 });
 
 
-/* 매수 진행; 잔액 부족 시 불가 */
+/* 매수 진행  */
 $(document).on("click", "#buy", function() {
+
+	/* 무 종목 매수 방지 */
+	if($("#symbol_buy").text() == '' || $("#symbol_buy").text() == null) {
+		alert('종목을 선택해주세요.');
+		return false;
+	}
 	
 	/* 예수금 부족 */
 	if(parseInt($("#balance").text()) < 0) {
 		alert('예수금이 부족합니다.');
 		return false;
-	} 
+	}
+	
+	/* 매수 수량 오류 */
+	if(parseInt($("#tradeQty").val()) <= 0 || $("#tradeQty").val() == '' || $("#tradeQty").val() == null) {
+		alert('매수 수량을 정확히 입력해주세요.');
+		return false;
+	}
+	
+	/* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */	
+	var amt = $("#cur_price").text().replace(/,/g, '');
 	
 	/* 매수 */
 	var email_val = ses;
-	var symbol_val = $("#symbol").text();
-	var avg_h_price_val = $("#cur_price").text();
+	var symbol_val = $("#symbol_buy").text();
+	var avg_h_price_val = amt;
 	var h_qty_val = $("#tradeQty").val();
-	var cur_price_val = $("#cur_price").text();
+	var cur_price_val = amt;
 	
 	if($("#h_qty").text() != 0) {
         let accountData = {
@@ -272,7 +294,8 @@ $(document).on("click", "#buy", function() {
 			}).done(function(result) {
 				if(parseInt(result) > 0) {
 					alert('정상 추가 매수 하였습니다.');
-					$("#cancel").click();					
+					$("#cancel").click();
+					window.location.reload();					
 				}
 			}).fail(function(err) {
 				console.log(err);
@@ -293,7 +316,8 @@ $(document).on("click", "#buy", function() {
 			}).done(function(result) {
 				if(parseInt(result) > 0) {
 					alert('정상 매수 하였습니다.');
-					$("#cancel").click();					
+					$("#cancel").click();
+					window.location.reload();					
 				}
 			}).fail(function(err) {
 				console.log(err);
@@ -305,19 +329,34 @@ $(document).on("click", "#buy", function() {
 
 /* 매도 진행; 보유량 부족 시 불가 */
 $(document).on("click", "#sell", function() {
-	
+
+	/* 무 종목 매도 방지 */
+	if($("#symbol_sell").text() == '' || $("#symbol_sell").text() == null) {
+		alert('종목을 선택해주세요.');
+		return false;
+	}
+
 	/* 판매 수량 부족 */
-	if(parseInt($("#h_qty_sell").text()) < parseInt($("#tradeQty_sell").text())) {
+	if(parseInt($("#h_qty_sell").text()) < parseInt($("#tradeQty_sell").val())) {
 		alert('매도할 수량이 부족합니다.');
 		return false;
-	} 
+	}
+	
+	/* 매도 수량 오류  */
+	if(parseInt($("#tradeQty_sell").val()) <= 0 || $("#tradeQty_sell").val() == '' || $("#tradeQty_sell").val() == null) {
+		alert('매도 수량을 정확히 입력해주세요.');
+		return false;
+	}
+	
+    /* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */      
+    var amt = $("#cur_price_sell").text().replace(/,/g, '');
 	
 	/* 매도 */
 	var email_val = ses;
 	var symbol_val = $("#symbol_sell").text();
-	var avg_h_price_val = $("#cur_price_sell").text();
+	var avg_h_price_val = amt;
 	var h_qty_val = $("#tradeQty_sell").val();
-	var cur_price_val = $("#cur_price_sell").text();
+	var cur_price_val = amt;
 	
         let accountData = {
 				email : email_val,
@@ -334,152 +373,10 @@ $(document).on("click", "#sell", function() {
 			}).done(function(result) {
 				if(parseInt(result) > 0) {
 					alert('정상 매도 하였습니다.');
-					$("#cancel_sell").click();					
+					$("#cancel_sell").click();
+					window.location.reload();					
 				}
 			}).fail(function(err) {
 				console.log(err);
 			});
 });
-
-
-</script>
-
-<!-- 매수  modal -->
-<div class="modal fade" id="buyModal" tabindex="-1"
-	aria-labelledby="exampleModalLabel" aria-hidden="true"
-	data-backdrop="static" style="z-index: -1;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title grayFontBold" id="exampleModalLabel">매수주문</h5>
-				<button type="button" class="close" data-dismiss="modal" id="cancel2"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="input-group">
-					<input class="form-control" type="text" id="keyword"
-						placeholder="종목명을 입력해주세요">
-					<div class="input-group-append">
-						<button type="button" class="btn"
-							style="background-color: #1F9688; color: white" id="symbolSearch">종목조회</button>
-					</div>
-				</div>
-				<div class="input-group mt-1">
-					<input class="form-control" type="text" name="tradeQty" id="tradeQty"
-						placeholder="거래 수량을 입력해주세요">
-					<div class="input-group-append">
-						<button type="button" class="btn" id="amountSearch" disabled="disabled"
-							style="background-color: #1F9688; color: white">대금조회</button>
-					</div>
-				</div>
-				<table class="table table-borderless mt-3" style="table-layout:fixed;">
-					<tbody>
-						<tr>
-							<td>종목명</td>
-							<td id="symbol" class="grayFontBold"></td>
-							<td>보유량</td>
-							<td id="h_qty" class="grayFontBold"></td>
-						</tr>
-						<tr>
-							<td>매입가</td>
-							<td id="avg_h_price" class="grayFontBold"></td>
-							<td>평가금액</td>
-							<td id="total" class="grayFontBold"></td>
-						</tr>
-						<tr>
-							<td>현재가</td>
-							<td id="cur_price" class="grayFontBold"></td>
-							<td>매수총액</td>
-							<td id="buyingAmount" class="grayFontBold"></td>
-						</tr>
-						<tr>
-							<td>예수금</td>
-							<td id="deposit" class="grayFontBold"></td>
-							<td>거래후 잔액</td>
-							<td id="balance" class="grayFontBold"></td>
-						</tr>
-					</tbody>
-				</table>
-				<input type="hidden" id="deposit_store">
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn" id="buy" style="background-color: #1F9688; color: white;">매수하기</button>
-				<button type="button" class="btn" id="cancel" style="background-color: #1F9688; color: white;" data-dismiss="modal">거래취소</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!-- 매도  modal -->
-<div class="modal fade" id="sellModal" tabindex="-1"
-	aria-labelledby="exampleModalLabel" aria-hidden="true"
-	data-backdrop="static" style="z-index: -1;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title grayFontBold" id="exampleModalLabel">매도주문</h5>
-				<button type="button" class="close" data-dismiss="modal" id="cancel2_sell"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="input-group">
-					<input class="form-control" type="text" id="keyword_sell"
-						placeholder="종목명을 입력해주세요">
-					<div class="input-group-append">
-						<button type="button" class="btn"
-							style="background-color: #1F9688; color: white" id="symbolSearch_sell">종목조회</button>
-					</div>
-				</div>
-				<div class="input-group mt-1">
-					<input class="form-control" type="text" name="tradeQty_sell" id="tradeQty_sell"
-						placeholder="거래 수량을 입력해주세요">
-					<div class="input-group-append">
-						<button type="button" class="btn" id="amountSearch_sell" disabled="disabled"
-							style="background-color: #1F9688; color: white">대금조회</button>
-					</div>
-				</div>
-				<table class="table table-borderless mt-3" style="table-layout:fixed;">
-					<tbody>
-						<tr>
-							<td>종목명</td>
-							<td id="symbol_sell" class="grayFontBold"></td>
-							<td>보유량</td>
-							<td id="h_qty_sell" class="grayFontBold"></td>
-						</tr>
-						<tr>
-							<td>매입가</td>
-							<td id="avg_h_price_sell" class="grayFontBold"></td>
-							<td>평가금액</td>
-							<td id="total_sell" class="grayFontBold"></td>
-						</tr>
-						<tr>
-							<td>현재가</td>
-							<td id="cur_price_sell" class="grayFontBold"></td>
-							<td>매도총액</td>
-							<td id="sellingAmount" class="grayFontBold"></td>
-						</tr>
-						<tr>
-							<td>예수금</td>
-							<td id="deposit_sell" class="grayFontBold"></td>
-							<td>거래후 잔액</td>
-							<td id="balance_sell" class="grayFontBold"></td>
-						</tr>
-					</tbody>
-				</table>
-				<input type="hidden" id="deposit_store_sell">
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn" id="sell" style="background-color: #1F9688; color: white;">매도하기</button>
-				<button type="button" class="btn" id="cancel_sell" style="background-color: #1F9688; color: white;" data-dismiss="modal">거래취소</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<jsp:include page="common/footer.jsp" />

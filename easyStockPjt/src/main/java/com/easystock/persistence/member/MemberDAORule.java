@@ -48,6 +48,16 @@ public interface MemberDAORule {
 	public StockVO getSpecificSymbol_new(String keyword);
 	//신규 매수
 	public int newBuy(AccountVO avo);
-	//예수금 처리
+	//예수금 deduct 처리
 	public int deductDeposit(double price, String email);
+	//추가매수; 기존 계좌 정보
+	public AccountVO getCurrentAccount(String email, String symbol);
+	//추가매수; 계산된 정보로 업데이트
+	public int updateAccount(AccountVO new_avo);
+	//예수금 add 처리
+	public int addDeposit(double price, String email);
+	//부분 매도
+	public int updateAccount_sell(AccountVO avo);
+	//전량 매도
+	public int deleteAccount_sell(AccountVO avo);
 }

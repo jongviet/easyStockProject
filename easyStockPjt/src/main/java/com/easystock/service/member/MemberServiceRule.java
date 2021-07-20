@@ -33,4 +33,6 @@ public interface MemberServiceRule {
 	public StockVO getSpecificSymbol_new(String keyword); //신규 매수용 리스트
 	
 	public int newBuy(AccountVO avo); //신규 구매
+	public int additionalBuy(AccountVO new_avo); //추가 구매
+	public int sell(AccountVO avo); //매도
 }

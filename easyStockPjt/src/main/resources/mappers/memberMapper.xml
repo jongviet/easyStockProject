@@ -77,6 +77,10 @@
 	<update id="deductDeposit" parameterType="HashMap">
 		update member set deposit_usd = deposit_usd - #{price} where email = #{email}
 	</update>
+	<!-- 매도용 예수금 증가 -->
+	<update id="addDeposit" parameterType="HashMap">
+		update member set deposit_usd = deposit_usd + #{price} where email = #{email}
+	</update>
 	
 	<!-- 신규 매수 -->
 	<insert id="newBuy">
@@ -84,6 +88,27 @@
 		values(#{email}, #{symbol}, #{avg_h_price}, #{h_qty}, #{cur_price})
 	</insert>
 	
+	<!-- 추가 매수 기존 계좌 정보 -->
+	<select id="getCurrentAccount" parameterType="HashMap" resultType="avo">
+		select * from account where email = #{email} and symbol = #{symbol}
+	</select>
+	<!-- 추가 매수 계좌 업데이트 -->
+	<update id="updateAccount" parameterType="avo">
+		update account set avg_h_price = #{avg_h_price}, h_qty = #{h_qty}
+		where email = #{email} and symbol = #{symbol}
+	</update>
+	
+	<!-- 부분 매도 계좌 업데이트 -->
+	<update id="updateAccount_sell" parameterType="avo">
+		update account set h_qty = h_qty - #{h_qty}
+		where email = #{email} and symbol = #{symbol}
+	</update>
+	<!-- 전량 매도 계좌 업데이트 -->
+	<update id="deleteAccouont_sell" parameterType="avo">
+		delete from account where email = #{email} and symbol = #{symbol}
+	</update>
+
+	<!-- 테스터 처리 -->	
 	<delete id="delTester">
 		delete from member where email like 'tester%'
 	</delete>
