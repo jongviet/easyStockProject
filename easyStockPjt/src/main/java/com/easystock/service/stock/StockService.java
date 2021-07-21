@@ -29,13 +29,19 @@ public class StockService implements StockServiceRule {
 	@Inject
 	private MemberDAORule mdao;
 
+	@Transactional
 	@Override
 	public int register(StockVO svo) {
+		//accountVO rawdata 생성
+		sdao.createRawData(svo.getSymbol());
+		
+		//company overview 등록
 		return sdao.insert(svo);
 	}
 
 	@Override
 	public int register(EarningVO evo) {
+		//earning 등록
 		return sdao.insert(evo);
 	}
 
@@ -80,5 +86,10 @@ public class StockService implements StockServiceRule {
 	@Override
 	public int delete(WatchVO wvo) {
 		return sdao.remove(wvo);
+	}
+
+	@Override
+	public List<StockVO> getStockList() {
+		return sdao.getStockList();
 	}
 }

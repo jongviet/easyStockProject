@@ -1,8 +1,5 @@
 package com.easystock.ctrl;
 
-import com.easystock.ctrl.HomeController;
-import com.easystock.service.member.MemberServiceRule;
-
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -14,9 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.easystock.service.member.MemberServiceRule;
+
 @Controller
 public class HomeController {
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);	
 	
 	@Inject
 	private MemberServiceRule msv;
@@ -31,4 +30,5 @@ public class HomeController {
 	public String test() {
 		return "test";
 	}
+		
 }

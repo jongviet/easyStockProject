@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Spring</title>
+  <title>EasyStock</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
@@ -30,6 +30,25 @@ const ses = "<%=(String)session.getAttribute("ses")%>";
 const ses_id = "<%=(String)session.getAttribute("ses_id")%>";
 const ses_tester = "<%=(String)session.getAttribute("ses_tester")%>";
 
+var timeLeft =  <%=session.getMaxInactiveInterval()%>
+var interVal;
+
+function decrement() {
+     interVal =   setInterval(function() {
+         timeLeft--;
+          
+         if(timeLeft == 0) {
+              stopTimer();
+         }                          
+     }, 1000);
+}
+function stopTimer() {
+     clearInterval(interVal);
+     alert("세션이 만료되었습니다. 다시 로그인해주세요");
+     window.location.href =  "/member/logout";
+}
+decrement();
+
 /* 쿠키 */
 function setCookie(cName, cValue, cDay){
 var expire = new Date();
@@ -53,4 +72,6 @@ cValue = cookieData.substring(start, end);
 return unescape(cValue);
 }
 </script>
-<body>
+<body style="background-color:#f5f5f5;">
+
+

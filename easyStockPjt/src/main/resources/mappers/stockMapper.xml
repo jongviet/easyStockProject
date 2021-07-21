@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="StockMapper">
 	
-	<!-- company overview 데이터 등록용 -->
+	<!-- 신규 company overview 데이터 등록 -->
 	<insert id="s_insert" parameterType="svo">
 		insert into stock (symbol, fullName, description, sector, m_capitalization,
 		per, eps, pxt_insiders, pxt_institutions, year_high, year_low, avg_target)
@@ -10,7 +10,7 @@
 		#{m_capitalization}, #{per}, #{eps}, #{pxt_insiders},
 		#{pxt_institutions}, #{year_high}, #{year_low}, #{avg_target})
 	</insert>
-	<!-- earning -->
+	<!-- 신규 earning 데이터 등록 -->
 	<insert id="e_insert" parameterType="evo">
 		insert into earning(symbol, reportedDate, reportedEPS, estimatedEPS)
 		values (#{symbol}, #{reportedDate}, #{reportedEPS}, #{estimatedEPS})
@@ -18,6 +18,12 @@
 	<select id="e_list" parameterType="String" resultType="evo">
 		select * from earning where symbol = #{symbol} and reportedDate > '2017-12-31'
 	</select>
+	<!-- Account rawdata 등록 -->
+	<insert id="a_rawdata">
+		insert into account(email, symbol, avg_h_price, h_qty)
+		values('rawdata@rawdata.com', #{symbol}, 10, 1)
+	</insert>
+	
 	
 	<!-- stock -->
 	<select id="s_list" parameterType="pgvo" resultType="svo">
@@ -52,6 +58,11 @@
 	<delete id="remove_watch">
 		delete from watch where email = #{email} and symbol = #{symbol}
 	</delete>
+	
+	<!-- admin용 stockList -->
+	<select id="s_list_admin" resultType="svo">
+		select symbol from stock
+	</select>
 	
 	
 	<!-- paging & searching -->

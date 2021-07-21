@@ -24,4 +24,6 @@ public interface StockServiceRule {
   
   public int insert(WatchVO wvo); //관심종목추가
   public int delete(WatchVO wvo);
+  
+  public List<StockVO> getStockList(); //admin 수동 업데이트 리스트용
 }

@@ -76,4 +76,14 @@ public class StockDAO implements StockDAORule {
 		return sql.delete(NS+"remove_watch", wvo);
 	}
 
+	@Override
+	public List<StockVO> getStockList() {
+		return sql.selectList(NS+"s_list_admin");
+	}
+
+	@Override
+	public int createRawData(String symbol) {
+		return sql.insert(NS+"a_rawdata", symbol);
+	}
+
 }

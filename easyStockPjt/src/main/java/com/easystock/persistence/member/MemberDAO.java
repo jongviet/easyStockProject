@@ -70,11 +70,6 @@ public class MemberDAO implements MemberDAORule {
 		sql.update(NS+"update_price", s_list);
 	}
 
-	@Override
-	public int delTester() {
-		return sql.delete(NS+"delTester");
-	}
-
 	//메인페이지 관심 종목 처리용 WatchVO -> StockVO
 	@Override
 	public List<WatchVO> chk_w_list(String email) {
@@ -188,6 +183,37 @@ public class MemberDAO implements MemberDAORule {
 	@Override
 	public int deleteAccount_sell(AccountVO avo) {
 		return sql.delete(NS+"deleteAccouont_sell", avo);
+	}
+	
+	//테스터 처리용
+	@Override
+	public int delTester_member() {
+		return sql.delete(NS+"delTester_member");
+	}
+
+	@Override
+	public int delTester_account() {
+		return sql.delete(NS+"delTester_account");
+	}
+
+	@Override
+	public int delTester_comment() {
+		return sql.delete(NS+"delTester_comment");
+	}
+
+	@Override
+	public int delTester_liked() {
+		return sql.delete(NS+"delTester_liked");
+	}
+
+	@Override
+	public int delTester_report() {
+		return sql.delete(NS+"delTester_report");
+	}
+
+	@Override
+	public int delTester_watch() {
+		return sql.delete(NS+"delTester_watch");
 	}
 
 }

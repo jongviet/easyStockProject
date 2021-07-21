@@ -108,8 +108,26 @@
 		delete from account where email = #{email} and symbol = #{symbol}
 	</update>
 
+
 	<!-- 테스터 처리 -->	
-	<delete id="delTester">
+	<delete id="delTester_member">
 		delete from member where email like 'tester%'
 	</delete>
+	<delete id="delTester_account">
+		delete from account where email like 'tester%'
+	</delete>
+	<delete id="delTester_comment">
+		delete from comment where writer like 'tester%'
+	</delete>
+	<delete id="delTester_liked">
+		delete from liked where writer like 'tester%'
+	</delete>
+	<delete id="delTester_report">
+		delete from report where reporter like 'tester%'
+	</delete>
+	<delete id="delTester_watch">
+		delete from watch where email like 'tester%'
+	</delete>
+	
+	
 </mapper>

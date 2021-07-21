@@ -5,11 +5,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="../common/header.jsp" />
 <jsp:include page="../common/nav.jsp" />
+<script src="/resources/bootstrap/js/list.js"></script>
+
 
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12 col-md-12 mx-auto text-center">
-			<h3 class="float-left grayFontBold">종목리스트</h3>
+			<h3 class="float-left greenFontBold">종목리스트</h3>
 			<div class="form-group float-right">
 				<form action="/stock/list" class="form-inline">
 					<select class="form-control" name="range">
@@ -32,12 +34,12 @@
 				</form>
 			</div>
 			<table class="table table-hover">
-				<thead>
+				<thead style="background-color:#1F96881F;">
 					<tr class="greenLineBold">
-						<th class="grayFontBold">Symbol</th>
-						<th class="grayFontBold">Name</th>
-						<th class="grayFontBold">Sector</th>
-						<th class="text-right grayFontBold">Market_Capitalization</th>
+						<th class="grayFontBold">종목코드</th>
+						<th class="grayFontBold">종목명</th>
+						<th class="grayFontBold">그룹</th>
+						<th class="text-center grayFontBold">시가총액</th>
 						<th class="grayFontBold">거래하기</th>
 					</tr>
 				</thead>
@@ -52,9 +54,12 @@
 							<td class="text-right grayFont">$<fmt:formatNumber
 									value="${svo.m_capitalization}" pattern="#,###" />&nbsp;&nbsp;&nbsp;
 							</td>
-							<td>
-								<a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#buyModal" id="buying" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">shopping_cart</i></a>
-								<a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#sellModal" id="selling" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">remove_shopping_cart</i></a>
+							<td><a data-symbol="${svo.symbol}" data-toggle="modal"
+								data-target="#buyModal" id="buying" href="#"><i
+									class="material-icons" style="font-size: 24px; color: #FF8C69">shopping_cart</i></a>
+								<a data-symbol="${svo.symbol}" data-toggle="modal"
+								data-target="#sellModal" id="selling" href="#"><i
+									class="material-icons" style="font-size: 24px; color: #FF8C69">remove_shopping_cart</i></a>
 							</td>
 						</tr>
 					</c:forEach>
@@ -66,14 +71,10 @@
 				</tfoot>
 			</table>
 		</div>
-		<div class="col-lg-6 col-md-6 ml-10 pl-10"
-			style="float: left; border: 1px solid black; text-align: center;">
-			<h1>NEWS!</h1>
-		</div>
 		<!-- trading view chart import -->
 		<div class="col-lg-6 col-md-6 ml-10 pl-10"
-			style="float: right; text-align: center;">
-			<div class="tradingview-widget-container">
+			style="float: left; text-align: center;">
+			<div class="tradingview-widget-container" style="border-top: 1px solid #1F9688;">
 				<div class="tradingview-widget-container__widget"></div>
 				<script type="text/javascript"
 					src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js"
@@ -84,10 +85,10 @@
 			  "showChart": true,
 			  "locale": "en",
 			  "largeChartUrl": "",
-			  "isTransparent": false,
+			  "isTransparent": true,
 			  "showSymbolLogo": false,
 			  "width": "530",
-			  "height": "800",
+			  "height": "650",
 			  "plotLineColorGrowing": "rgba(61, 170, 147, 1)",
 			  "plotLineColorFalling": "rgba(61, 170, 147, 1)",
 			  "gridLineColor": "rgba(240, 243, 250, 1)",
@@ -167,6 +168,89 @@
 				</script>
 			</div>
 		</div>
+		<div class="col-lg-6 col-md-6 mr-10 pr-10"
+			style="float: right; text-align: center;">
+			<h3 class="greenFontBold text-center">섹터별 성과 지표</h3>
+			<table class="table table-hover">
+				<thead style="background-color:#1F96881F;">
+					<tr class="greenLineBold">
+						<th class="grayFontBold">Sector</th>
+						<th class="grayFontBold">Daily</th>
+						<th class="grayFontBold">Monthly</th>
+						<th class="grayFontBold">YTD</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="grayFont">Communication Services</td>
+						<td class="grayFont" id="cs_d"></td>
+						<td class="grayFont" id="cs_m"></td>
+						<td class="grayFont" id="cs_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Consumer Discretionary</td>
+						<td class="grayFont" id="cd_d"></td>
+						<td class="grayFont" id="cd_m"></td>
+						<td class="grayFont" id="cd_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Consumer Staples</td>
+						<td class="grayFont" id="cst_d"></td>
+						<td class="grayFont" id="cst_m"></td>
+						<td class="grayFont" id="cst_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Energy</td>
+						<td class="grayFont" id="e_d"></td>
+						<td class="grayFont" id="e_m"></td>
+						<td class="grayFont" id="e_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Financials</td>
+						<td class="grayFont" id="f_d"></td>
+						<td class="grayFont" id="f_m"></td>
+						<td class="grayFont" id="f_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Health Care</td>
+						<td class="grayFont" id="h_d"></td>
+						<td class="grayFont" id="h_m"></td>
+						<td class="grayFont" id="h_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Industrials</td>
+						<td class="grayFont" id="i_d"></td>
+						<td class="grayFont" id="i_m"></td>
+						<td class="grayFont" id="i_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Information Technology</td>
+						<td class="grayFont" id="it_d"></td>
+						<td class="grayFont" id="it_m"></td>
+						<td class="grayFont" id="it_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Materials</td>
+						<td class="grayFont" id="m_d"></td>
+						<td class="grayFont" id="m_m"></td>
+						<td class="grayFont" id="m_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Real Estate</td>
+						<td class="grayFont" id="re_d"></td>
+						<td class="grayFont" id="re_m"></td>
+						<td class="grayFont" id="re_y"></td>
+					</tr>
+					<tr>
+						<td class="grayFont">Utilities</td>
+						<td class="grayFont" id="u_d"></td>
+						<td class="grayFont" id="u_m"></td>
+						<td class="grayFont" id="u_y"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
 	</div>
 </div>
 
@@ -175,9 +259,9 @@
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
 	<div class="modal-dialog">
-		<div class="modal-content">
+		<div class="modal-content" style="background-color:#FFEEE9">
 			<div class="modal-header">
-				<h5 class="modal-title grayFontBold" id="exampleModalLabel">매수주문</h5>
+				<h5 class="modal-title grayFontBold" id="exampleModalLabel">매수주문<i class="material-icons ml-1" style="font-size:24px;color:#FF8C69">shopping_cart</i></h5>
 				<button type="button" class="close" data-dismiss="modal" id="cancel2"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -189,7 +273,7 @@
 						placeholder="종목명을 입력해주세요">
 					<div class="input-group-append">
 						<button type="button" class="btn"
-							style="background-color: #1F9688; color: white" id="symbolSearch">종목조회</button>
+							style="background-color: #FF8C69; color: white" id="symbolSearch">종목조회</button>
 					</div>
 				</div>
 				<div class="input-group mt-1">
@@ -197,7 +281,7 @@
 						placeholder="거래 수량을 입력해주세요">
 					<div class="input-group-append">
 						<button type="button" class="btn" id="amountSearch" disabled="disabled"
-							style="background-color: #1F9688; color: white">대금조회</button>
+							style="background-color: #FF8C69; color: white">대금조회</button>
 					</div>
 				</div>
 				<table class="table table-borderless mt-3" style="table-layout:fixed;">
@@ -231,8 +315,8 @@
 				<input type="hidden" id="deposit_store">
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn" id="buy" style="background-color: #1F9688; color: white;">매수하기</button>
-				<button type="button" class="btn" id="cancel" style="background-color: #1F9688; color: white;" data-dismiss="modal">거래취소</button>
+				<button type="submit" class="btn" id="buy" style="background-color: #FF8C69; color: white;">매수하기</button>
+				<button type="button" class="btn" id="cancel" style="background-color: #FF8C69; color: white;" data-dismiss="modal">거래취소</button>
 			</div>
 		</div>
 	</div>
@@ -243,9 +327,9 @@
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
 	<div class="modal-dialog">
-		<div class="modal-content">
+		<div class="modal-content" style="background-color:#FFEEE9"> 
 			<div class="modal-header">
-				<h5 class="modal-title grayFontBold" id="exampleModalLabel">매도주문</h5>
+				<h5 class="modal-title grayFontBold" id="exampleModalLabel">매도주문<i class="material-icons ml-1" style="font-size:24px;color:#FF8C69">remove_shopping_cart</i></h5>
 				<button type="button" class="close" data-dismiss="modal" id="cancel2_sell"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -257,7 +341,7 @@
 						placeholder="종목명을 입력해주세요">
 					<div class="input-group-append">
 						<button type="button" class="btn"
-							style="background-color: #1F9688; color: white" id="symbolSearch_sell">종목조회</button>
+							style="background-color: #FF8C69; color: white" id="symbolSearch_sell">종목조회</button>
 					</div>
 				</div>
 				<div class="input-group mt-1">
@@ -265,7 +349,7 @@
 						placeholder="거래 수량을 입력해주세요">
 					<div class="input-group-append">
 						<button type="button" class="btn" id="amountSearch_sell" disabled="disabled"
-							style="background-color: #1F9688; color: white">대금조회</button>
+							style="background-color: #FF8C69; color: white">대금조회</button>
 					</div>
 				</div>
 				<table class="table table-borderless mt-3" style="table-layout:fixed;">
@@ -299,16 +383,11 @@
 				<input type="hidden" id="deposit_store_sell">
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn" id="sell" style="background-color: #1F9688; color: white;">매도하기</button>
-				<button type="button" class="btn" id="cancel_sell" style="background-color: #1F9688; color: white;" data-dismiss="modal">거래취소</button>
+				<button type="submit" class="btn" id="sell" style="background-color: #FF8C69; color: white;">매도하기</button>
+				<button type="button" class="btn" id="cancel_sell" style="background-color: #FF8C69; color: white;" data-dismiss="modal">거래취소</button>
 			</div>
 		</div>
 	</div>
 </div>
-
-
-
-
 <script src="/resources/bootstrap/js/buyAndSell.js"></script>
-<script src="/resources/bootstrap/js/list.js"></script>
 <jsp:include page="../common/footer.jsp" />

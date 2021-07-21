@@ -4,7 +4,6 @@
 	word-break:break-all;
 }
 
-
 .grayLight {
 	color:#767675B3;
 }
@@ -29,6 +28,10 @@
 
 .greenLine {
 	border-top: 1px solid #1F9688;
+}
+
+.grayLine {
+	border-top: 1px solid #76767533;
 }
 
 .greenLineBold {

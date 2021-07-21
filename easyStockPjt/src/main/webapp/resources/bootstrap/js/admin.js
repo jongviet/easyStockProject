@@ -121,37 +121,55 @@ function earning_input(input_val) {
 $(document).ready(function() {
 
 	$("#priceUpdate").on("click", function() {
-		tradeable();
+		tradable();
 		alert('전일 종가 업데이트 완료');
 	});
 	
 	$("#accountUpdate").on("click", function() {
-		tradeable_account();
+		tradable_account();
 		alert('Member Account 현재가 업데이트 완료');
 	});
 });
 
 
-function tradeable() {
-	
-	var tradeableList = ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'FB', 'TSLA', 'TSM', 'BABA', 'V', 'NVDA', 'JPM', 'JNJ', 'WMT', 'UNH', 'MA',
-			'BAC', 'HD', 'PG', 'DIS', 'XOM', 'NKE', 'NFLX', 'VZ', 'KO', 'INTC', 'ORCL', 'PFE', 'CVX', 'UPS', 'COST', 
-			'TXN', 'MCD', 'QCOM', 'HON', 'BMY', 'NEE', 'BA', 'UBER', 'FDX', 'ATVI', 'F', 'SPG', 'LUV', 'O', 'OHI'];																			
+function tradable() {
 
-	for(let idx in tradeableList) {
-		adjusted_close(tradeableList[idx]);
-	};
+    let url_val = "/stock/tradable";
+    
+    $.getJSON(url_val, function(result) {
+    	var tradableList = [];
+    	
+    	for(let i = 0; i < result.length; i++) {
+    		tradableList.push(result[i].symbol);
+    	}
+    	
+    	for(let idx in tradableList) {
+		adjusted_close(tradableList[idx]);
+		};
+    
+    }).fail(function(err) {
+    	console.log(err);
+    });
 };
 
-function tradeable_account() {
-	
-	var tradeableList = ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'FB', 'TSLA', 'TSM', 'BABA', 'V', 'NVDA', 'JPM', 'JNJ', 'WMT', 'UNH', 'MA',
-			'BAC', 'HD', 'PG', 'DIS', 'XOM', 'NKE', 'NFLX', 'VZ', 'KO', 'INTC', 'ORCL', 'PFE', 'CVX', 'UPS', 'COST', 
-			'TXN', 'MCD', 'QCOM', 'HON', 'BMY', 'NEE', 'BA', 'UBER', 'FDX', 'ATVI', 'F', 'SPG', 'LUV', 'O', 'OHI'];																			
+function tradable_account() {
 
-	for(let idx in tradeableList) {
-		adjusted_close_account(tradeableList[idx]);
-	};
+    let url_val = "/stock/tradable";
+    
+    $.getJSON(url_val, function(result) {
+    	var tradableList = [];
+    	
+    	for(let i = 0; i < result.length; i++) {
+    		tradableList.push(result[i].symbol);
+    	}
+    	
+    	for(let idx in tradableList) {
+		adjusted_close_account(tradableList[idx]);
+		};
+    
+    }).fail(function(err) {
+    	console.log(err);
+    });
 };
 
 

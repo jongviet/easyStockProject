@@ -1,16 +1,63 @@
-drop table if exists member;
-drop table if exists stock;
-drop table if exists news;
-drop table if exists earning;
-drop table if exists dailyValue;
 drop table if exists account;
 drop table if exists comment;
+drop table if exists earning;
 drop table if exists liked;
+drop table if exists member;
+drop table if exists news;
+drop table if exists report;
+drop table if exists stock;
+drop table if exists watch;
+
+create table account (
+h_num int(10) primary key auto_increment,
+email varchar(50) not null,
+symbol varchar(10) not null,
+cur_price decimal(6,2),
+avg_h_price decimal(6,2),
+h_qty int(10)
+);
+
+create table comment(
+cNum int(10) primary key,
+symbol varchar(10) not null,
+writer varchar(50) not null,
+comment varchar(2000),
+t_up int(10) default 0,
+regdate timestamp not null default current_timestamp
+);
+
+create table earning (
+earningNum int(10) primary key auto_increment,
+symbol varchar(10) not null,
+reportedDate varchar(100),
+reportedEPS decimal(10,4),
+estimatedEPS decimal(10,4)
+);
+
+create table liked (
+likeNum int(10) primary key auto_increment,
+writer varchar(50) not null,
+cNum int(10) not null
+);
 
 create table member (
 email varchar(50) primary key,
 pwd varchar(1000) not null,
 deposit_usd decimal(10,2) default 50
+);
+
+create table news (
+newsNum int(10) primary key,
+symbol varchar(10) not null,
+title varchar(1000),
+content varchar(15000)
+);
+
+create table report (
+reportNum int(10) primary key auto_increment,
+cNum int(10) not null,
+writer varchar(50) not null,
+content varchar(200) not null
 );
 
 create table stock (
@@ -28,54 +75,11 @@ year_low decimal(10,4),
 avg_target decimal(10,4)
 );
 
-create table news (
-newsNum int(10) primary key,
-symbol varchar(10) not null,
-title varchar(1000),
-content varchar(15000)
-);
-
-create table earning (
-earningNum int(10) primary key auto_increment,
-symbol varchar(10) not null,
-reportedDate varchar(100),
-reportedEPS decimal(10,4),
-estimatedEPS decimal(10,4)
-);
-
-create table dailyValue (
-dvNum int(10) primary key,
-date varchar(100),
-symbol varchar(10) not null,
-open decimal(6,2),
-high decimal(6,2),
-close decimal(6,2),
-d_volume bigint(100)
-);
-
-create table account (
-h_num int(10) primary key,
+create table watch (
+watchNum int(10) primary key auto_increment,
 email varchar(50) not null,
-symbol varchar(10) not null,
-avg_h_price decimal(6,2),
-h_qty int(10)
+symbol varchar(10) not null
 );
-
-create table comment(
-cNum int(10) primary key,
-symbol varchar(10) not null,
-writer varchar(50) not null,
-comment varchar(2000),
-t_up int(10) default 0,
-regdate timestamp not null default current_timestamp
-);
-
-create table liked (
-likeNum int(10) primary key auto_increment,
-writer varchar(50) not null,
-cNum int(10) not null
-);
-
 
 
 -- RAW DATA

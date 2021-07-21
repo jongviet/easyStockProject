@@ -83,7 +83,7 @@ function alpha_input_daily(input) {
 		};
 		
 		$("#myChartOne").remove();
-		$("#canvasDiv").append("<canvas id='myChartOne' style='background-color: white;'></canvas>");
+		$("#canvasDiv").append("<canvas id='myChartOne' style='background-color: #f5f5f5;'></canvas>");
 		show_graph_daily(dateArray, valArray, input);
   });
 };
@@ -108,7 +108,7 @@ function alpha_input_monthly(input) {
 			}
 		};
 		$("#myChartOne").remove();
-		$("#canvasDiv").append("<canvas id='myChartOne' style='background-color: white;'></canvas>");
+		$("#canvasDiv").append("<canvas id='myChartOne' style='background-color: #f5f5f5;'></canvas>");
 		show_graph_monthly(dateArray, valArray, input);
   });
 };
@@ -223,46 +223,12 @@ function alpha_input_monthly(input) {
 		});
 	});
 	
-	/* 댓글 삭제 */
-	$(function () {
-			$(document).on("click", "#cmtDel", function(e) {
-			e.preventDefault();
-			
-			/* writer 가져와서 검증 후 제거 */	
-			let cmtWriter = $(this).parent().find("h5").text();
-			let cNum = $(this).parent().parent().find("div.comment-footer").find("input[name='cNum']").val();
-			let symbol_val = $("#symbol").text();
-			
-			if(cmtWriter == ses) {
-			
-				var cfmDel = confirm('정말 삭제하시겠습니까?');
-				
-				if(cfmDel) {
-					$.ajax({
-						url : "/comment/cNum/"+cNum,
-						type : "delete"
-					
-					}).done(function(result) {
-						alert('삭제되었습니다');
-						commentList($("#symbol").text());
-					});
-				} else {
-				return false;
-				}
-			} else {
-				alert('삭제 권한이 없습니다');
-				return false; //페이지 리로드 되지 않게 처리
-			}
-		});
-	});
-
-
-	
 	/* 댓글 리스트 출력  */
 	function print_commentList(list) {
 		
 		if(list.length == 0) {
-			console.log('댓글 없음, 당황 금지');
+			let cmtBox = $("#cmtBox");
+			cmtBox.empty();
 		} else {
 			let cmtBox = $("#cmtBox");
 			cmtBox.empty();
@@ -322,6 +288,40 @@ function alpha_input_monthly(input) {
 	
 	/* 댓글 쓰기 */
 	$(document).on("click", "#posting", posting);
+	
+	/* 댓글 삭제 */
+	$(function () {
+			$(document).on("click", "#cmtDel", function(e) {
+			e.preventDefault();
+			
+			/* writer 가져와서 검증 후 제거 */	
+			let cmtWriter = $(this).parent().find("h5").text();
+			let cNum = $(this).parent().parent().find("div.comment-footer").find("input[name='cNum']").val();
+			let symbol_val = $("#symbol").text();
+			
+			if(cmtWriter == ses) {
+			
+				var cfmDel = confirm('정말 삭제하시겠습니까?');
+				
+				if(cfmDel) {
+					$.ajax({
+						url : "/comment/cNum/"+cNum,
+						type : "delete"
+					
+					}).done(function(result) {
+						alert('삭제되었습니다');
+						commentList($("#symbol").text());
+					});
+				} else {
+				return false;
+				}
+			} else {
+				alert('삭제 권한이 없습니다');
+				return false; //페이지 리로드 되지 않게 처리
+			}
+		});
+	});
+	
 	
 	/* 신고 글자수 40자 제한 */
     function textLengthOverCut(txt) {

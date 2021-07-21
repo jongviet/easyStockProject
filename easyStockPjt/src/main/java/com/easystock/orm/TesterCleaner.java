@@ -18,15 +18,22 @@ public class TesterCleaner {
 	@Inject
 	private MemberDAORule mdao;
 	
-	//추후 스케쥴대로 움직여줄 수 있는 자바 코드 동작 가능~~~ 메시지 전송, 검사 등등
-	//에러 로그만 정기적으로 날리는 것도 추가 가능함~~
-	// 초 분 시 일 월 요일 연도(optional)
- 	@Scheduled(cron = "30 00 09 * * *") //ss, mm, hh, 매일, 매월, 매요일
+ 	@Scheduled(cron = "00 00 09 * * *")
 	public void testerCleaner() throws Exception {
 		logger.info(">>> testerCleaner() - Start Running");
 		logger.info(">>> Start Running at : " + LocalDateTime.now());
 		
-		int result = mdao.delTester();
-		logger.info(result > 0 ? ">>> 테스터 계정 삭제 완료" : ">>> 테스터 계정 삭제 실패");
+		int result = 1;
+		result = mdao.delTester_account();
+		result = mdao.delTester_liked();
+		result = mdao.delTester_comment();
+		result = mdao.delTester_report();
+		result = mdao.delTester_watch();
+		result = mdao.delTester_member();
+		
+		logger.info(result > 0 ? ">>> 테스터 데이터 삭제 완료" : ">>> 테스터 데이터 삭제 실패");
+		
+		
+		
 	}
 }

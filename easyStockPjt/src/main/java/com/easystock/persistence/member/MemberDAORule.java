@@ -24,8 +24,6 @@ public interface MemberDAORule {
 	public List<AccountVO> chk_h_list(String email);
 	//account 가격 업데이트
 	public void updatePrice(List<StockVO> s_list);
-	//테스터 계정 정기 삭제
-	public int delTester();
 	//관심종목확인
 	public List<WatchVO> chk_w_list(String email);
 	//관심 종목 기준 svo
@@ -60,4 +58,12 @@ public interface MemberDAORule {
 	public int updateAccount_sell(AccountVO avo);
 	//전량 매도
 	public int deleteAccount_sell(AccountVO avo);
+	
+	//테스터 정기 삭제
+	public int delTester_member();
+	public int delTester_account();
+	public int delTester_liked();
+	public int delTester_comment();
+	public int delTester_report();
+	public int delTester_watch();
 }

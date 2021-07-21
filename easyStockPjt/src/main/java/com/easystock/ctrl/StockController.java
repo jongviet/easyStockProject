@@ -1,7 +1,7 @@
 package com.easystock.ctrl;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.easystock.domain.AccountVO;
 import com.easystock.domain.EarningVO;
 import com.easystock.domain.PageVO;
-import com.easystock.domain.ReportVO;
 import com.easystock.domain.StockVO;
 import com.easystock.domain.WatchVO;
 import com.easystock.handler.PagingHandler;
@@ -45,7 +44,7 @@ public class StockController {
 	@Inject
 	private MemberServiceRule msv;
 
-	//신규 종목 등록
+	//신규 종목 등록, account raw data+@
 	@PostMapping(value = "/c_register", consumes = "application/json", produces = "application/text; charset=UTF-8")
 	public ResponseEntity<String> register(@RequestBody StockVO svo) {
 		int isUp = ssv.register(svo);
@@ -87,6 +86,19 @@ public class StockController {
 			 }
 		 }
 	}
+	
+	//거래소 등록용
+	@ResponseBody
+	@GetMapping(value = {"/tradable"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<List<StockVO>> tradable() {
+			
+		List<StockVO> svo_list = ssv.getStockList();
+		
+		return (svo_list != null) ? new ResponseEntity<List<StockVO>>(svo_list, HttpStatus.OK)
+				: new ResponseEntity<List<StockVO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
 	
 	//매수, 매도 종목 조회
 	@ResponseBody
@@ -155,4 +167,5 @@ public class StockController {
 		
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 }

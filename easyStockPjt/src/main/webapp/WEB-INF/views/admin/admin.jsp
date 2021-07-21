@@ -7,9 +7,9 @@
 	<h3 class="float-left grayFontBold mt-1">신고내역</h3>
 	<h6 class="grayFont mb-4" style="clear:both;">이용 회원들이 신고한 내역 및 신고 당한 댓글 내용을 확인할 수 있습니다. 관리자 확인 후 적절한 조치를 취할 수 있습니다.</h6>
 	<table class="table table-hover text-center">
-		<thead>
+		<thead style="background-color:#1F96881F;">
 			<tr class="greenLineBold">
-				<th class="grayFontBold">cNum</th>
+				<th class="grayFontBold">코멘트번호</th>
 				<th colspan="3" class="grayFontBold">신고내용</th>
 				<th class="grayFontBold">조치사항</th>
 			</tr>
