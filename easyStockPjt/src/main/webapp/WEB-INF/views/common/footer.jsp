@@ -3,75 +3,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 </div>
-
 <!-- container ends -->
-
-<style>
-
-.footer-link > li {
-    display: inline-block;
-    padding-right: 20px;
-}
-
-.footer-link>li>a:hover {
-	font-weight: bolder;
-}
-
-.footer > .footer-link {
-    text-align: left;
-    list-style: none;
-    font-size: smaller;
-    margin-left: auto;
-}
-
-.footer > a {
-    text-decoration: none !important;
-}
-
-.footer > .footer-bottom > .team-info {
-    list-style: none;
-    text-align: left;
-    font-size: x-small;
-    margin-left: auto;
-}
-
-.footer {
-    float: left;
-    width: 100%;
-    height: 140px;
-    line-height: 100%;
-    padding-top: 26px;
-}
-</style>
 
 <div class="col-lg-8 col-md-8 mx-auto text-center" style="margin-bottom:0; margin-top: 50px; 
    background-color:#f5f5f5; border-top:3px solid #1F96884D;">
 
 <div class="footer">
+	<a style="font-weight: bolder; font-size: 40px; color:#1F968880;"><i class='fab fa-grav mr-2' style='font-size:36px; color:#1F968880;'></i>EasyStock</a>
 	<aside class="footer-logo">
-		<a href="main.jsp"><img src="" alt="" /></a>
+		<a><img src="" alt="" /></a>
 	</aside>
 	<section class="footer-top">
 		<ul class="footer-link">
-			<li><a>약관 보기</a></li>
-			<li>|</li>
-			<li><a>개인정보처리방침</a></li>
-			<li>|</li>
-			<li><a>고객의 소리</a></li>
-			<li>|</li>
-			<li><a>광고 및 제휴 문의</a></li>
-			<li>|</li>
+			<li class="f_link_size grayFont" style="margin-right:-13px;"><span style="color:#1F968880; font-weight: bolder; font-size:20px;">Dev's</span></li>
+			<li class="f_link_size"><a class="grayFont" href="mailto:jongki6161@gmail.com">Email</a></li>
+			<li class="f_link_size"><a class="grayFont" target="_blank" href="https://jongviet.tistory.com">Blog</a></li>
+			<li class="f_link_size"><a class="grayFont" target="_blank" href="http://jongviet.dothome.co.kr/">Portfolio</a></li>
+			<li class="f_link_size"><a class="grayFont" target="_blank" href="https://github.com/jongviet">Github </a></li>
+			<li class="f_link_size"><a class="grayFont" target="_blank" href="https://www.rocketpunch.com/@jongki6161">RocketPunch</a></li>
 		</ul>
-	</section>
-	<section class="footer-bottom">
-		<ul class="team-info">
-			<li>서울특별시 서초구 서초대로77길 54, 서초W타워 1406호</li>
-			<li>대표자명 : 김종기 곽단 손관식 이지남</li>
-			<li>COPYRIGHT© group5 ALL RIGHTS RESERVED</li>
+		<ul class="footer-link">
+			<li class="f_size grayFont">OS : Windows10 64bit / Language : Java 1.8, Javascript ES5 / Framework : SpringMVC, Spring Security / Tools : Eclipse / DB: MySQL 5.7.34 / WAS : Tomcat 8.5 / Library : Bootstrap 4.5, Jquery 3.6, Chartjs 2.4 & 3.4.1, GU, Junit 4.13, quartz 2.3.2, logback 1.2.3, Mybatis 3.5.3</li>
 		</ul>
 	</section>
 </div>
-   
 </div>
+
 </body>
 </html>

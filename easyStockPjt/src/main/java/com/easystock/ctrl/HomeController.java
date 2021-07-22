@@ -25,10 +25,4 @@ public class HomeController {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		return "index";
 	}
-	
-	@RequestMapping(value = { "/test" }, method = { RequestMethod.GET })
-	public String test() {
-		return "test";
-	}
-		
 }

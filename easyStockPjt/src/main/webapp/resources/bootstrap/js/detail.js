@@ -413,6 +413,16 @@ function alpha_input_monthly(input) {
 /* Detail 관심 종목 끝 */
 
 
+/* 개별 종목 검색 */
+$(document).on("click", "#d_search", function() {
+	let symbol_val = $("#d_symbol").val(); 
+	let email_val = ses;
+	let url_val = "/stock/detail?symbol=" + symbol_val + "&email=" + email_val;
+	
+	$("#d_go").attr("href", url_val); 
+	var d_go = document.getElementById("d_go");
+	d_go.click();
+});
 
 
 

@@ -420,7 +420,7 @@
 				<c:if test="${h_list[0] eq null }">
 				<tfoot>
 					<tr>
-						<td colspan="6" class="grayLight">거래를 시작해보세요&nbsp;&nbsp;<a href="/stock/list"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
+						<td colspan="6" class="grayLight">상세 정보를 확인해보세요&nbsp;&nbsp;<a href="/stock/detail?symbol=AAPL&email=${ses}"><i class="fas fa-cart-plus" style='font-size: 24px; color: #1F9688;'></i></a></td>
 					</tr>
 				</tfoot>
 				</c:if>

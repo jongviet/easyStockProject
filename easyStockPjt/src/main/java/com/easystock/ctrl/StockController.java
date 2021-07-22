@@ -98,8 +98,6 @@ public class StockController {
 				: new ResponseEntity<List<StockVO>>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	
-	
 	//매수, 매도 종목 조회
 	@ResponseBody
 	@GetMapping(value = {"/list/{keyword}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })

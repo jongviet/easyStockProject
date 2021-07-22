@@ -98,3 +98,46 @@
 	margin: auto;
 	margin-top: 20px;
 }
+
+.footer-link > li {
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.footer-link>li>a:hover {
+	font-weight: bolder;
+}
+
+.footer > .footer-link {
+    text-align: left;
+    list-style: none;
+    font-size: smaller;
+    margin-left: auto;
+}
+
+.footer-link > ul > li > a {
+    text-decoration: none !important;
+}
+
+.footer {
+    width: 100%;
+    height: 140px;
+    line-height: 100%;
+    padding-top: 26px;
+}
+
+.f_link_size {
+	font-size:15px;
+}
+
+.f_size {
+	font-size:8px;
+}
+
+.orangeFontBold {
+	color: #FF8C69;
+	font-weight: bold;
+}
+
+
+

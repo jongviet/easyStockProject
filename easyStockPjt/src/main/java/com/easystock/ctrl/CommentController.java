@@ -99,7 +99,7 @@ public class CommentController {
 		return csv.delete(cNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//신고 내역 denied -> 신고내역 + 신고 당한 댓글 제거
+	//신고 내역 denied -> 신고내역만 제거
 	@DeleteMapping(value="/denied/{cNum}", produces= MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> deniedReport(@PathVariable("cNum") int cNum) {
 		//신고 내역만 제거

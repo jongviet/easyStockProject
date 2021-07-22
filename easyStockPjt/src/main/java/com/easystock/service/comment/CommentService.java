@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.easystock.domain.CommentVO;
 import com.easystock.domain.ReportVO;
 import com.easystock.persistence.comment.CommentDAORule;
+import com.easystock.persistence.member.MemberDAORule;
 
 @Service
 public class CommentService implements CommentServiceRule {
@@ -20,6 +21,9 @@ public class CommentService implements CommentServiceRule {
 
 	@Inject
 	private CommentDAORule cdao;
+	
+	@Inject
+	private MemberDAORule mdao;
 
 	@Override
 	public int insert(CommentVO cvo) {
@@ -43,9 +47,13 @@ public class CommentService implements CommentServiceRule {
 		}
 	}
 
-	//특정 댓글의 좋아요 삭제 -> 댓글 삭제
+	//특정 댓글의 좋아요 삭제 -> 댓글 삭제    +@ 리포트 삭제도 제일 앞에 추가
 	@Override
 	public int delete(int cNum) {
+		
+		//리포트 먼저 삭제
+		mdao.deleteReport(cNum);
+		
 		if(cdao.cmtDel(cNum) == 1) {
 			return cdao.delete(cNum);
 		} else {

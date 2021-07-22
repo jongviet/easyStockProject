@@ -5,10 +5,7 @@
 <link rel="stylesheet" href="/resources/bootstrap/css/custom.css">
 <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico" />
 <!-- 아이콘  -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://kit.fontawesome.com/10e6240b9d.js" crossorigin="anonymous"></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+ <script src="https://kit.fontawesome.com/10e6240b9d.js"></script>
 <style>
 body { overflow: auto; } 
 body::before { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: url(/resources/assets/img/bg.jpg); background-size: cover; -webkit-filter: blur(5px); -moz-filter: blur(5px); -o-filter: blur(5px); -ms-filter: blur(5px); filter: blur(5px); transform: scale(1.02); z-index: -1; content: ""; }
@@ -22,7 +19,7 @@ body::before { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background
 </c:if>
 <div class="container" id="memberForm">
 	<h3 class="text-center" style="color: #f5f5f5; font-weight: bolder;"><i class='fab fa-grav mr-2' style='font-size:40px'></i>EasyStock</h3>
-	<form action="/member/login" method="post" id="form">
+	<form action="/member/login" method="POST" id="form">
 		<div class="form-group">
 			<input class="form-control chk" type="email" name="email" id="email"
 				placeholder="Email">

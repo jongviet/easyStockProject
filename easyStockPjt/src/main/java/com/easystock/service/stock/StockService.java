@@ -1,6 +1,5 @@
 package com.easystock.service.stock;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,7 +7,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.easystock.domain.AccountVO;
@@ -32,11 +30,11 @@ public class StockService implements StockServiceRule {
 	@Transactional
 	@Override
 	public int register(StockVO svo) {
-		//accountVO rawdata 생성
-		sdao.createRawData(svo.getSymbol());
+		//company overview 먼저 등록 PK
+		sdao.insert(svo);
 		
-		//company overview 등록
-		return sdao.insert(svo);
+		//accountVO rawdata 생성 FK
+		return sdao.createRawData(svo.getSymbol());
 	}
 
 	@Override

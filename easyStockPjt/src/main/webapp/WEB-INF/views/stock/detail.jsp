@@ -7,7 +7,18 @@
 <!-- 디테일용 chartjs -->
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
 
-<h3 class="greenFontBold" style="float: left">${svo.fullName}
+<!-- 종목 상세 검색 -->
+<h3 class="float-left greenFontBold mb-3">개별종목상세</h3>
+<div class="input-group">
+	<input type="text" class="form-control" id="d_symbol" placeholder="종목코드를 기준으로 상세 정보를 조회해보세요.">
+	<div class="input-group-append">
+		<button class="btn" id="d_search" style="width: 150px; background-color:#1F9688; color:white; font-weight:bold;" type="button">상세조회</button>
+	</div>
+	<a href="" id="d_go"></a>
+</div>
+<hr>
+
+<h3 class="greenFontBold mt-5" style="float: left">${svo.fullName}
 <c:choose>
 	<c:when test="${hasWatch eq 1}">
 		<a href='#'><i class='fa fa-star' id='remove_watch' style='font-size: 24px; color: #1F9688;'></i></a>
@@ -19,7 +30,7 @@
 <a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#buyModal" id="buying" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">shopping_cart</i></a>
 <a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#sellModal" id="selling" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">remove_shopping_cart</i></a>
 </h3>
-<h5 class="grayFontBold" style="float: right;">Avg-Target : ${svo.avg_target} USD</h5>
+<h5 class="grayFontBold mt-5" style="float: right;">Avg-Target : ${svo.avg_target} USD</h5>
 
 <div id="canvasDiv">
 	<canvas id="myChartOne" style="background-color: #f5f5f5;"></canvas>
