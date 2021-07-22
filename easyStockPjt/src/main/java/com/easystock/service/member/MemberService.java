@@ -88,8 +88,8 @@ public class MemberService implements MemberServiceRule {
 	}
 
 	@Override
-	public List<ReportVO> getReportList(PageVO pgvo) {
-		return mdao.getReportList(pgvo);
+	public List<ReportVO> getReportList() {
+		return mdao.getReportList();
 	}
 
 	@Override

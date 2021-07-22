@@ -102,9 +102,8 @@ public class MemberDAO implements MemberDAORule {
 	}
 
 	@Override
-	public List<ReportVO> getReportList(PageVO pgvo) {
-		pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 5);
-		return sql.selectList(NS+"getReportList", pgvo);
+	public List<ReportVO> getReportList() {
+		return sql.selectList(NS+"getReportList");
 	}
 
 	@Override

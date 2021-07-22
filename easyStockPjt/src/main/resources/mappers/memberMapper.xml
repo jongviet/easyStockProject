@@ -47,9 +47,8 @@
 		select count(symbol) from watch where email = #{email} and symbol = #{symbol};
 	</select>
 	
-	<select id="getReportList" resultType="rvo" parameterType="pgvo">
-	 	select @rownum:=@rownum+1 rowNum, r.* from report r, (select @rownum:=0) temp
-		order by reportNum limit #{cal_idx}, #{countPerPage}
+	<select id="getReportList" resultType="rvo">
+	 	select * from report
 	</select>
 	<delete id="deleteReport" parameterType="int">
 		delete from report where cNum = #{cNum}

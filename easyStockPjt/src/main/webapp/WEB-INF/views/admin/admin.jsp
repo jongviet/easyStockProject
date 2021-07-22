@@ -28,13 +28,9 @@
 				</tr>
 			</c:forEach>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="5" class="text-center"><jsp:include page="../common/paging.jsp" /></td>
-			</tr>
-		</tfoot>
 	</table>
 </div>
+<h3 class="mb-4"></h3>
 <hr>
 <div class="modal fade" id="commentModal" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
@@ -61,7 +57,7 @@
 	<h3 class="float-left grayFontBold mt-3">신규 종목 데이터 등록</h3>
 	<h6 class="grayFont mb-4" style="clear:both;">Symbol을 기준으로 회사 개요 및 5년치 earning 데이터를 등록합니다. 신규 상장되어 earning 데이터가 부족한 기업이 있을 수 있습니다.</h6>
 	<div class="form-group mb-3">
-		<form class="form-inline">
+		<form class="form-inline mb-4">
 			<input type="text" id="input">
 			<button type="button" class="btn btn-md ml-1 btnBackground" id="inputBtn">등록하기</button>
 		</form>
@@ -71,8 +67,8 @@
 <div class="col-lg-12 col-md-12 mx-auto">
 	<h3 class="float-left grayFontBold mt-3">전일 종가 및 Member Account 현재가 업데이트</h3>
 	<h6 class="grayFont mb-4" style="clear:both;">3월 말~10월 말까지는 서머타임의 적용을 받아, 한국 시각 기준 오전 7시 이후부터 전일 종가 업데이트가 가능합니다.</h6>
-	<button type="button" id="priceUpdate" class="btn btnBackground">전일 종가 업데이트</button>
-	<button type="button" id="accountUpdate" class="btn btnBackground">Member Account 현재가 업데이트</button>
+	<button type="button" id="priceUpdate mb-4" class="btn btnBackground">전일 종가 업데이트</button>
+	<button type="button" id="accountUpdate mb-4" class="btn btnBackground">Member Account 현재가 업데이트</button>
 </div>
 <script src="/resources/bootstrap/js/admin.js"></script>
 <jsp:include page="../common/footer.jsp" />

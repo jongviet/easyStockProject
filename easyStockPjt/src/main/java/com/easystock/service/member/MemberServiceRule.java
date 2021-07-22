@@ -25,7 +25,7 @@ public interface MemberServiceRule {
 	public List<WatchVO> getWatchList(String email);
 	public int inYourWatchList(String email, String symbol);
 	
-	public List<ReportVO> getReportList(PageVO pgvo);
+	public List<ReportVO> getReportList();
 	public int deleteReport(int cNum);
 	public int getReportCnt(PageVO pgvo);
 	

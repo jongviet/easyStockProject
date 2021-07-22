@@ -58,7 +58,7 @@ public class MemberController {
 			model.addAttribute("msg", "회원가입 완료");
 			model.addAttribute("url", "/");
 		}
-		return "temp";
+		return "detour";
 	}
 	
 	@PostMapping("/login")
@@ -84,7 +84,7 @@ public class MemberController {
 		} else {
 			model.addAttribute("msg", "아이디나 비밀번호가 올바르지 않습니다.");
 			model.addAttribute("url", "/");
-			return "logFail";
+			return "detour";
 		}
 	}
 	
@@ -114,13 +114,11 @@ public class MemberController {
 		return msv.chkDeposit(email);
 	}
 	
-	@RequestMapping(value = { "/admin" }, method = { RequestMethod.GET })
-	public String admin(Model model, PageVO pgvo) {
+	@RequestMapping(value = { "/admin" }, method = { RequestMethod.POST })
+	public String admin(Model model) {
 		
-		model.addAttribute("r_list", msv.getReportList(pgvo));
-		int totalCnt = msv.getReportCnt(pgvo);
+		model.addAttribute("r_list", msv.getReportList());
 		
-		model.addAttribute("pghdl", new PagingHandler(totalCnt, pgvo));
 		return "admin/admin";
 	}
 	

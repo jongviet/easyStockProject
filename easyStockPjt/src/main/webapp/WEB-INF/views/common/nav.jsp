@@ -17,13 +17,15 @@
 			<li class="nav-item"><a class="nav-link" href="/stock/list">종목/지수/환율/섹터</a></li>
 			<li class="nav-item"><a class="nav-link" href="/stock/detail/?email=${ses}&symbol=AAPL">개별종목상세</a></li>
 			<c:if test="${ses eq 'jongki6161@naver.com' }">
-				<li class="nav-item"><a class="nav-link" id="admin" href="/member/admin">관리자모드</a></li>
+				<li class="nav-item"><a class="nav-link" id="admin" href="javascript:post_move()">관리자모드</a></li>
 			</c:if>
 			<li class="nav-item"><a class="nav-link" id="logout" href="/member/logout">로그아웃</a></li>
 		</ul>
 	</div>
 </nav>
-
+<form id="toAdmin">
+      <input type="hidden">
+</form>
 <script>
 	$("#logout").on("click", function(e) {
 		e.preventDefault();
@@ -36,6 +38,5 @@
 		});
 	});
 </script>
-
 
 <div class="container" style="margin-top: 30px">
