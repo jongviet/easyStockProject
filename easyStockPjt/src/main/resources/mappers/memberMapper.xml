@@ -50,9 +50,13 @@
 	<select id="getReportList" resultType="rvo">
 	 	select * from report
 	</select>
-	<delete id="deleteReport" parameterType="int">
+	<delete id="deleteReport_all" parameterType="int">
 		delete from report where cNum = #{cNum}
 	</delete>
+	<delete id="deleteReport_one" parameterType="int">
+		delete from report where reportNum = #{reportNum}
+	</delete>
+	
 	<select id="getReportCnt" parameterType="pgvo" resultType="int">
 		select count(reportNum) as cnt from report
 	</select>

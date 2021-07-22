@@ -77,12 +77,12 @@ public class CommentController {
 	
 	@DeleteMapping(value="/accepted/{cNum}", produces= MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> acceptedReport(@PathVariable("cNum") int cNum) {
-		msv.deleteReport(cNum);
+		msv.deleteReport_all(cNum);
 		return csv.delete(cNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@DeleteMapping(value="/denied/{cNum}", produces= MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> deniedReport(@PathVariable("cNum") int cNum) {
-		return msv.deleteReport(cNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	@DeleteMapping(value="/denied/{reportNum}", produces= MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> deniedReport(@PathVariable("reportNum") int reportNum) {
+		return msv.deleteReport_one(reportNum) > 0 ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

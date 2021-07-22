@@ -26,7 +26,8 @@ public interface MemberServiceRule {
 	public int inYourWatchList(String email, String symbol);
 	
 	public List<ReportVO> getReportList();
-	public int deleteReport(int cNum);
+	public int deleteReport_all(int cNum);
+	public int deleteReport_one(int reportNum);
 	public int getReportCnt(PageVO pgvo);
 	
 	public AccountVO getSpecificSymbol(String keyword, String email);
@@ -35,4 +36,5 @@ public interface MemberServiceRule {
 	public int newBuy(AccountVO avo);
 	public int additionalBuy(AccountVO new_avo);
 	public int sell(AccountVO avo);
+	
 }

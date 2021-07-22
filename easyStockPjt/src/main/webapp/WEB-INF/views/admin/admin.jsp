@@ -26,6 +26,7 @@
 					<td class="text-center">
 						<button type="button" class="btn mr-1 btn-sm btnBackground" id="accepted">댓글삭제</button>
 						<button type="button" class="btn btn-sm btnBackground" id="denied">사유불충분</button>
+						<input type="hidden" value="${rvo.reportNum}" id="reportNum">
 					</td>
 				</tr>
 			</c:forEach>

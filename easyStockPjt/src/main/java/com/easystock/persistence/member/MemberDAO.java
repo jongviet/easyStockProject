@@ -107,8 +107,13 @@ public class MemberDAO implements MemberDAORule {
 	}
 
 	@Override
-	public int deleteReport(int cNum) {
-		return sql.delete(NS+"deleteReport", cNum);
+	public int deleteReport_all(int cNum) {
+		return sql.delete(NS+"deleteReport_all", cNum);
+	}
+	
+	@Override
+	public int deleteReport_one(int reportNum) {
+		return sql.delete(NS+"deleteReport_one", reportNum);
 	}
 
 	@Override

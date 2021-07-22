@@ -93,8 +93,13 @@ public class MemberService implements MemberServiceRule {
 	}
 
 	@Override
-	public int deleteReport(int cNum) {
-		return mdao.deleteReport(cNum);
+	public int deleteReport_all(int cNum) {
+		return mdao.deleteReport_all(cNum);
+	}
+	
+	@Override
+	public int deleteReport_one(int reportNum) {
+		return mdao.deleteReport_one(reportNum);
 	}
 
 	@Override
@@ -161,6 +166,8 @@ public class MemberService implements MemberServiceRule {
 			return mdao.updateAccount_sell(avo);
 		}
 	}
+
+
 }
 
 

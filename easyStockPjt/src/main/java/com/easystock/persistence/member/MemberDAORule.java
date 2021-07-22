@@ -30,7 +30,8 @@ public interface MemberDAORule {
 	public int inYourWatchList(String email, String symbol);
 	
 	public List<ReportVO> getReportList();
-	public int deleteReport(int cNum);
+	public int deleteReport_all(int cNum);
+	public int deleteReport_one(int reportNum);
 	public int getReportCnt(PageVO pgvo);
 
 	public AccountVO getSpecificSymbol(String keyword, String email);

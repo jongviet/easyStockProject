@@ -47,7 +47,7 @@ public class CommentService implements CommentServiceRule {
 	@Override
 	public int delete(int cNum) {
 		
-		mdao.deleteReport(cNum);
+		mdao.deleteReport_all(cNum);
 		
 		if(cdao.cmtDel(cNum) == 1) {
 			return cdao.delete(cNum);

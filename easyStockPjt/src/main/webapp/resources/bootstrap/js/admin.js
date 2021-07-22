@@ -245,11 +245,11 @@ $(function () {
 });
 
 $(function () {
-	$(document).on("click", "#denied", function() {
-	let cNum_val = $(this).parent().parent().find("#comment").text();
+	$(document).on("click", "#denied", function() {	
+	let reportNum_val = $(this).closest("tr").find("input").eq(0).val();
 	
 		$.ajax({
-			url : "/comment/denied/"+cNum_val,
+			url : "/comment/denied/"+reportNum_val,
 			type : "delete"		
 		}).done(function(result) {
 			if(parseInt(result) > 0) {
