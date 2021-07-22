@@ -11,6 +11,7 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="collapsibleNavbar">
+		<c:if test="${ses ne null}">
 		<ul class="navbar-nav"
 			style="color: white !important; font-weight: bolder; font-size: 1.1em !important; z-index: 2000 !important;">
 			<li class="nav-item"><a class="nav-link" id="reload" href="/member/main/?email=${ses}">내 포트폴리오</a></li>
@@ -21,6 +22,7 @@
 			</c:if>
 			<li class="nav-item"><a class="nav-link" id="logout" href="/member/logout">로그아웃</a></li>
 		</ul>
+		</c:if>
 	</div>
 </nav>
 <form id="toAdmin">

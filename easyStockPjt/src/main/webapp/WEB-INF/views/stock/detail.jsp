@@ -6,6 +6,8 @@
 <jsp:include page="../common/nav.jsp" />
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
 
+<c:choose>
+<c:when test="${ses ne null}">
 <h3 class="float-left greenFontBold mb-3">개별종목상세</h3>
 <div class="input-group">
 	<input type="text" class="form-control" id="d_symbol" placeholder="종목코드를 기준으로 상세 정보를 조회해보세요.">
@@ -24,9 +26,13 @@
 		<a href='#'><i class='fa fa-star-o' id='add_watch' style='font-size: 24px; color: #1F9688;'></i></a>
 	</c:otherwise>
 </c:choose>
+<c:if test="${ses ne null}">
 <a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#buyModal" id="buying" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">shopping_cart</i></a>
 <a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#sellModal" id="selling" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">remove_shopping_cart</i></a>
+</c:if>
 </h3>
+
+
 <h5 class="grayFontBold mt-5" style="float: right;">Avg-Target : ${svo.avg_target} USD</h5>
 
 <div id="canvasDiv">
@@ -257,6 +263,11 @@
 		</div>
 	</div>
 </div>
+</c:when>
+<c:otherwise>
+	<h1 class="text-center">비정상적인 접근이 감지되었습니다. 다시 로그인해주세요.</h1>
+</c:otherwise>
+</c:choose>
 
 <script src="/resources/bootstrap/js/buyAndSell.js"></script>
 <script src="/resources/bootstrap/js/detail.js"></script>

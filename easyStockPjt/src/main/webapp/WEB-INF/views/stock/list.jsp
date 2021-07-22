@@ -7,6 +7,9 @@
 <jsp:include page="../common/nav.jsp" />
 <script src="/resources/bootstrap/js/list.js"></script>
 
+
+<c:choose>
+<c:when test="${ses ne null}">
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12 col-md-12 mx-auto text-center">
@@ -52,6 +55,8 @@
 							<td class="text-right grayFont">$<fmt:formatNumber
 									value="${svo.m_capitalization}" pattern="#,###" />&nbsp;&nbsp;&nbsp;
 							</td>
+							<c:choose>
+							<c:when test="${ses ne null}">
 							<td><a data-symbol="${svo.symbol}" data-toggle="modal"
 								data-target="#buyModal" id="buying" href="#"><i
 									class="material-icons" style="font-size: 24px; color: #FF8C69">shopping_cart</i></a>
@@ -59,6 +64,13 @@
 								data-target="#sellModal" id="selling" href="#"><i
 									class="material-icons" style="font-size: 24px; color: #FF8C69">remove_shopping_cart</i></a>
 							</td>
+							</c:when>
+							<c:otherwise>
+							<td>
+							세션미확인
+							</td>
+							</c:otherwise>
+							</c:choose>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -378,6 +390,10 @@
 		</div>
 	</div>
 </div>
-
+</c:when>
+<c:otherwise>
+	<h1 class="text-center">비정상적인 접근이 감지되었습니다. 다시 로그인해주세요.</h1>
+</c:otherwise>
+</c:choose>
 <script src="/resources/bootstrap/js/buyAndSell.js"></script>
 <jsp:include page="../common/footer.jsp" />

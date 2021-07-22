@@ -3,6 +3,8 @@
 <jsp:include page="../common/header.jsp" />
 <jsp:include page="../common/nav.jsp" />
 
+<c:choose>
+<c:when test="${ses ne null}">
 <div class="col-lg-12 col-md-12 mx-auto">
 	<h3 class="float-left grayFontBold mt-1">신고내역</h3>
 	<h6 class="grayFont mb-4" style="clear:both;">이용 회원들이 신고한 내역 및 신고 당한 댓글 내용을 확인할 수 있습니다. 관리자 확인 후 적절한 조치를 취할 수 있습니다.</h6>
@@ -70,6 +72,11 @@
 	<button type="button" id="priceUpdate mb-4" class="btn btnBackground">전일 종가 업데이트</button>
 	<button type="button" id="accountUpdate mb-4" class="btn btnBackground">Member Account 현재가 업데이트</button>
 </div>
+</c:when>
+<c:otherwise>
+	<h1 class="text-center">비정상적인 접근이 감지되었습니다. 다시 로그인해주세요.</h1>
+</c:otherwise>
+</c:choose>
 <script src="/resources/bootstrap/js/admin.js"></script>
 <jsp:include page="../common/footer.jsp" />
 

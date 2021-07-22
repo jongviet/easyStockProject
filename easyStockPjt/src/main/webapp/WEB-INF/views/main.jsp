@@ -8,6 +8,8 @@
 <script src="/resources/bootstrap/js/Chart.min.js"></script>
 <script src="/resources/bootstrap/js/main.js"></script>
 
+<c:choose>
+<c:when test="${ses ne null}">
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6 col-md-6 mx-auto float-left text-center">
@@ -106,10 +108,19 @@
 							<td class="grayFont">${svo.year_high }</td>
 							<td class="grayFont"><a href="/stock/detail?symbol=${svo.symbol}&email=${ses}"><i class="fas fa-info-circle"
 									style='font-size: 24px; color: #1F9688;'></i></a></td>
+							<c:choose>
+							<c:when test="${ses ne null}">
 							<td class="grayFont">
 								<a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#buyModal" id="buying" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">shopping_cart</i></a>
 								<a data-symbol="${svo.symbol}" data-toggle="modal" data-target="#sellModal" id="selling" href="#"><i class="material-icons" style="font-size:24px;color:#FF8C69">remove_shopping_cart</i></a>
 							</td>
+							</c:when>
+							<c:otherwise>
+							<td>
+							세션미확인
+							</td>
+							</c:otherwise>
+							</c:choose>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -254,6 +265,11 @@
 		</div>
 	</div>
 </div>
+</c:when>
+<c:otherwise>
+	<h1 class="text-center">비정상적인 접근이 감지되었습니다. 다시 로그인해주세요.</h1>
+</c:otherwise>
+</c:choose>
 <script>
  	var symbol_arr = [];
 	var h_price_arr = [];
