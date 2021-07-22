@@ -7,345 +7,6 @@
 <jsp:include page="common/nav.jsp" />
 <script src="/resources/bootstrap/js/Chart.min.js"></script>
 <script src="/resources/bootstrap/js/main.js"></script>
-<script>
- 	var symbol_arr = [];
-	var h_price_arr = [];
-	var h_qty_arr = [];
-	var c_price_arr = [];
-	
-	var deposit = "${deposit}";
-	var deposit_val = Number(deposit);
-
-	/* 해당 종목 가져오기 */
-	<c:forEach items="${h_list}" var="avo">
-	var symbol = "${avo.symbol}";
-	var h_price = "${avo.avg_h_price}";
-	var h_qty = "${avo.h_qty}";
-	var c_price = "${avo.cur_price}";
-	symbol_arr.push(symbol);
-	h_price_arr.push(Number(h_price));
-	h_qty_arr.push(Number(h_qty));
-	c_price_arr.push(Number(c_price));
-	</c:forEach>
-
-	/* asset 처리 */
-	var asset = 0.0;
-	var asset_input = 0.0;
-
-	for (let i = 0; i < h_qty_arr.length; i++) {
-		asset += c_price_arr[i] * h_qty_arr[i];
-	}
-
-	for (let i = 0; i < h_qty_arr.length; i++) {
-		asset_input += h_price_arr[i] * h_qty_arr[i];
-	}
-
-	/* 매매 기준 전체 총 평가액 */
-	var asset_input_val = (deposit_val + asset_input).toFixed(2);
-
-	
-	/* 현재 기준 전체 총 평가액 */
-	var asset_val = (deposit_val + asset).toFixed(2);
-	var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
-	/* 현재 기준 주식 총 평가액 */
-	var stock_val = asset.toFixed(2);
-	var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
-	var earning = (asset_val - asset_input_val).toFixed(2);
-	var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-	
-	var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
-	var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-	
-	$(function() {
-		
-		$("#percentage").text(earningPer_comma);
-		$("#profit").text(earning_comma);
-		$("#stock").text(stock_val_comma);
-		$("#asset").text(asset_val_comma);
-
-		/* 예수금 포함 각 주식 별 금액 던지기 */
-		var eachStockVal = [];
-
-		for (let i = 0; i < c_price_arr.length; i++) {
-			eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
-		}
-		
-		/* 예수금 추가 */
-		symbol_arr.push('예수금');
-		eachStockVal.push(deposit_val);
-
-		current_asset_show(symbol_arr, eachStockVal);	
-	});
-	
-	$(document).on("click", "#show", function() {
-		
-	 	var symbol_arr = [];
-		var h_price_arr = [];
-		var h_qty_arr = [];
-		var c_price_arr = [];
-		
-		var deposit = "${deposit}";
-		var deposit_val = Number(deposit);
-
-		/* 해당 종목 가져오기 */
-		<c:forEach items="${h_list}" var="avo">
-		var symbol = "${avo.symbol}";
-		var h_price = "${avo.avg_h_price}";
-		var h_qty = "${avo.h_qty}";
-		var c_price = "${avo.cur_price}";
-		symbol_arr.push(symbol);
-		h_price_arr.push(Number(h_price));
-		h_qty_arr.push(Number(h_qty));
-		c_price_arr.push(Number(c_price));
-		</c:forEach>
-
-		/* asset 처리 */
-		var asset = 0.0;
-		var asset_input = 0.0;
-
-		for (let i = 0; i < h_qty_arr.length; i++) {
-			asset += c_price_arr[i] * h_qty_arr[i];
-		}
-
-		for (let i = 0; i < h_qty_arr.length; i++) {
-			asset_input += h_price_arr[i] * h_qty_arr[i];
-		}
-
-		/* 매매 기준 전체 총 평가액 */
-		var asset_input_val = (deposit_val + asset_input).toFixed(2);
-
-		
-		/* 현재 기준 전체 총 평가액 */
-		var asset_val = (deposit_val + asset).toFixed(2);
-		var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
-		/* 현재 기준 주식 총 평가액 */
-		var stock_val = asset.toFixed(2);
-		var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
-		var earning = (asset_val - asset_input_val).toFixed(2);
-		var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		
-		var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
-		var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		
-		$(function() {
-			
-			$("#percentage").text(earningPer_comma);
-			$("#profit").text(earning_comma);
-			$("#stock").text(stock_val_comma);
-			$("#asset").text(asset_val_comma);
-
-			/* 예수금 포함 각 주식 별 금액 던지기 */
-			var eachStockVal = [];
-
-			for (let i = 0; i < c_price_arr.length; i++) {
-				eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
-			}
-			
-			/* 예수금 추가 */
-			symbol_arr.push('예수금');
-			eachStockVal.push(deposit_val);
-
-			current_asset_show(symbol_arr, eachStockVal);	
-		});
-	});
-
-	$(document).on("click", "#hide", function() {
-		
-	 	var symbol_arr = [];
-		var h_price_arr = [];
-		var h_qty_arr = [];
-		var c_price_arr = [];
-		
-		var deposit = "${deposit}";
-		var deposit_val = Number(deposit);
-
-		/* 해당 종목 가져오기 */
-		<c:forEach items="${h_list}" var="avo">
-		var symbol = "${avo.symbol}";
-		var h_price = "${avo.avg_h_price}";
-		var h_qty = "${avo.h_qty}";
-		var c_price = "${avo.cur_price}";
-		symbol_arr.push(symbol);
-		h_price_arr.push(Number(h_price));
-		h_qty_arr.push(Number(h_qty));
-		c_price_arr.push(Number(c_price));
-		</c:forEach>
-
-		/* asset 처리 */
-		var asset = 0.0;
-		var asset_input = 0.0;
-
-		for (let i = 0; i < h_qty_arr.length; i++) {
-			asset += c_price_arr[i] * h_qty_arr[i];
-		}
-
-		for (let i = 0; i < h_qty_arr.length; i++) {
-			asset_input += h_price_arr[i] * h_qty_arr[i];
-		}
-
-		/* 매매 기준 전체 총 평가액 */
-		var asset_input_val = (deposit_val + asset_input).toFixed(2);
-
-		
-		/* 현재 기준 전체 총 평가액 */
-		var asset_val = (deposit_val + asset).toFixed(2);
-		var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
-		/* 현재 기준 주식 총 평가액 */
-		var stock_val = asset.toFixed(2);
-		var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
-		var earning = (asset_val - asset_input_val).toFixed(2);
-		var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		
-		var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
-		var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		
-		$(function() {
-			
-			$("#percentage").text(earningPer_comma);
-			$("#profit").text(earning_comma);
-			$("#stock").text(stock_val_comma);
-			$("#asset").text(asset_val_comma);
-
-			/* 예수금 포함 각 주식 별 금액 던지기 */
-			var eachStockVal = [];
-
-			for (let i = 0; i < c_price_arr.length; i++) {
-				eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
-			}
-			
-			/* 예수금 추가 */
-			symbol_arr.push('예수금');
-			eachStockVal.push(deposit_val);
-
-			current_asset_hide(symbol_arr, eachStockVal);
-		});
-	});
-
-	function current_asset_show(symbol_arr, eachStockVal) {
-		$("#myChartTwo").remove();
-		$("#canvasDivTwo").append("<canvas id='myChartTwo' style='background-color: #f5f5f5;' width='525' height='460'></canvas>");
-		
-		var ctx = document.getElementById('myChartTwo');
-		var config = {
-			type : 'doughnut',
-			data : {
-				labels : symbol_arr,
-				datasets : [ {
-					label : 'Stock',
-					data : eachStockVal,
-					backgroundColor : [ '#99E6B2', '#7AD2A8', '#5CBE9D',
-							'#3DAA93', '#1F9688', '#00827E', '#008562', '#009D74', '#006E50', '#00563E'],
-					borderWidth : 2
-				} ],
-			},
-			animation : {
-				animateScale : true,
-				animateRotate : true
-			},
-			options : {
-				responsive : false,
-				scaleShowLabelBackdrop : true,
-				showAllTooltips : true,
-				tooltips : {
-					callbacks : {
-						label : function(tooltipItem, data) {
-							var dataset = data.datasets[tooltipItem.datasetIndex];
-							var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-							var total = meta.total;
-							var currentValue = dataset.data[tooltipItem.index];
-							var percentage = parseFloat((currentValue / total * 100)
-									.toFixed(1));
-							return currentValue + ' (' + percentage + '%)';
-						},
-						title : function(tooltipItem, data) {
-							return data.labels[tooltipItem[0].index];
-						}
-					}
-				},
-				legend : {
-					display : false,
-					labels : {
-						fontColor : 'rgb(255, 255, 255)',
-						fontSize : 12
-					}
-				}
-			}
-		};
-		var myDoughnutChart = new Chart(ctx, config);
-	};
-	
-	function current_asset_hide(symbol_arr, eachStockVal) {
-		$("#myChartTwo").remove();
-		$("#canvasDivTwo").append("<canvas id='myChartTwo' style='background-color: #f5f5f5;' width='525' height='460'></canvas>");
-		
-		var ctx = document.getElementById('myChartTwo');
-		var config = {
-			type : 'doughnut',
-			data : {
-				labels : symbol_arr,
-				datasets : [ {
-					label : 'Stock',
-					data : eachStockVal,
-					backgroundColor : [ '#99E6B2', '#7AD2A8', '#5CBE9D',
-							'#3DAA93', '#1F9688', '#00827E', '#008562', '#009D74', '#006E50', '#00563E'],
-					borderWidth : 2
-				} ],
-			},
-			animation : {
-				animateScale : true,
-				animateRotate : true
-			},
-			options : {
-				responsive : false,
-				scaleShowLabelBackdrop : true,
-				showAllTooltips : false,
-				tooltips : {
-					callbacks : {
-						label : function(tooltipItem, data) {
-							var dataset = data.datasets[tooltipItem.datasetIndex];
-							var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-							var total = meta.total;
-							var currentValue = dataset.data[tooltipItem.index];
-							var percentage = parseFloat((currentValue / total * 100)
-									.toFixed(1));
-							return currentValue + ' (' + percentage + '%)';
-						},
-						title : function(tooltipItem, data) {
-							return data.labels[tooltipItem[0].index];
-						}
-					}
-				},
-				legend : {
-					display : false,
-					labels : {
-						fontColor : 'rgb(255, 255, 255)',
-						fontSize : 12
-					}
-				}
-			}
-		};
-		var myDoughnutChart = new Chart(ctx, config);
-	};	
-	
-	if (ses_tester != null && ses_tester != "") {
-
-		var checkEvent = getCookie("Ck_01");
-
-		if (checkEvent == "on") {
-
-		} else {
-			var trigger = document.getElementById("reload");
-			trigger.click();
-			setCookie("Ck_01", "on", "0"); /* 맨마지막 0으로 설정해야지 브라우저 종료 시 쿠키 사라짐?! -> 확인해보기  */
-		}
-	};
-</script>
 
 <div class="container">
 	<div class="row">
@@ -360,20 +21,20 @@
 			<table class="mb-5" style="width: 525px; height: 200px;">
 				<tbody>
 					<tr class="greenLineBold">
-						<td colspan="2" class="grayFontBold" style="background-color:#1F96881F;">예수금</td>
+						<td colspan="2" class="grayFontBold titleBackground">예수금</td>
 						<td colspan="2" class="grayFontBold" id="deposit"><fmt:formatNumber value="${deposit}" pattern="#,###.00"/>
 						<span>&nbsp;USD</span></td>
 					</tr>
 					<tr class="grayLine">
-						<td colspan="2" class="grayFontBold" style="background-color:#1F96881F;">주식</td>
+						<td colspan="2" class="grayFontBold titleBackground">주식</td>
 						<td colspan="2" class="grayFontBold"><span id="stock"></span><span>&nbsp;USD</span></td>
 					</tr>
 					<tr class="grayLine">
-						<td colspan="2" class="grayFontBold" style="background-color:#1F96881F;">손익</td>
+						<td colspan="2" class="grayFontBold titleBackground">손익</td>
 						<td colspan="2" class="grayFontBold"><span id="profit"></span><span>&nbsp;USD</span></td>
 					</tr>
 					<tr class="grayLine">
-						<td colspan="2" class="grayFontBold" style="background-color:#1F96881F;">수익률</td>
+						<td colspan="2" class="grayFontBold titleBackground">수익률</td>
 						<td colspan="2" class="grayFontBold"><span id="percentage"></span><span>&nbsp;%</span></td>
 					</tr>
 				</tbody>
@@ -383,16 +44,15 @@
 					height="460"></canvas>
 			</div>
 			<div class="text-center mt-2">
-				<button type="button" class="btn btn-light btn-md grayFontBold" style="background-color:#1F96881F;" id="show">Show</button>
-				<button type="button" class="btn btn-light btn-md grayFontBold" style="background-color:#1F96881F;" id="hide">Hide</button>
+				<button type="button" class="btn btn-light btn-md grayFontBold titleBackground" id="show">Show</button>
+				<button type="button" class="btn btn-light btn-md grayFontBold titleBackground" id="hide">Hide</button>
 			</div>
 		</div>
-		<!-- table -->
 		<div class="col-lg-6 col-md-6 ml-10 pl-10"
 			style="float: right; text-align: center;">
 			<h3 class="mb-4 text-center greenFontBold">내 보유종목</h3>
 			<table class="table table-hover">
-				<thead style="background-color:#1F96881F;">
+				<thead class="titleBackground">
 					<tr class="greenLineBold">
 						<th class="grayFontBold">종목코드</th>
 						<th class="grayFontBold">현재가</th>
@@ -427,7 +87,7 @@
 			</table>
 			<h3 class="mb-4 mt-5 text-center greenFontBold">내 관심종목</h3>
 			<table class="table table-hover">
-				<thead style="background-color:#1F96881F;">
+				<thead class="titleBackground">
 					<tr class="greenLineBold">
 						<th class="grayFontBold">종목코드</th>
 						<th class="grayFontBold">현재가</th>
@@ -465,8 +125,6 @@
 	</div>
 </div>
 
-
-<!-- 매수  modal -->
 <div class="modal fade" id="buyModal" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
@@ -484,16 +142,14 @@
 					<input class="form-control" type="text" id="keyword_buy"
 						placeholder="종목명을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn"
-							style="background-color: #FF8C69; color: white" id="symbolSearch">종목조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="symbolSearch">종목조회</button>
 					</div>
 				</div>
 				<div class="input-group mt-1">
 					<input class="form-control" type="text" name="tradeQty" id="tradeQty"
 						placeholder="거래 수량을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn" id="amountSearch" disabled="disabled"
-							style="background-color: #FF8C69; color: white">대금조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="amountSearch" disabled="disabled">대금조회</button>
 					</div>
 				</div>
 				<table class="table table-borderless mt-3" style="table-layout:fixed;">
@@ -527,14 +183,13 @@
 				<input type="hidden" id="deposit_store">
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn" id="buy" style="background-color: #FF8C69; color: white;">매수하기</button>
-				<button type="button" class="btn" id="cancel" style="background-color: #FF8C69; color: white;" data-dismiss="modal">거래취소</button>
+				<button type="submit" class="btn btnBackgroundTrade" id="buy">매수하기</button>
+				<button type="button" class="btn btnBackgroundTrade" id="cancel" data-dismiss="modal">거래취소</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- 매도  modal -->
 <div class="modal fade" id="sellModal" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
@@ -552,16 +207,14 @@
 					<input class="form-control" type="text" id="keyword_sell"
 						placeholder="종목명을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn"
-							style="background-color: #FF8C69; color: white" id="symbolSearch_sell">종목조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="symbolSearch_sell">종목조회</button>
 					</div>
 				</div>
 				<div class="input-group mt-1">
 					<input class="form-control" type="text" name="tradeQty_sell" id="tradeQty_sell"
 						placeholder="거래 수량을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn" id="amountSearch_sell" disabled="disabled"
-							style="background-color: #FF8C69; color: white">대금조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="amountSearch_sell" disabled="disabled">대금조회</button>
 					</div>
 				</div>
 				<table class="table table-borderless mt-3" style="table-layout:fixed;">
@@ -595,12 +248,209 @@
 				<input type="hidden" id="deposit_store_sell">
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn" id="sell" style="background-color: #FF8C69; color: white;">매도하기</button>
-				<button type="button" class="btn" id="cancel_sell" style="background-color: #FF8C69; color: white;" data-dismiss="modal">거래취소</button>
+				<button type="submit" class="btn btnBackgroundTrade" id="sell">매도하기</button>
+				<button type="button" class="btn btnBackgroundTrade" id="cancel_sell" data-dismiss="modal">거래취소</button>
 			</div>
 		</div>
 	</div>
 </div>
+<script>
+ 	var symbol_arr = [];
+	var h_price_arr = [];
+	var h_qty_arr = [];
+	var c_price_arr = [];
+	
+	var deposit = "${deposit}";
+	var deposit_val = Number(deposit);
+
+	<c:forEach items="${h_list}" var="avo">
+	var symbol = "${avo.symbol}";
+	var h_price = "${avo.avg_h_price}";
+	var h_qty = "${avo.h_qty}";
+	var c_price = "${avo.cur_price}";
+	symbol_arr.push(symbol);
+	h_price_arr.push(Number(h_price));
+	h_qty_arr.push(Number(h_qty));
+	c_price_arr.push(Number(c_price));
+	</c:forEach>
+
+	var asset = 0.0;
+	var asset_input = 0.0;
+
+	for (let i = 0; i < h_qty_arr.length; i++) {
+		asset += c_price_arr[i] * h_qty_arr[i];
+	}
+
+	for (let i = 0; i < h_qty_arr.length; i++) {
+		asset_input += h_price_arr[i] * h_qty_arr[i];
+	}
+
+	var asset_input_val = (deposit_val + asset_input).toFixed(2);
+	
+	var asset_val = (deposit_val + asset).toFixed(2);
+	var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+	var stock_val = asset.toFixed(2);
+	var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+	var earning = (asset_val - asset_input_val).toFixed(2);
+	var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	
+	var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
+	var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	
+	$(function() {
+		
+		$("#percentage").text(earningPer_comma);
+		$("#profit").text(earning_comma);
+		$("#stock").text(stock_val_comma);
+		$("#asset").text(asset_val_comma);
+
+		var eachStockVal = [];
+
+		for (let i = 0; i < c_price_arr.length; i++) {
+			eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
+		}
+		
+		symbol_arr.push('예수금');
+		eachStockVal.push(deposit_val);
+
+		current_asset_show(symbol_arr, eachStockVal);	
+	});
+	
+	$(document).on("click", "#show", function() {
+		
+	 	var symbol_arr = [];
+		var h_price_arr = [];
+		var h_qty_arr = [];
+		var c_price_arr = [];
+		
+		var deposit = "${deposit}";
+		var deposit_val = Number(deposit);
+
+		<c:forEach items="${h_list}" var="avo">
+		var symbol = "${avo.symbol}";
+		var h_price = "${avo.avg_h_price}";
+		var h_qty = "${avo.h_qty}";
+		var c_price = "${avo.cur_price}";
+		symbol_arr.push(symbol);
+		h_price_arr.push(Number(h_price));
+		h_qty_arr.push(Number(h_qty));
+		c_price_arr.push(Number(c_price));
+		</c:forEach>
+
+		var asset = 0.0;
+		var asset_input = 0.0;
+
+		for (let i = 0; i < h_qty_arr.length; i++) {
+			asset += c_price_arr[i] * h_qty_arr[i];
+		}
+
+		for (let i = 0; i < h_qty_arr.length; i++) {
+			asset_input += h_price_arr[i] * h_qty_arr[i];
+		}
+
+		var asset_input_val = (deposit_val + asset_input).toFixed(2);
+
+		
+		var asset_val = (deposit_val + asset).toFixed(2);
+		var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+		var stock_val = asset.toFixed(2);
+		var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+		var earning = (asset_val - asset_input_val).toFixed(2);
+		var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		
+		var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
+		var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		
+		$(function() {
+			
+			$("#percentage").text(earningPer_comma);
+			$("#profit").text(earning_comma);
+			$("#stock").text(stock_val_comma);
+			$("#asset").text(asset_val_comma);
+
+			var eachStockVal = [];
+
+			for (let i = 0; i < c_price_arr.length; i++) {
+				eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
+			}
+			
+			symbol_arr.push('예수금');
+			eachStockVal.push(deposit_val);
+
+			current_asset_show(symbol_arr, eachStockVal);	
+		});
+	});
+
+	$(document).on("click", "#hide", function() {
+		
+	 	var symbol_arr = [];
+		var h_price_arr = [];
+		var h_qty_arr = [];
+		var c_price_arr = [];
+		
+		var deposit = "${deposit}";
+		var deposit_val = Number(deposit);
+
+		<c:forEach items="${h_list}" var="avo">
+		var symbol = "${avo.symbol}";
+		var h_price = "${avo.avg_h_price}";
+		var h_qty = "${avo.h_qty}";
+		var c_price = "${avo.cur_price}";
+		symbol_arr.push(symbol);
+		h_price_arr.push(Number(h_price));
+		h_qty_arr.push(Number(h_qty));
+		c_price_arr.push(Number(c_price));
+		</c:forEach>
+
+		var asset = 0.0;
+		var asset_input = 0.0;
+
+		for (let i = 0; i < h_qty_arr.length; i++) {
+			asset += c_price_arr[i] * h_qty_arr[i];
+		}
+
+		for (let i = 0; i < h_qty_arr.length; i++) {
+			asset_input += h_price_arr[i] * h_qty_arr[i];
+		}
+
+		var asset_input_val = (deposit_val + asset_input).toFixed(2);
+
+		var asset_val = (deposit_val + asset).toFixed(2);
+		var asset_val_comma = asset_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+		var stock_val = asset.toFixed(2);
+		var stock_val_comma = stock_val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+		var earning = (asset_val - asset_input_val).toFixed(2);
+		var earning_comma = earning.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		
+		var earningPer = (((asset_val - asset_input_val) / asset_input_val) * 100).toFixed(2);
+		var earningPer_comma = earningPer.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		
+		$(function() {
+			
+			$("#percentage").text(earningPer_comma);
+			$("#profit").text(earning_comma);
+			$("#stock").text(stock_val_comma);
+			$("#asset").text(asset_val_comma);
+
+			var eachStockVal = [];
+
+			for (let i = 0; i < c_price_arr.length; i++) {
+				eachStockVal.push( (c_price_arr[i] * h_qty_arr[i]).toFixed(2));
+			}
+			
+			symbol_arr.push('예수금');
+			eachStockVal.push(deposit_val);
+
+			current_asset_hide(symbol_arr, eachStockVal);
+		});
+	});
+</script>
 
 
 <script src="/resources/bootstrap/js/buyAndSell.js"></script>

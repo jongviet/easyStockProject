@@ -4,8 +4,8 @@
 <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/bootstrap/css/custom.css">
 <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico" />
-<!-- 아이콘  -->
- <script src="https://kit.fontawesome.com/10e6240b9d.js"></script>
+<script src="https://kit.fontawesome.com/10e6240b9d.js"></script>
+
 <style>
 body { overflow: auto; } 
 body::before { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: url(/resources/assets/img/bg.jpg); background-size: cover; -webkit-filter: blur(5px); -moz-filter: blur(5px); -o-filter: blur(5px); -ms-filter: blur(5px); filter: blur(5px); transform: scale(1.02); z-index: -1; content: ""; }
@@ -30,7 +30,7 @@ body::before { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background
 		</div>
 		<div class="form-group">
 			<input class="form-control chk" type="hidden" name="pwdCfm"
-				placeholder="Password Confirm">
+				placeholder="Confirm Password">
 		</div>
 		<button class="btn btn-md mb-1" id="loginBtn" type="submit" style="background-color:#06486c80; color:f5f5f5;">Login</button>
 		<div class="form-group text-center">

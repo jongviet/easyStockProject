@@ -40,7 +40,6 @@
       </rollingPolicy>
    </appender>
 
-<!-- JDBC 관련 설정, sqltiming은 sql문, resultsettable은 쿼리결과값 -->
    <logger name="jdbc" level="OFF" />
    <logger name="jdbc.sqlonly" level="OFF" />
    <logger name="jdbc.sqltiming" level="info" />

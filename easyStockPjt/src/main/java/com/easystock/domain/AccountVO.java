@@ -56,11 +56,4 @@ public class AccountVO {
 	public void setH_qty(int h_qty) {
 		this.h_qty = h_qty;
 	}
-
-	@Override
-	public String toString() {
-		return "AccountVO [h_num=" + h_num + ", email=" + email + ", symbol=" + symbol + ", avg_h_price=" + avg_h_price
-				+ ", h_qty=" + h_qty + ", cur_price=" + cur_price + "]";
-	}
-	
 }

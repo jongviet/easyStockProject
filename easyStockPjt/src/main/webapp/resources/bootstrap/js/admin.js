@@ -1,11 +1,4 @@
-/* company_overview + earning key */
-    /**
-     * Init Alpha Vantage with your API key.
-     *
-     * @param {String} key
-     *   Your Alpha Vantage API key.
-     */
-    const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
+const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
     
 $("#inputBtn").on("click", function() {
 	$(function() {
@@ -19,11 +12,9 @@ $("#inputBtn").on("click", function() {
 	});
 });
 
-/* company_overview */
 function overview_input(input_val) {
     alpha.fundamental.company_overview(input_val).then((data) => {
         	
-    	/* 적자 기업 PER 처리 */
     	if(data["PERatio"] == 'None') {
     		var per_val = 0;
     	} else {
@@ -45,7 +36,6 @@ function overview_input(input_val) {
 	        avg_target : data["AnalystTargetPrice"]
     	};
     	
-    	
     	$.ajax({
 			url : "/stock/c_register",
 			type : "post",
@@ -65,14 +55,12 @@ function overview_input(input_val) {
     });
 };
 
-/* earning data */
 function earning_input(input_val) {
 	let input = input_val.toUpperCase();
     alpha.fundamental.earnings(input).then((data) => {
        
        var jsonArray = [];
        
-       /* 분기 어닝 발표 20회 이상 시, 20 아닐 시, length 사용 */
        if(Object.keys(data["quarterlyEarnings"]).length >= 20) {
     	   var e_count = 20;
        } else {
@@ -90,7 +78,6 @@ function earning_input(input_val) {
              jsonData.date = data["quarterlyEarnings"][i]["reportedDate"];
              jsonData.r_eps = data["quarterlyEarnings"][i]["reportedEPS"];
              
-             /* 신생기업 e_eps 데이터 미 존재 시 0 처리  */
              if(data["quarterlyEarnings"][i]["estimatedEPS"] == 'None') {
             	 jsonData.e_eps = "-0.000";
              } else {
@@ -114,9 +101,6 @@ function earning_input(input_val) {
 
    });
 };
-
-
-
 
 $(document).ready(function() {
 
@@ -188,7 +172,7 @@ function adjusted_close(input_val) {
 				cur_price : cur_price_val
 			};
 			$.ajax({
-				url : "/comment/trade",
+				url : "/stock/trade",
 				type : "post",
 				data : JSON.stringify(price_data),
 				contentType : "application/json; charset=utf-8"
@@ -211,7 +195,7 @@ function adjusted_close_account(input_val) {
 				cur_price : cur_price_val
 			};
 			$.ajax({
-				url : "/comment/account",
+				url : "/stock/account",
 				type : "post",
 				data : JSON.stringify(price_data),
 				contentType : "application/json; charset=utf-8"
@@ -219,19 +203,16 @@ function adjusted_close_account(input_val) {
   });
 };
 
-
-/* 코멘트 현황 */
 function print_comment(cvo) {
 	let commentBox = $(".commentBox");
 	commentBox.empty();	
 	
-	let cmtData = '<h5 class="grayFontBold">작성자 : '+cvo.writer+'</h5><h6 class="grayFont">'+cvo.comment+'</h6>';
+	let cmtData = '<h5 class="greenFontBold">작성자 : '+cvo.writer+'</h5><h6 class="grayFont">'+cvo.comment+'</h6>';
 	
 	$("#exampleModalLabel").text("코멘트 번호 : " + cvo.cNum + " / " + "좋아요 : " + cvo.t_up + " / " + "종목 : " + cvo.symbol);
 	commentBox.append(cmtData);
 };
 
-/* 코멘트 조회 버튼 클릭 */
 $(document).on("click", "#comment", function() {
 
 		$("#commentModal").css("z-index", "3000");
@@ -246,8 +227,6 @@ $(document).on("click", "#comment", function() {
 		});
 });
 
-/* 신고 내역 조치  */
-/* 댓글 삭제 cNum 관련한 모든 신고 내역 삭제 및 해당 댓글 삭제  */
 $(function () {
 	$(document).on("click", "#accepted", function() {
 	let cNum_val = $(this).parent().parent().find("#comment").text();
@@ -265,7 +244,6 @@ $(function () {
 	});
 });
 
-/* 삭제 사유 불충분 -> 신고 내역만 삭제  */
 $(function () {
 	$(document).on("click", "#denied", function() {
 	let cNum_val = $(this).parent().parent().find("#comment").text();

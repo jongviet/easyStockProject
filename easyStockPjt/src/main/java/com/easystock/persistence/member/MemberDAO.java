@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.easystock.domain.AccountVO;
@@ -20,7 +18,6 @@ import com.easystock.domain.WatchVO;
 
 @Repository
 public class MemberDAO implements MemberDAORule {
-	private static Logger logger = LoggerFactory.getLogger(MemberDAO.class);
 	private final String NS = "MemberMapper.";
 	
 	@Inject
@@ -70,13 +67,11 @@ public class MemberDAO implements MemberDAORule {
 		sql.update(NS+"update_price", s_list);
 	}
 
-	//메인페이지 관심 종목 처리용 WatchVO -> StockVO
 	@Override
 	public List<WatchVO> chk_w_list(String email) {
 		return sql.selectList(NS+"w_list", email);
 	}
 
-	//메인페이지 관심 종목 처리용 WatchVO -> StockVO
 	@Override
 	public List<StockVO> chk_s_list(List<WatchVO> wlist) {
 		return sql.selectList(NS+"st_list", wlist);
@@ -92,13 +87,11 @@ public class MemberDAO implements MemberDAORule {
 		return sql.selectOne(NS+"hasHoldList", email);
 	}
 
-	//WatchVO List 리턴 to stock/list; 사용안함
 	@Override
 	public List<WatchVO> getWatchList(String email) {
 		return sql.selectList(NS+"getWatchList", email);
 	}
 
-	// detail 관심 종목 아이콘 처리용
 	@Override
 	public int inYourWatchList(String email, String symbol) {
 		Map<String, Object> map = new HashMap<>();
@@ -185,7 +178,6 @@ public class MemberDAO implements MemberDAORule {
 		return sql.delete(NS+"deleteAccouont_sell", avo);
 	}
 	
-	//테스터 처리용
 	@Override
 	public int delTester_member() {
 		return sql.delete(NS+"delTester_member");

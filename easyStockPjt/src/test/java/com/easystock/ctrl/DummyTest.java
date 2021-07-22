@@ -19,16 +19,11 @@ import com.easystock.persistence.stock.StockDAORule;
 public class DummyTest {
 		
 	@Inject
-	private StockDAORule sdao;
-	
-	@Inject
 	private MemberDAORule mdao;
 	
 	@Test
 	public void test() throws Exception {
 		String email = "jongki6161@naver.com";
 		List<WatchVO> wlist = mdao.chk_w_list(email);
-		List<StockVO> slist = mdao.chk_s_list(wlist);
-		System.out.println(slist);
 	}
 }

@@ -1,13 +1,5 @@
-    /**
-     * Init Alpha Vantage with your API key.
-     *
-     * @param {String} key
-     *   Your Alpha Vantage API key.
-     */
-    const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
+const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
 
-
-/* chartjs tooltip 용 */
 $(document).ready(function() {
 	var ctx = document.getElementById("myChartTwo");
 	Chart.plugins.register({

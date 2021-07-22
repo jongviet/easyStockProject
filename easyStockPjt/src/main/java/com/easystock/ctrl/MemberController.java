@@ -23,15 +23,10 @@ import com.easystock.service.stock.StockServiceRule;
 @RequestMapping("/member/*")
 @Controller
 public class MemberController {
-	private static Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	@Inject
 	private MemberServiceRule msv;
 	
-	@Inject
-	private StockServiceRule ssv;
-	
-	//테스터 계정 체크, 가입 후, session 부여
 	@ResponseBody
 	@PostMapping("/chkTester")
 	public String chkTester(@RequestParam("email") String email, HttpSession ses) {
@@ -49,7 +44,6 @@ public class MemberController {
 		return "0";
 	}
 	
-	//중복 이메일 체크
 	@ResponseBody
 	@PostMapping("/chkEmail")
 	public String chkEmail(@RequestParam("email") String email) {
@@ -57,7 +51,6 @@ public class MemberController {
 		return result > 0 ? "1" : "0";
 	}
 
-	//회원가입
 	@PostMapping("/join")
 	public String join(MemberVO mvo, Model model) {
 		int result = msv.join(mvo);
@@ -68,35 +61,37 @@ public class MemberController {
 		return "temp";
 	}
 	
-	//로그인
 	@PostMapping("/login")
 	public String login(MemberVO mvo, HttpSession ses, Model model) {
 		MemberVO member = msv.login(mvo);
 		
 		if(member != null) {
 			
-			//1.세션 처리
 			ses.setAttribute("ses", member.getEmail());
 			String[] array = member.getEmail().split("@");
 			String ses_id = array[0];
 			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
 			
-			//2.예수금, 보유종목, 관심종목 현황
 			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
 			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
 			
 			if(msv.hasWatchList(mvo.getEmail()) > 0) {
 				model.addAttribute("w_list", msv.chk_w_list(mvo.getEmail()));
 			}
-
 			return "main";
 			
 		} else {
 			model.addAttribute("msg", "아이디나 비밀번호가 올바르지 않습니다.");
 			model.addAttribute("url", "/");
-			return "temp";
+			return "logFail";
 		}
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession ses) {
+		ses.invalidate();
+		return "redirect:/";
 	}
 
 	@GetMapping("/main")
@@ -107,31 +102,23 @@ public class MemberController {
 			model.addAttribute("h_list", msv.chk_h_list(email));				
 
 			if(msv.hasWatchList(email) > 0) {
-				model.addAttribute("w_list", msv.chk_w_list(email)); //wvo가 아닌 svo가 리턴됨! 주의!
+				model.addAttribute("w_list", msv.chk_w_list(email));
 			}
 		}
 		return "main";	
 	}
 	
-	@GetMapping("/logout")
-	public String logout(HttpSession ses) {
-		ses.invalidate();
-		return "redirect:/";
-	}
-	
-	//잔고 체크
 	@ResponseBody
 	@PostMapping("/chkDeposit")
 	public String chkDeposit(@RequestParam("email") String email) {
 		return msv.chkDeposit(email);
 	}
 	
-	//신고내역 처리
 	@RequestMapping(value = { "/admin" }, method = { RequestMethod.GET })
 	public String admin(Model model, PageVO pgvo) {
 		
 		model.addAttribute("r_list", msv.getReportList(pgvo));
-		int totalCnt = msv.getReportCnt(pgvo); //pgvo 신고 리스트 상 검색 기능 없기에 큰 의미는 없음
+		int totalCnt = msv.getReportCnt(pgvo);
 		
 		model.addAttribute("pghdl", new PagingHandler(totalCnt, pgvo));
 		return "admin/admin";

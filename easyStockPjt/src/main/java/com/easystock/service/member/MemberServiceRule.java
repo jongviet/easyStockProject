@@ -15,24 +15,24 @@ public interface MemberServiceRule {
 	public MemberVO login(MemberVO mvo);
 	public int chkTester(String email);
 	
-	public String chkDeposit(String email); //잔고 체크
-	public List<AccountVO> chk_h_list(String email); //보유 종목 체크
-	public void updatePrice(List<StockVO> s_list); // account 가격 업데이트
-	public List<StockVO> chk_w_list(String email); //관심종목
-	public int hasWatchList(String email); //관심종목 보유 현황 체크
-	public int hasHoldList(String email); // 보유 종목 체크
+	public String chkDeposit(String email); 
+	public List<AccountVO> chk_h_list(String email);
+	public void updatePrice(List<StockVO> s_list);
+	public List<StockVO> chk_w_list(String email);
+	public int hasWatchList(String email);
+	public int hasHoldList(String email);
 	
-	public List<WatchVO> getWatchList(String email); //WatchVO List 리턴 to stock/list; 사용 안함
-	public int inYourWatchList(String email, String symbol); // detail 관심 종목 아이콘 처리용
+	public List<WatchVO> getWatchList(String email);
+	public int inYourWatchList(String email, String symbol);
 	
 	public List<ReportVO> getReportList(PageVO pgvo);
-	public int deleteReport(int cNum); //신고 내역 제거
-	public int getReportCnt(PageVO pgvo); //리포트 카운트
+	public int deleteReport(int cNum);
+	public int getReportCnt(PageVO pgvo);
 	
-	public AccountVO getSpecificSymbol(String keyword, String email); //매수용 리스트
-	public StockVO getSpecificSymbol_new(String keyword); //신규 매수용 리스트
+	public AccountVO getSpecificSymbol(String keyword, String email);
+	public StockVO getSpecificSymbol_new(String keyword);
 	
-	public int newBuy(AccountVO avo); //신규 구매
-	public int additionalBuy(AccountVO new_avo); //추가 구매
-	public int sell(AccountVO avo); //매도
+	public int newBuy(AccountVO avo);
+	public int additionalBuy(AccountVO new_avo);
+	public int sell(AccountVO avo);
 }

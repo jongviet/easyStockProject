@@ -9,21 +9,21 @@ import com.easystock.domain.WatchVO;
 import java.util.List;
 
 public interface StockServiceRule {
-  public int register(StockVO svo); //스톡 등록용, 현재 삭제
-  public int register(EarningVO evo); //어닝 등록용
+  public int register(StockVO svo);
+  public int register(EarningVO evo);
   
-  public List<StockVO> getList(PageVO pgvo); //스톡 리스트, 페이지네이션추가
-  public StockVO detail(String symbol); //스톡 디테일
+  public List<StockVO> getList(PageVO pgvo);
+  public StockVO detail(String symbol);
   
-  public List<EarningVO> getEarningList(String symbol); //어닝리스트
+  public List<EarningVO> getEarningList(String symbol);
   
-  public int getTotalCnt(PageVO pgvo); //스톡 페이징용
+  public int getTotalCnt(PageVO pgvo);
   
-  public int update(StockVO svo); //거래소 가격 데이터 업데이트
-  public int update(AccountVO avo); //어카운트 가격 데이터 업데이트
+  public int update(StockVO svo);
+  public int update(AccountVO avo);
   
-  public int insert(WatchVO wvo); //관심종목추가
+  public int insert(WatchVO wvo);
   public int delete(WatchVO wvo);
   
-  public List<StockVO> getStockList(); //admin 수동 업데이트 리스트용
+  public List<StockVO> getStockList();
 }

@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="StockMapper">
 	
-	<!-- 신규 company overview 데이터 등록 -->
 	<insert id="s_insert" parameterType="svo">
 		insert into stock (symbol, fullName, description, sector, m_capitalization,
 		per, eps, pxt_insiders, pxt_institutions, year_high, year_low, avg_target)
@@ -10,7 +9,6 @@
 		#{m_capitalization}, #{per}, #{eps}, #{pxt_insiders},
 		#{pxt_institutions}, #{year_high}, #{year_low}, #{avg_target})
 	</insert>
-	<!-- 신규 earning 데이터 등록 -->
 	<insert id="e_insert" parameterType="evo">
 		insert into earning(symbol, reportedDate, reportedEPS, estimatedEPS)
 		values (#{symbol}, #{reportedDate}, #{reportedEPS}, #{estimatedEPS})
@@ -18,14 +16,11 @@
 	<select id="e_list" parameterType="String" resultType="evo">
 		select * from earning where symbol = #{symbol} and reportedDate > '2017-12-31'
 	</select>
-	<!-- Account rawdata 등록 -->
 	<insert id="a_rawdata">
 		insert into account(email, symbol, avg_h_price, h_qty)
 		values('rawdata@rawdata.com', #{symbol}, 10, 1)
 	</insert>
 	
-	
-	<!-- stock -->
 	<select id="s_list" parameterType="pgvo" resultType="svo">
 		select @rownum:=@rownum+1 rowNum, s.* from stock s, (select @rownum:=0) temp
 		where symbol is not null <include refid="search"/>
@@ -36,36 +31,26 @@
 		select * from stock where symbol = #{symbol}
 	</select>
 
-	<!-- stock price update -->
 	<update id="s_price_update" parameterType="svo">
 		update stock set cur_price = #{cur_price} where symbol = #{symbol}
 	</update>
-	<!-- account price update -->	
 	<update id="a_price_update" parameterType="avo">
 		update account set cur_price = #{cur_price} where symbol = #{symbol}
 	</update>
-	
 	<select id="s_list_account" resultType="HashMap">
 		select symbol, cur_price from stock
 	</select>
 	
-	<!-- 관심종목 추가 -->
 	<insert id="add_watch" parameterType="wvo">
 		insert into watch(email, symbol) values(#{email}, #{symbol})	
 	</insert>
-	
-	<!-- 관심종목 제거 -->
 	<delete id="remove_watch">
 		delete from watch where email = #{email} and symbol = #{symbol}
 	</delete>
-	
-	<!-- admin용 stockList -->
 	<select id="s_list_admin" resultType="svo">
 		select symbol from stock
 	</select>
 	
-	
-	<!-- paging & searching -->
 	<select id="tc" parameterType="pgvo" resultType="int">
 		select count(symbol) as cnt from stock where symbol is not null
 		<include refid="search"/>

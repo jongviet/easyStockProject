@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import com.easystock.persistence.member.MemberDAORule;
 
 @Service
 public class CommentService implements CommentServiceRule {
-	private static Logger logger = LoggerFactory.getLogger(CommentService.class);
 
 	@Inject
 	private CommentDAORule cdao;
@@ -47,11 +44,9 @@ public class CommentService implements CommentServiceRule {
 		}
 	}
 
-	//특정 댓글의 좋아요 삭제 -> 댓글 삭제    +@ 리포트 삭제도 제일 앞에 추가
 	@Override
 	public int delete(int cNum) {
 		
-		//리포트 먼저 삭제
 		mdao.deleteReport(cNum);
 		
 		if(cdao.cmtDel(cNum) == 1) {

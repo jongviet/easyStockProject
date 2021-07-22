@@ -4,20 +4,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:include page="../common/header.jsp" />
 <jsp:include page="../common/nav.jsp" />
-<!-- 디테일용 chartjs -->
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
 
-<!-- 종목 상세 검색 -->
 <h3 class="float-left greenFontBold mb-3">개별종목상세</h3>
 <div class="input-group">
 	<input type="text" class="form-control" id="d_symbol" placeholder="종목코드를 기준으로 상세 정보를 조회해보세요.">
 	<div class="input-group-append">
-		<button class="btn" id="d_search" style="width: 150px; background-color:#1F9688; color:white; font-weight:bold;" type="button">상세조회</button>
+		<button class="btn btnBackground" id="d_search" style="width: 150px; font-weight:bold;" type="button">상세조회</button>
 	</div>
 	<a href="" id="d_go"></a>
 </div>
 <hr>
-
 <h3 class="greenFontBold mt-5" style="float: left">${svo.fullName}
 <c:choose>
 	<c:when test="${hasWatch eq 1}">
@@ -36,8 +33,8 @@
 	<canvas id="myChartOne" style="background-color: #f5f5f5;"></canvas>
 </div>
 <div class="text-center mt-2">
-	<button type="button" class="btn btn-light btn-md grayFontBold" style="background-color:#1F96881F;" id="daily">Daily</button>
-	<button type="button" class="btn btn-light btn-md grayFontBold" style="background-color:#1F96881F;" id="monthly">Monthly</button>
+	<button type="button" class="btn btn-light btn-md grayFontBold titleBackground" id="daily">Daily</button>
+	<button type="button" class="btn btn-light btn-md grayFontBold titleBackground" id="monthly">Monthly</button>
 </div>
 <div class="text-right">
 	<a data-toggle="modal" data-target="#earningModal" id="earning" href="#" class="greenFontBold">최근실적조회</a> | 
@@ -57,8 +54,7 @@
 				<td>그룹</td>
 				<td class="grayFontBold">${svo.sector}</td>
 				<td>시가총액</td>
-				<td class="grayFontBold"><fmt:formatNumber
-						value="${svo.m_capitalization}" pattern="#,###" />&nbsp;USD</td>
+				<td class="grayFontBold"><fmt:formatNumber value="${svo.m_capitalization}" pattern="#,###" />&nbsp;USD</td>
 			</tr>
 			<tr>
 				<td>PER</td>
@@ -83,7 +79,6 @@
 	</table>
 </div>
 
-<!-- 댓글  작성 -->
 <h2 class="float-left greenFontBold mb-3">종목토론장</h2>
 <div class="form-group">
 	<form>
@@ -91,7 +86,7 @@
 			<input type="text" class="form-control" id="comment"
 				placeholder="${svo.fullName}에 대한 의견을 적어주세요.">
 			<div class="input-group-append">
-				<button class="btn" id="posting" style="width: 150px; background-color:#1F9688; color:white; font-weight:bold;"
+				<button class="btn btnBackground" id="posting" style="width: 150px; font-weight:bold;"
 					type="button">POST</button>
 			</div>
 		</div>
@@ -101,14 +96,13 @@
 
 <div id="cmtBox"></div>
 
-<!-- 실적 modal -->
 <div class="modal fade" id="earningModal" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title grayFontBold" id="exampleModalLabel">${svo.fullName}</h5>
+				<h5 class="modal-title greenFontBold" id="exampleModalLabel">${svo.fullName}</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -116,7 +110,7 @@
 			</div>
 			<div class="modal-body">
 				<table class="table table-hover">
-					<thead>
+					<thead class="titleBackground greenLineBold">
 						<tr>
 							<th class="grayFontBold">reportedDate</th>
 							<th class="grayFontBold">reportedEPS</th>
@@ -128,14 +122,12 @@
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn" style="background-color:#1F9688; color:white;" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btnBackground" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-
-<!-- 매수  modal -->
 <div class="modal fade" id="buyModal" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
@@ -153,16 +145,14 @@
 					<input class="form-control" type="text" id="keyword_buy"
 						placeholder="종목명을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn"
-							style="background-color: #FF8C69; color: white" id="symbolSearch">종목조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="symbolSearch">종목조회</button>
 					</div>
 				</div>
 				<div class="input-group mt-1">
 					<input class="form-control" type="text" name="tradeQty" id="tradeQty"
 						placeholder="거래 수량을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn" id="amountSearch" disabled="disabled"
-							style="background-color: #FF8C69; color: white">대금조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="amountSearch" disabled="disabled">대금조회</button>
 					</div>
 				</div>
 				<table class="table table-borderless mt-3" style="table-layout:fixed;">
@@ -196,14 +186,13 @@
 				<input type="hidden" id="deposit_store">
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn" id="buy" style="background-color: #FF8C69; color: white;">매수하기</button>
-				<button type="button" class="btn" id="cancel" style="background-color: #FF8C69; color: white;" data-dismiss="modal">거래취소</button>
+				<button type="submit" class="btn btnBackgroundTrade" id="buy">매수하기</button>
+				<button type="button" class="btn btnBackgroundTrade" id="cancel" data-dismiss="modal">거래취소</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- 매도  modal -->
 <div class="modal fade" id="sellModal" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true"
 	data-backdrop="static" style="z-index: -1;">
@@ -221,16 +210,14 @@
 					<input class="form-control" type="text" id="keyword_sell"
 						placeholder="종목명을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn"
-							style="background-color: #FF8C69; color: white" id="symbolSearch_sell">종목조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="symbolSearch_sell">종목조회</button>
 					</div>
 				</div>
 				<div class="input-group mt-1">
 					<input class="form-control" type="text" name="tradeQty_sell" id="tradeQty_sell"
 						placeholder="거래 수량을 입력해주세요">
 					<div class="input-group-append">
-						<button type="button" class="btn" id="amountSearch_sell" disabled="disabled"
-							style="background-color: #FF8C69; color: white">대금조회</button>
+						<button type="button" class="btn btnBackgroundTrade" id="amountSearch_sell" disabled="disabled">대금조회</button>
 					</div>
 				</div>
 				<table class="table table-borderless mt-3" style="table-layout:fixed;">
@@ -264,8 +251,8 @@
 				<input type="hidden" id="deposit_store_sell">
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn" id="sell" style="background-color: #FF8C69; color: white;">매도하기</button>
-				<button type="button" class="btn" id="cancel_sell" style="background-color: #FF8C69; color: white;" data-dismiss="modal">거래취소</button>
+				<button type="submit" class="btn btnBackgroundTrade" id="sell">매도하기</button>
+				<button type="button" class="btn btnBackgroundTrade" id="cancel_sell" data-dismiss="modal">거래취소</button>
 			</div>
 		</div>
 	</div>

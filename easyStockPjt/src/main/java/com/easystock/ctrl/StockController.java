@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,6 @@ import com.github.openjson.JSONObject;
 @RequestMapping("/stock/*")
 @Controller
 public class StockController {
-	private static Logger logger = LoggerFactory.getLogger(StockController.class);
 
 	@Inject
 	private StockServiceRule ssv;
@@ -44,7 +41,6 @@ public class StockController {
 	@Inject
 	private MemberServiceRule msv;
 
-	//신규 종목 등록, account raw data+@
 	@PostMapping(value = "/c_register", consumes = "application/json", produces = "application/text; charset=UTF-8")
 	public ResponseEntity<String> register(@RequestBody StockVO svo) {
 		int isUp = ssv.register(svo);
@@ -52,7 +48,6 @@ public class StockController {
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//어닝 등록
 	@RequestMapping(value = "/e_register", method = RequestMethod.POST)
 	public String register(@RequestParam String jsonData) {
 		JSONArray ja = new JSONArray(jsonData);
@@ -67,6 +62,32 @@ public class StockController {
 			ssv.register(new EarningVO(symbol, date, reportedEPS, estimatedEPS));
 		}
 		return "index";
+	}
+	
+	@ResponseBody
+	@GetMapping(value = {"/tradable"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<List<StockVO>> tradable() {
+			
+		List<StockVO> svo_list = ssv.getStockList();
+		
+		return (svo_list != null) ? new ResponseEntity<List<StockVO>>(svo_list, HttpStatus.OK)
+				: new ResponseEntity<List<StockVO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/trade", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> trade(@RequestBody StockVO svo) {
+		int isUp = ssv.update(svo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/account", consumes = "application/json", produces = "application/text; charset=UTF-8")
+	public ResponseEntity<String> account(@RequestBody AccountVO avo) {
+		int isUp = ssv.update(avo);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK)
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping("/list")
@@ -87,18 +108,13 @@ public class StockController {
 		 }
 	}
 	
-	//거래소 등록용
 	@ResponseBody
-	@GetMapping(value = {"/tradable"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<List<StockVO>> tradable() {
-			
-		List<StockVO> svo_list = ssv.getStockList();
-		
-		return (svo_list != null) ? new ResponseEntity<List<StockVO>>(svo_list, HttpStatus.OK)
-				: new ResponseEntity<List<StockVO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+	@GetMapping(value = "/earning/{symbol}", produces = { MediaType.APPLICATION_ATOM_XML_VALUE,
+			MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<List<EarningVO>> earning(@PathVariable String symbol) {
+		return new ResponseEntity<List<EarningVO>>(ssv.getEarningList(symbol), HttpStatus.OK);
 	}
 	
-	//매수, 매도 종목 조회
 	@ResponseBody
 	@GetMapping(value = {"/list/{keyword}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<HashMap<String, Object>> list(@PathVariable String keyword, @PathVariable String email) {
@@ -116,29 +132,24 @@ public class StockController {
 		return (map != null) ? new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK) : new ResponseEntity<HashMap<String, Object>>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//신규 매수
 	@PostMapping(value = "/newBuy", consumes = "application/json", produces = "application/text; charset=UTF-8")
 	public ResponseEntity<String> newBuy(@RequestBody AccountVO avo) {
 		int isUp = msv.newBuy(avo);
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//추가 매수
 	@PostMapping(value = "/additionalBuy", consumes = "application/json", produces = "application/text; charset=UTF-8")
 	public ResponseEntity<String> additionalBuy(@RequestBody AccountVO new_avo) {
 		int isUp = msv.additionalBuy(new_avo);
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//매도
 	@PostMapping(value = "/sell", consumes = "application/json", produces = "application/text; charset=UTF-8")
 	public ResponseEntity<String> sell(@RequestBody AccountVO avo) {
-		//h_qty에 매도할 수량 전송
 		int isUp = msv.sell(avo);
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//관심종목 추가
 	@ResponseBody
 	@GetMapping(value = {"/add_watch/{symbol}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<String> add_watch(@PathVariable String symbol, @PathVariable String email) {
@@ -152,7 +163,6 @@ public class StockController {
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	//관심종목 제거
 	@ResponseBody
 	@GetMapping(value = {"/remove_watch/{symbol}/{email}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<String> remove_watch(@PathVariable String symbol, @PathVariable String email) {

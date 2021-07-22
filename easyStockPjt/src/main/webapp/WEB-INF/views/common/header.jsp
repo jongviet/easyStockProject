@@ -15,17 +15,14 @@
   <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/bootstrap/js/bundle.js"></script>
 
-  <!-- favicon -->
   <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico" />
 
-  <!-- 아이콘  -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://kit.fontawesome.com/10e6240b9d.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   
 </head>
 <script>
-/* session */
 const ses = "<%=(String)session.getAttribute("ses")%>";
 const ses_id = "<%=(String)session.getAttribute("ses_id")%>";
 const ses_tester = "<%=(String)session.getAttribute("ses_tester")%>";
@@ -49,7 +46,6 @@ function stopTimer() {
 }
 decrement();
 
-/* 쿠키 */
 function setCookie(cName, cValue, cDay){
 var expire = new Date();
 expire.setDate(expire.getDate() + cDay);

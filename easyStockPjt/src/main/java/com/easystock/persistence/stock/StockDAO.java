@@ -5,8 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.easystock.domain.AccountVO;
@@ -17,7 +15,6 @@ import com.easystock.domain.WatchVO;
 
 @Repository
 public class StockDAO implements StockDAORule {
-	private static Logger logger = LoggerFactory.getLogger(StockDAO.class);
 	private final String NS = "StockMapper.";
 
 	@Inject
@@ -33,7 +30,6 @@ public class StockDAO implements StockDAORule {
 		return sql.insert(NS + "e_insert", evo);
 	}
 
-	// 페이징에 따른 리스트
 	@Override
 	public List<StockVO> selectList(PageVO pgvo) {
 		pgvo.setCal_idx((pgvo.getPageIndex() - 1) * 5);
@@ -65,7 +61,6 @@ public class StockDAO implements StockDAORule {
 		return sql.update(NS + "a_price_update", avo);
 	}
 
-	//관심종목 추가
 	@Override
 	public int insert(WatchVO wvo) {
 		return sql.insert(NS+"add_watch", wvo);

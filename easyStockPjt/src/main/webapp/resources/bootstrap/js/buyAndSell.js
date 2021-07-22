@@ -1,21 +1,17 @@
-/* 매수; 거래하기 버튼 클릭 */
 $(document).on("click", "#buying", function() {
 	$("#buyModal").css("z-index", "2000");
 	var symbol = $(this).data("symbol");
 	$("#keyword_buy").val(symbol);
 });
 
-/* 매도; 거래하기 버튼 클릭 */
 $(document).on("click", "#selling", function() {
 	$("#sellModal").css("z-index", "2000");
 	var symbol = $(this).data("symbol");
 	$("#keyword_sell").val(symbol);
 });
 
-/* 매수하기 종목 조회  */
 $(document).on("click", "#symbolSearch", function() {
 	
-	/* 종목 재검색 시, 매수 총액 , 거래 수량 제거 */
 	$("#buyingAmount").text("");
 	$("#tradeQty").val("");
 	$("#balance").text("");
@@ -27,7 +23,6 @@ $(document).on("click", "#symbolSearch", function() {
     $.getJSON(url_val, function(result) {
     	
     		if(result.svo == null) {
-            	/* 기 보유 시 */
             	var cur_price = result.avo.cur_price.toFixed(2);
             	var cur_price_comma = cur_price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             	var avg_h_price = result.avo.avg_h_price.toFixed(2);
@@ -47,7 +42,6 @@ $(document).on("click", "#symbolSearch", function() {
             	$("#total").text(total_comma);
             	$("#amountSearch").attr('disabled', false);
     		} else if(result.avo == null) {
-   	        	/* 미 보유 시 */
    	        	var cur_price = result.svo.cur_price.toFixed(2);
    	        	var cur_price_comma = cur_price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             	var deposit = result.deposit;
@@ -67,11 +61,8 @@ $(document).on("click", "#symbolSearch", function() {
     });
 });
 
-
-/* 매도하기 종목 조회  */
 $(document).on("click", "#symbolSearch_sell", function() {
 	
-	/* 종목 재검색 시, 매도 총액 , 거래 수량 제거 */
 	$("#sellingAmount").text("");
 	$("#tradeQty_sell").val("");
 	$("#balance_sell").text("");
@@ -83,7 +74,6 @@ $(document).on("click", "#symbolSearch_sell", function() {
     $.getJSON(url_val, function(result) {
     	
     		if(result.svo == null) {
-            	/* 기 보유 시 */
             	var cur_price = result.avo.cur_price.toFixed(2);
             	var cur_price_comma = cur_price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             	var avg_h_price = result.avo.avg_h_price.toFixed(2);
@@ -103,7 +93,6 @@ $(document).on("click", "#symbolSearch_sell", function() {
             	$("#total_sell").text(total_comma);
             	$("#amountSearch_sell").attr('disabled', false);
     		} else if(result.avo == null) {
-   	        	/* 미 보유 시 */
    	        	var cur_price = result.svo.cur_price.toFixed(2);
    	        	var cur_price_comma = cur_price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             	var deposit = result.deposit;
@@ -123,17 +112,13 @@ $(document).on("click", "#symbolSearch_sell", function() {
     });
 });
 
-
-/* 매수 거래 대금 조회 */
 $(document).on("click", "#amountSearch", function() {
 	
-	/* 매수 수량 오류  */
 	if(parseInt($("#tradeQty").val()) <= 0 || $("#tradeQty").val() == '' || $("#tradeQty").val() == null) {
 		alert('거래 수량을 정확히 입력해주세요.');
 		return false;
 	}
 	
-	/* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */	
 	var amt = $("#cur_price").text().replace(/,/g, '');
 	var amt_no_comma = parseFloat(amt);
 	
@@ -142,7 +127,6 @@ $(document).on("click", "#amountSearch", function() {
 	
 	$("#buyingAmount").text(buyingAmount_comma);
 	
-	/* 거래 후 잔액 처리 */
 	var deposit = $("#deposit_store").val();
 	var balance = (deposit - parseFloat(buyingAmount)).toFixed(2);
 	var balance_comma = balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -150,22 +134,18 @@ $(document).on("click", "#amountSearch", function() {
 	$("#balance").text(balance_comma);
 });
 
-/* 매도 거래 대금 조회 */
 $(document).on("click", "#amountSearch_sell", function() {
 	
-	/* 매도 수량 오류  */
 	if(parseInt($("#tradeQty_sell").val()) <= 0 || $("#tradeQty_sell").val() == '' || $("#tradeQty_sell").val() == null) {
 		alert('거래 수량을 정확히 입력해주세요.');
 		return false;
 	}
 	
-	/* 판매 수량 부족 */
 	if(parseInt($("#h_qty_sell").text()) < parseInt($("#tradeQty_sell").val())) {
 		alert('매도할 수량이 부족합니다.');
 		return false;
 	}
 	
-	/* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */	
 	var amt = $("#cur_price_sell").text().replace(/,/g, '');
 	var amt_no_comma = parseFloat(amt);
 	
@@ -174,7 +154,6 @@ $(document).on("click", "#amountSearch_sell", function() {
 	
 	$("#sellingAmount").text(sellingAmount_comma);
 	
-	/* 거래 후 잔액 처리 */
 	var deposit = $("#deposit_store_sell").val();
 	var balance = (Number(deposit) + parseFloat(sellingAmount)).toFixed(2);
 	var balance_comma = balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -182,7 +161,6 @@ $(document).on("click", "#amountSearch_sell", function() {
 	$("#balance_sell").text(balance_comma);
 });
 
-/* 매수 거래 취소 하단 거래취소 버튼 */
 $(document).on("click", "#cancel", function() {
 	$("#keyword_buy").val("");
 	$("#tradeQty").val("");
@@ -198,7 +176,6 @@ $(document).on("click", "#cancel", function() {
 	$("#amountSearch").attr('disabled', true);
 });
 
-/* 매도 거래 취소 하단 거래취소 버튼 */
 $(document).on("click", "#cancel_sell", function() {
 	$("#keyword_sell").val("");
 	$("#tradeQty_sell").val("");
@@ -214,7 +191,6 @@ $(document).on("click", "#cancel_sell", function() {
 	$("#amountSearch_sell").attr('disabled', true);
 });
 
-/* 매수 거래 취소 상단 x 버튼 */
 $(document).on("click", "#cancel2", function() {
 	$("#keyword_buy").val("");
 	$("#tradeQty").val("");
@@ -230,7 +206,6 @@ $(document).on("click", "#cancel2", function() {
 	$("#amountSearch").attr('disabled', true);
 });
 
-/* 매도 거래 취소 상단 x 버튼 */
 $(document).on("click", "#cancel2_sell", function() {
 	$("#keyword_sell").val("");
 	$("#tradeQty_sell").val("");
@@ -246,32 +221,25 @@ $(document).on("click", "#cancel2_sell", function() {
 	$("#amountSearch_sell").attr('disabled', true);
 });
 
-
-/* 매수 진행  */
 $(document).on("click", "#buy", function() {
 
-	/* 무 종목 매수 방지 */
 	if($("#symbol_buy").text() == '' || $("#symbol_buy").text() == null) {
 		alert('종목을 선택해주세요.');
 		return false;
 	}
 	
-	/* 예수금 부족 */
 	if(parseInt($("#balance").text()) < 0) {
 		alert('예수금이 부족합니다.');
 		return false;
 	}
 	
-	/* 매수 수량 오류 */
 	if(parseInt($("#tradeQty").val()) <= 0 || $("#tradeQty").val() == '' || $("#tradeQty").val() == null) {
 		alert('매수 수량을 정확히 입력해주세요.');
 		return false;
 	}
 	
-	/* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */	
 	var amt = $("#cur_price").text().replace(/,/g, '');
 	
-	/* 매수 */
 	var email_val = ses;
 	var symbol_val = $("#symbol_buy").text();
 	var avg_h_price_val = amt;
@@ -326,32 +294,25 @@ $(document).on("click", "#buy", function() {
 });
 
 
-
-/* 매도 진행; 보유량 부족 시 불가 */
 $(document).on("click", "#sell", function() {
 
-	/* 무 종목 매도 방지 */
 	if($("#symbol_sell").text() == '' || $("#symbol_sell").text() == null) {
 		alert('종목을 선택해주세요.');
 		return false;
 	}
 
-	/* 판매 수량 부족 */
 	if(parseInt($("#h_qty_sell").text()) < parseInt($("#tradeQty_sell").val())) {
 		alert('매도할 수량이 부족합니다.');
 		return false;
 	}
 	
-	/* 매도 수량 오류  */
 	if(parseInt($("#tradeQty_sell").val()) <= 0 || $("#tradeQty_sell").val() == '' || $("#tradeQty_sell").val() == null) {
 		alert('매도 수량을 정확히 입력해주세요.');
 		return false;
 	}
 	
-    /* 천달러 이상 종목 거래용 처리 : 아마존, 구글 */      
     var amt = $("#cur_price_sell").text().replace(/,/g, '');
 	
-	/* 매도 */
 	var email_val = ses;
 	var symbol_val = $("#symbol_sell").text();
 	var avg_h_price_val = amt;
@@ -380,3 +341,129 @@ $(document).on("click", "#sell", function() {
 				console.log(err);
 			});
 });
+
+
+	function current_asset_show(symbol_arr, eachStockVal) {
+		$("#myChartTwo").remove();
+		$("#canvasDivTwo").append("<canvas id='myChartTwo' style='background-color: #f5f5f5;' width='525' height='460'></canvas>");
+		
+		var ctx = document.getElementById('myChartTwo');
+		var config = {
+			type : 'doughnut',
+			data : {
+				labels : symbol_arr,
+				datasets : [ {
+					label : 'Stock',
+					data : eachStockVal,
+					backgroundColor : [ '#99E6B2', '#7AD2A8', '#5CBE9D',
+							'#3DAA93', '#1F9688', '#00827E', '#008562', '#009D74', '#006E50', '#00563E'],
+					borderWidth : 2
+				} ],
+			},
+			animation : {
+				animateScale : true,
+				animateRotate : true
+			},
+			options : {
+				responsive : false,
+				scaleShowLabelBackdrop : true,
+				showAllTooltips : true,
+				tooltips : {
+					callbacks : {
+						label : function(tooltipItem, data) {
+							var dataset = data.datasets[tooltipItem.datasetIndex];
+							var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+							var total = meta.total;
+							var currentValue = dataset.data[tooltipItem.index];
+							var percentage = parseFloat((currentValue / total * 100)
+									.toFixed(1));
+							return currentValue + ' (' + percentage + '%)';
+						},
+						title : function(tooltipItem, data) {
+							return data.labels[tooltipItem[0].index];
+						}
+					}
+				},
+				legend : {
+					display : false,
+					labels : {
+						fontColor : 'rgb(255, 255, 255)',
+						fontSize : 12
+					}
+				}
+			}
+		};
+		var myDoughnutChart = new Chart(ctx, config);
+	};
+	
+	function current_asset_hide(symbol_arr, eachStockVal) {
+		$("#myChartTwo").remove();
+		$("#canvasDivTwo").append("<canvas id='myChartTwo' style='background-color: #f5f5f5;' width='525' height='460'></canvas>");
+		
+		var ctx = document.getElementById('myChartTwo');
+		var config = {
+			type : 'doughnut',
+			data : {
+				labels : symbol_arr,
+				datasets : [ {
+					label : 'Stock',
+					data : eachStockVal,
+					backgroundColor : [ '#99E6B2', '#7AD2A8', '#5CBE9D',
+							'#3DAA93', '#1F9688', '#00827E', '#008562', '#009D74', '#006E50', '#00563E'],
+					borderWidth : 2
+				} ],
+			},
+			animation : {
+				animateScale : true,
+				animateRotate : true
+			},
+			options : {
+				responsive : false,
+				scaleShowLabelBackdrop : true,
+				showAllTooltips : false,
+				tooltips : {
+					callbacks : {
+						label : function(tooltipItem, data) {
+							var dataset = data.datasets[tooltipItem.datasetIndex];
+							var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+							var total = meta.total;
+							var currentValue = dataset.data[tooltipItem.index];
+							var percentage = parseFloat((currentValue / total * 100)
+									.toFixed(1));
+							return currentValue + ' (' + percentage + '%)';
+						},
+						title : function(tooltipItem, data) {
+							return data.labels[tooltipItem[0].index];
+						}
+					}
+				},
+				legend : {
+					display : false,
+					labels : {
+						fontColor : 'rgb(255, 255, 255)',
+						fontSize : 12
+					}
+				}
+			}
+		};
+		var myDoughnutChart = new Chart(ctx, config);
+	};	
+	
+	if (ses_tester != null && ses_tester != "") {
+
+		var checkEvent = getCookie("Ck_01");
+
+		if (checkEvent == "on") {
+
+		} else {
+			var trigger = document.getElementById("reload");
+			trigger.click();
+			setCookie("Ck_01", "on", "0");
+		}
+	};
+
+
+
+
+
+

@@ -6,7 +6,7 @@ public class StockVO {
 	private String fullName;
 	private String description;
 	private String sector;
-	private long m_capitalization; //시가총액, 숫자 범위 매우 큼!
+	private long m_capitalization;
 	private double per;
 	private double eps;
 	private double pxt_insiders;
@@ -14,7 +14,7 @@ public class StockVO {
 	private double year_high;
 	private double year_low;
 	private double avg_target;
-	private double cur_price; //거래용, 4개 종목만 업데이트하기
+	private double cur_price;
 
 	public StockVO() {}
 
@@ -139,14 +139,4 @@ public class StockVO {
 	public void setAvg_target(double avg_target) {
 		this.avg_target = avg_target;
 	}
-
-	@Override
-	public String toString() {
-		return "StockVO [symbol=" + symbol + ", fullName=" + fullName + ", description=" + description + ", sector="
-				+ sector + ", m_capitalization=" + m_capitalization + ", per=" + per + ", eps=" + eps
-				+ ", pxt_insiders=" + pxt_insiders + ", pxt_institutions=" + pxt_institutions + ", year_high="
-				+ year_high + ", year_low=" + year_low + ", avg_target=" + avg_target + ", cur_price=" + cur_price
-				+ "]";
-	}
-	
 }

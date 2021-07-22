@@ -1,22 +1,11 @@
-/* Detail page 차트 시작 */
+const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
 
-/* 차트용 key */
-    /**
-     * Init Alpha Vantage with your API key.
-     *
-     * @param {String} key
-     *   Your Alpha Vantage API key.
-     */
-    const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
-
-/* 최초 로딩  */
 $(document).ready(function() {
 	let symbol = $("#symbol").text();
 	let input = symbol.toLowerCase();
 
 	alpha_input_init(input);
 });
-
 
 
 $("#daily").on("click", function() {
@@ -37,7 +26,6 @@ $("#monthly").on("click", function() {
 	alpha_input_monthly(input);
 
 });
-
 
 function alpha_input_init(input) { 
 	
@@ -113,7 +101,6 @@ function alpha_input_monthly(input) {
   });
 };
 
-
 	function show_graph_monthly(dateArray, valArray, input) {
 		
 		const myChartOne = document.getElementById("myChartOne").getContext("2d");
@@ -168,12 +155,6 @@ function alpha_input_monthly(input) {
 		
 	};
 	
-/* Detail page 차트 끝 */
-
-
-/* Detail page 댓글 시작  */
-
-	/* 실적 리스트 */
 	function print_earningList(list) {
 		let earningBox = $("#earningBox");
 		earningBox.empty();
@@ -189,13 +170,11 @@ function alpha_input_monthly(input) {
 		}
 	};
 
-
-	/* 실적 조회 버튼 클릭 */
 	$("#earning").on("click", function() {
 		$("#earningModal").css("z-index", "2000");
 		
 		let symbol_val = $("#symbol").text();
-		let url_val = "/comment/earning/"+symbol_val;
+		let url_val = "/stock/earning/"+symbol_val;
 		
 		$.getJSON(url_val, function(result) {
 			print_earningList(result);
@@ -205,13 +184,11 @@ function alpha_input_monthly(input) {
 		
 	});
 
-
-	/* 좋아요 추가  */
 	$(function () {
 		$(document).on("click", "#t_up", function(e) {
 			e.preventDefault();
 			let cNum = $(this).parent().parent("div.comment-footer").find("input[name='cNum']").val();
-			let writer = ses;  /* 로그인한 이메일로 변경 필요! */
+			let writer = ses;
 			
 			let url_val = "/comment/cNum/"+cNum+"/"+writer + ".json";
 			
@@ -223,7 +200,6 @@ function alpha_input_monthly(input) {
 		});
 	});
 	
-	/* 댓글 리스트 출력  */
 	function print_commentList(list) {
 		
 		if(list.length == 0) {
@@ -245,7 +221,6 @@ function alpha_input_monthly(input) {
 		}
 	};
 
-	/* 댓글 리스트 가져오기  */
 	function commentList(symbol) {
 		let url_val = "/comment/symbol/"+symbol+".json";
 		
@@ -256,7 +231,6 @@ function alpha_input_monthly(input) {
 		});
 	};
 
-	/* 댓글 쓰기  */
 	function posting() {
 		let symbol_val = $("#symbol").text();
 		let writer_val = ses;
@@ -286,15 +260,12 @@ function alpha_input_monthly(input) {
 		}
 	};
 	
-	/* 댓글 쓰기 */
 	$(document).on("click", "#posting", posting);
 	
-	/* 댓글 삭제 */
 	$(function () {
 			$(document).on("click", "#cmtDel", function(e) {
 			e.preventDefault();
 			
-			/* writer 가져와서 검증 후 제거 */	
 			let cmtWriter = $(this).parent().find("h5").text();
 			let cNum = $(this).parent().parent().find("div.comment-footer").find("input[name='cNum']").val();
 			let symbol_val = $("#symbol").text();
@@ -317,13 +288,11 @@ function alpha_input_monthly(input) {
 				}
 			} else {
 				alert('삭제 권한이 없습니다');
-				return false; //페이지 리로드 되지 않게 처리
+				return false;
 			}
 		});
 	});
 	
-	
-	/* 신고 글자수 40자 제한 */
     function textLengthOverCut(txt) {
 	    var length = 40;
 		var lastTxt = "...";
@@ -334,11 +303,16 @@ function alpha_input_monthly(input) {
 	    return txt;
 	}
 	
-	/* 댓글 신고 */
     $(document).on("click", ".fa-minus-circle", function() {
         let cNum_val = $(this).data("cnum");
         let writer_val = $(this).data("writer");
         let reporter_val = ses;
+        
+        if(writer_val == reporter_val) {
+        	alert('본인의 댓글은 신고할 수 없습니다');
+        	return false;
+        }
+        
         var reportContent = prompt('허위 신고는 제재의 대상이 될 수 있습니다. 신고하시려면 사유를 적어주세요. [40자 제한]');
         
         var cut_content = textLengthOverCut(reportContent);
@@ -368,17 +342,10 @@ function alpha_input_monthly(input) {
         }
     });
     
-    /* 최초 댓글 로딩 */
 	$(function() {
 		commentList($("#symbol").text());		
 	});
    
-/* Detail page 댓글 끝 */
-
-
-/* Detail 관심 종목 시작 */
-
-	/* 관심종목 추가 */
     $(document).on("click", "#add_watch",  function(e) {
          e.preventDefault();
          let symbol_val =  $("#symbol").text();
@@ -394,7 +361,6 @@ function alpha_input_monthly(input) {
          });
     });
 	
-	/* 관심종목 제거 */
      $(document).on("click", "#remove_watch",  function(e) {
          e.preventDefault();
          let symbol_val =  $("#symbol").text();
@@ -410,10 +376,6 @@ function alpha_input_monthly(input) {
          });
     });
 
-/* Detail 관심 종목 끝 */
-
-
-/* 개별 종목 검색 */
 $(document).on("click", "#d_search", function() {
 	let symbol_val = $("#d_symbol").val(); 
 	let email_val = ses;

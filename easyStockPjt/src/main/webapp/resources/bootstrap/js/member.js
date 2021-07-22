@@ -1,5 +1,3 @@
-/* 회원가입 / 로그인 전환 */
-
 var ajaxOn = false;
 $("#join").on("click", function() {
     $("#loginBtn").text("Join");
@@ -37,7 +35,6 @@ $(".chk").on("input", function() {
     }
 });
 
-/* 중복 이메일 체크 */
 $(function() {
     $("#email").on("focusout", function() {
         var email_val = $("#email").val();
@@ -61,7 +58,6 @@ $(function() {
     });
 }); 
 
-/* 회원가입 */
 $(function() {
 	$("#joinBtn").on("click",function() {
 		$("#joinBtn").submit();
@@ -69,7 +65,6 @@ $(function() {
 });
 
 
-/* 방문자 입장 */
 $(function() {
 	$("#lookArd").on("click",function() {
 		var num = Math.floor(Math.random() * 666666 * 777);

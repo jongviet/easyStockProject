@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.easystock.domain.CommentVO;
@@ -16,7 +14,6 @@ import com.easystock.domain.ReportVO;
 
 @Repository
 public class CommentDAO implements CommentDAORule {
-	private static Logger logger = LoggerFactory.getLogger(CommentDAO.class);
 	private final String NS = "CommentMapper.";
 
 	@Inject
@@ -83,6 +80,4 @@ public class CommentDAO implements CommentDAORule {
 	public CommentVO getReportedComment(int cNum) {
 		return sql.selectOne(NS+"reported_cmt", cNum);
 	}
-
-
 }

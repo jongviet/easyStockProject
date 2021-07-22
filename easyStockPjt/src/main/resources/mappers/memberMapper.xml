@@ -26,34 +26,27 @@
 		cur_price * h_qty as total from account where email = #{email} order by total desc
 	</select>
 		
-	<!-- 관심 종목의 symbol 조회 -->
 	<select id="w_list" parameterType="String" resultType="wvo">
 		select symbol from watch where email = #{email}
 	</select>
-	<!-- 관심종목에 포함되어 있는 stock List 출력; symbol만 담긴 wvo 리스트로 select한 구문 -->
 	<select id="st_list" parameterType="wvo" resultType="svo">
 		select * from stock where symbol in
 		<foreach collection="list" item="wvo" open="(" separator="," close=")">#{wvo.symbol}</foreach>
 	</select>
-	<!-- 관심 종목 보유 여부 -->
 	<select id="hasWatchList" parameterType="String" resultType="int">
 		select count(email) from watch where email = #{email}
 	</select>
-	<!-- 보유 종목 보유 여부 -->
 	<select id="hasHoldList" parameterType="String" resultType="int">
 		select count(email) from account where email = #{email}
 	</select>
 	
-	<!-- WatchVO List 리턴 to stock/list; 사용안함 -->
 	<select id="getWatchList" parameterType="String" resultType="wvo">
 		select symbol from watch where email =#{email}
 	</select>
-	<!-- // detail 관심 종목 아이콘 처리용 -->
 	<select id="inYourWatchList" parameterType="HashMap" resultType="int">
 		select count(symbol) from watch where email = #{email} and symbol = #{symbol};
 	</select>
 	
-	<!-- reportList -->
 	<select id="getReportList" resultType="rvo" parameterType="pgvo">
 	 	select @rownum:=@rownum+1 rowNum, r.* from report r, (select @rownum:=0) temp
 		order by reportNum limit #{cal_idx}, #{countPerPage}
@@ -65,7 +58,6 @@
 		select count(reportNum) as cnt from report
 	</select>
 	
-	<!-- 매수 매도 리스트용 -->
 	<select id="getSpecificSymbol" parameterType="HashMap" resultType="avo">
 		select * from account where email = #{email} and symbol = #{keyword}
 	</select>
@@ -73,43 +65,34 @@
 		select * from stock where symbol = #{keyword}
 	</select>
 	
-	<!-- 매수용 예수굼 차감 -->
 	<update id="deductDeposit" parameterType="HashMap">
 		update member set deposit_usd = deposit_usd - #{price} where email = #{email}
 	</update>
-	<!-- 매도용 예수금 증가 -->
 	<update id="addDeposit" parameterType="HashMap">
 		update member set deposit_usd = deposit_usd + #{price} where email = #{email}
 	</update>
 	
-	<!-- 신규 매수 -->
 	<insert id="newBuy">
 		insert into account(email, symbol, avg_h_price, h_qty, cur_price)
 		values(#{email}, #{symbol}, #{avg_h_price}, #{h_qty}, #{cur_price})
 	</insert>
 	
-	<!-- 추가 매수 기존 계좌 정보 -->
 	<select id="getCurrentAccount" parameterType="HashMap" resultType="avo">
 		select * from account where email = #{email} and symbol = #{symbol}
 	</select>
-	<!-- 추가 매수 계좌 업데이트 -->
 	<update id="updateAccount" parameterType="avo">
 		update account set avg_h_price = #{avg_h_price}, h_qty = #{h_qty}
 		where email = #{email} and symbol = #{symbol}
 	</update>
 	
-	<!-- 부분 매도 계좌 업데이트 -->
 	<update id="updateAccount_sell" parameterType="avo">
 		update account set h_qty = h_qty - #{h_qty}
 		where email = #{email} and symbol = #{symbol}
 	</update>
-	<!-- 전량 매도 계좌 업데이트 -->
 	<update id="deleteAccouont_sell" parameterType="avo">
 		delete from account where email = #{email} and symbol = #{symbol}
 	</update>
 
-
-	<!-- 테스터 처리 -->	
 	<delete id="delTester_member">
 		delete from member where email like 'tester%'
 	</delete>
@@ -128,6 +111,4 @@
 	<delete id="delTester_watch">
 		delete from watch where email like 'tester%'
 	</delete>
-	
-	
 </mapper>
