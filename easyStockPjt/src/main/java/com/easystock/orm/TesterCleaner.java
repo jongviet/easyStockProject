@@ -32,5 +32,5 @@ public class TesterCleaner {
 		result = mdao.delTester_member();
 		
 		logger.info(result > 0 ? ">>> 테스터 데이터 삭제 완료" : ">>> 테스터 데이터 삭제 실패");
-	}
+	} 	
 }

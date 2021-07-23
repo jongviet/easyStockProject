@@ -22,13 +22,13 @@
 							전체</option>
 						<option value="s"
 							<c:out value="${pghdl.pgvo.range eq 's' ? 'selected' : '' }"/>>
-							Symbol</option>
+							종목코드</option>
 						<option value="n"
 							<c:out value="${pghdl.pgvo.range eq 'n' ? 'selected' : '' }"/>>
-							Name</option>
+							종목명</option>
 						<option value="c"
 							<c:out value="${pghdl.pgvo.range eq 'c' ? 'selected' : '' }"/>>
-							Sector</option>
+							그룹</option>
 					</select> <input class="form-control" type="text" name="keyword"
 						value='<c:out value="${pghdl.pgvo.keyword }"/>'>
 					<button type="submit" class="btn btnBackground">조회</button>

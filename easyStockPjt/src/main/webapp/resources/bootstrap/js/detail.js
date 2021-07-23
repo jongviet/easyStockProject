@@ -377,13 +377,23 @@ function alpha_input_monthly(input) {
     });
 
 $(document).on("click", "#d_search", function() {
-	let symbol_val = $("#d_symbol").val(); 
+	let symbol_val = $("#d_symbol").val();
 	let email_val = ses;
-	let url_val = "/stock/detail?symbol=" + symbol_val + "&email=" + email_val;
 	
-	$("#d_go").attr("href", url_val); 
-	var d_go = document.getElementById("d_go");
-	d_go.click();
+	let hasSymbol_url = "/stock/hasSymbol/"+symbol_val+".json";
+    $.getJSON(hasSymbol_url, function(result) {
+	    if(parseInt(result) > 0) {
+	    	let url_val = "/stock/detail?symbol=" + symbol_val + "&email=" + email_val;
+	
+			$("#d_go").attr("href", url_val); 
+			var d_go = document.getElementById("d_go");
+			d_go.click();	    	
+	    } else {
+			alert('존재하지 않는 종목코드입니다');
+	    }
+    }).fail(function(err) {
+          console.log(err);
+    });
 });
 
 

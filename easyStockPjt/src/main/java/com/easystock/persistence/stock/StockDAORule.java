@@ -27,4 +27,5 @@ public interface StockDAORule {
 	public int remove(WatchVO wvo);
 	
 	public List<StockVO> getStockList();
+	public int hasSymbol(String symbol);
 }

@@ -77,4 +77,9 @@ public class StockService implements StockServiceRule {
 	public List<StockVO> getStockList() {
 		return sdao.getStockList();
 	}
+
+	@Override
+	public int hasSymbol(String symbol) {
+		return sdao.hasSymbol(symbol);
+	}
 }

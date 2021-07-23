@@ -56,6 +56,10 @@
 		<include refid="search"/>
 	</select>
 	
+	<select id="hasSymbol" parameterType="String" resultType="int">
+		select count(symbol) from stock where symbol = #{symbol}
+	</select>
+	
 	<sql id="search">
 		<if test="range != null">
 			<trim prefix="and" suffix="">

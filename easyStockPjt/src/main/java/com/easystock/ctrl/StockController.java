@@ -176,4 +176,27 @@ public class StockController {
 		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@ResponseBody
+	@GetMapping(value = {"/hasSymbol/{symbol}"}, produces = { MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	public ResponseEntity<String> hasSymbol(@PathVariable String symbol) {
+		
+		int isUp = ssv.hasSymbol(symbol);
+		return (isUp > 0) ? new ResponseEntity<String>("1", HttpStatus.OK) : new ResponseEntity<String>("0", HttpStatus.OK);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

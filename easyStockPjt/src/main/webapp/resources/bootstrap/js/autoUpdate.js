@@ -1,28 +1,31 @@
 const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
 
 $(document).ready(function() {
-	
+
 	var now = new Date();
 
-	hour = now.getHours();
+	date = now.getDate();      // 'dd'
+	if((date+"").length < 2){
+	    date="0"+date;      
+	}
+	hour = now.getHours();   // 'hh'
 	if((hour+"").length < 2){
 	hour="0"+hour;      
 	}
 	
-	min = now.getMinutes();
+	min = now.getMinutes(); // 'mm'
 	if((hour+"").length < 2){
 	min="0"+min;
-	} 
-	
-	if((hour == 09) && (min == 00)) {
-		tradable();
 	}
-	
-	if((hour == 09) && (min == 01)) {
+		
+	if((hour == 13) && (min == 57)) {
+		tradable();
+		setTimeout(function b(){
 		tradable_account();
+		}, 2000);
 	}
 });
-	
+
 function tradable() {
 
     let url_val = "/stock/tradable";

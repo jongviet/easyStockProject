@@ -26,4 +26,5 @@ public interface StockServiceRule {
   public int delete(WatchVO wvo);
   
   public List<StockVO> getStockList();
+  public int hasSymbol(String symbol);
 }

@@ -81,4 +81,9 @@ public class StockDAO implements StockDAORule {
 		return sql.insert(NS+"a_rawdata", symbol);
 	}
 
+	@Override
+	public int hasSymbol(String symbol) {
+		return sql.selectOne(NS+"hasSymbol", symbol);
+	}
+
 }

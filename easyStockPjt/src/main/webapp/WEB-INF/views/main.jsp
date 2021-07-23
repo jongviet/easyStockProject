@@ -9,7 +9,7 @@
 <script src="/resources/bootstrap/js/main.js"></script>
 
 <c:choose>
-<c:when test="${ses ne null}">
+<c:when test="${ses ne null and deposit ne null}">
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6 col-md-6 mx-auto float-left text-center">
