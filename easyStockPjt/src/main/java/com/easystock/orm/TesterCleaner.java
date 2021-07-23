@@ -18,7 +18,7 @@ public class TesterCleaner {
 	@Inject
 	private MemberDAORule mdao;
 	
- 	@Scheduled(cron = "00 49 13 * * *")
+ 	@Scheduled(cron = "00 00 09 * * *")
 	public void testerCleaner() throws Exception {
 		logger.info(">>> testerCleaner() - Start Running");
 		logger.info(">>> Start Running at : " + LocalDateTime.now());

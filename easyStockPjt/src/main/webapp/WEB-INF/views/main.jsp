@@ -267,7 +267,7 @@
 </div>
 </c:when>
 <c:otherwise>
-	<h1 class="text-center">비정상적인 접근이 감지되었습니다. 다시 로그인해주세요.</h1>
+	
 </c:otherwise>
 </c:choose>
 <script>

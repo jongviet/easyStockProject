@@ -26,12 +26,12 @@ public class MemberController {
 
 	@Inject
 	private MemberServiceRule msv;
-	
+
 	@ResponseBody
 	@PostMapping("/chkTester")
 	public String chkTester(@RequestParam("email") String email, HttpSession ses) {
 		int result = msv.chkTester(email);
-		if(result > 0) {
+		if (result > 0) {
 			ses.setAttribute("ses", email);
 			String[] array = email.split("@");
 			String ses_id = array[0];
@@ -43,7 +43,7 @@ public class MemberController {
 		}
 		return "0";
 	}
-	
+
 	@ResponseBody
 	@PostMapping("/chkEmail")
 	public String chkEmail(@RequestParam("email") String email) {
@@ -54,48 +54,51 @@ public class MemberController {
 	@PostMapping("/join")
 	public String join(MemberVO mvo, Model model) {
 		int result = msv.join(mvo);
-		if(result > 0) {
+		if (result > 0) {
 			model.addAttribute("msg", "회원가입 완료");
 			model.addAttribute("url", "/");
 		}
 		return "detour";
 	}
-	
+
 	@PostMapping("/login")
 	public String login(MemberVO mvo, HttpSession ses, Model model) {
 		MemberVO member = msv.login(mvo);
-		
-		if(member != null) {
-			
+
+		if (member != null) {
+
 			ses.setAttribute("ses", member.getEmail());
 			String[] array = member.getEmail().split("@");
 			String ses_id = array[0];
 			ses.setAttribute("ses_id", ses_id);
 			ses.setMaxInactiveInterval(15 * 60);
-			
+
 			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
 			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
-			
-			if(msv.hasWatchList(mvo.getEmail()) > 0) {
+
+			if (msv.hasWatchList(mvo.getEmail()) > 0) {
 				model.addAttribute("w_list", msv.chk_w_list(mvo.getEmail()));
 			}
 			return "main";
-			
+
 		} else {
 			model.addAttribute("msg", "아이디나 비밀번호가 올바르지 않습니다.");
 			model.addAttribute("url", "/");
 			return "detour";
 		}
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession ses) {
 		ses.invalidate();
 		return "redirect:/";
 	}
 
+
 	@GetMapping("/main")
 	public String main(Model model, @RequestParam(value = "email", required=false) String email, HttpSession ses) {
+		
+		System.out.println(email);
 		
 		String loggedEmail = (String) ses.getAttribute("ses");
 		
@@ -105,7 +108,7 @@ public class MemberController {
 			String testerChk = array[0].substring(0, 6);
 			if(testerChk.equals("tester")) {
 				model.addAttribute("deposit", msv.chkDeposit(email));
-				model.addAttribute("h_list", msv.chk_h_list(email));				
+				model.addAttribute("h_list", msv.chk_h_list(email));
 
 				if(msv.hasWatchList(email) > 0) {
 					model.addAttribute("w_list", msv.chk_w_list(email));
@@ -132,18 +135,18 @@ public class MemberController {
 		}
 		return "main";	
 	}
-	
+
 	@ResponseBody
 	@PostMapping("/chkDeposit")
 	public String chkDeposit(@RequestParam("email") String email) {
 		return msv.chkDeposit(email);
 	}
-	
+
 	@RequestMapping(value = { "/admin" }, method = { RequestMethod.POST })
 	public String admin(Model model) {
-		
+
 		model.addAttribute("r_list", msv.getReportList());
-		
+
 		return "admin/admin";
 	}
 
