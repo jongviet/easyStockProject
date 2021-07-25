@@ -316,9 +316,7 @@ function alpha_input_monthly(input) {
         var reportContent = prompt('허위 신고는 제재의 대상이 될 수 있습니다. 신고하시려면 사유를 적어주세요. [40자 제한]');
         
         var cut_content = textLengthOverCut(reportContent);
-        
-        console.log(cut_content);
-                
+                        
         if(reportContent != null) {
             let reportData = {
     				cNum : cNum_val,

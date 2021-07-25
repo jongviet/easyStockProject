@@ -43,6 +43,5 @@ body::before { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background
 </body>
 <script src="/resources/bootstrap/js/jquery-3.6.0.min.js"></script>
 <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
-<script src="/resources/bootstrap/js/autoUpdate.js"></script>
 <script src="/resources/bootstrap/js/member.js"></script>
 

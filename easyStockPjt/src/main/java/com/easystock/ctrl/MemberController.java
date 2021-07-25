@@ -97,40 +97,13 @@ public class MemberController {
 
 	@GetMapping("/main")
 	public String main(Model model, @RequestParam(value = "email", required=false) String email, HttpSession ses) {
-		
-		System.out.println(email);
-		
-		String loggedEmail = (String) ses.getAttribute("ses");
-		
-		String[] array = loggedEmail.split("@");
-		
-		if(array[0].length() >= 6) {
-			String testerChk = array[0].substring(0, 6);
-			if(testerChk.equals("tester")) {
-				model.addAttribute("deposit", msv.chkDeposit(email));
-				model.addAttribute("h_list", msv.chk_h_list(email));
+				
+		if(email != null) {
+			model.addAttribute("deposit", msv.chkDeposit(email));
+			model.addAttribute("h_list", msv.chk_h_list(email));				
 
-				if(msv.hasWatchList(email) > 0) {
-					model.addAttribute("w_list", msv.chk_w_list(email));
-				}
-			} else {
-				if(email.equals(loggedEmail)) {
-					model.addAttribute("deposit", msv.chkDeposit(email));
-					model.addAttribute("h_list", msv.chk_h_list(email));				
-
-					if(msv.hasWatchList(email) > 0) {
-						model.addAttribute("w_list", msv.chk_w_list(email));
-					}
-				}
-			}
-		} else {
-			if(email.equals(loggedEmail)) {
-				model.addAttribute("deposit", msv.chkDeposit(email));
-				model.addAttribute("h_list", msv.chk_h_list(email));				
-
-				if(msv.hasWatchList(email) > 0) {
-					model.addAttribute("w_list", msv.chk_w_list(email));
-				}
+			if(msv.hasWatchList(email) > 0) {
+				model.addAttribute("w_list", msv.chk_w_list(email)); //wvo가 아닌 svo가 리턴됨! 주의!
 			}
 		}
 		return "main";	
