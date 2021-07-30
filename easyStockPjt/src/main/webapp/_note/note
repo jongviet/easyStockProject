@@ -3,7 +3,6 @@ drop table if exists comment;
 drop table if exists earning;
 drop table if exists liked;
 drop table if exists member;
-drop table if exists news;
 drop table if exists report;
 drop table if exists stock;
 drop table if exists watch;
@@ -43,21 +42,15 @@ cNum int(10) not null
 create table member (
 email varchar(50) primary key,
 pwd varchar(1000) not null,
-deposit_usd decimal(10,2) default 50
-);
-
-create table news (
-newsNum int(10) primary key,
-symbol varchar(10) not null,
-title varchar(1000),
-content varchar(15000)
+deposit_usd decimal(10,2) default 5000
 );
 
 create table report (
 reportNum int(10) primary key auto_increment,
 cNum int(10) not null,
 writer varchar(50) not null,
-content varchar(200) not null
+content varchar(200) not null,
+reporter varchar(50)
 );
 
 create table stock (
@@ -72,7 +65,8 @@ pxt_insiders decimal(10,4),
 pxt_institutions decimal(10,4),
 year_high decimal(10,4),
 year_low decimal(10,4),
-avg_target decimal(10,4)
+avg_target decimal(10,4),
+cur_price decimal(6,2)
 );
 
 create table watch (
@@ -82,55 +76,1156 @@ symbol varchar(10) not null
 );
 
 
--- RAW DATA
-insert into account(email, symbol, avg_h_price, h_qty) values
-('rawdata@rawdata.com', 'AAPL', 10, 1),
-('rawdata@rawdata.com', 'MSFT', 10, 1),
-('rawdata@rawdata.com', 'AMZN', 10, 1),
-('rawdata@rawdata.com', 'GOOG', 10, 1),
-('rawdata@rawdata.com', 'FB', 10, 1),
-('rawdata@rawdata.com', 'TSLA', 10, 1),
-('rawdata@rawdata.com', 'TSM', 10, 1),
-('rawdata@rawdata.com', 'BABA', 10, 1),
-('rawdata@rawdata.com', 'V', 10, 1),
-('rawdata@rawdata.com', 'JPM', 10, 1),
-('rawdata@rawdata.com', 'JNJ', 10, 1),
-('rawdata@rawdata.com', 'WMT', 10, 1),
-('rawdata@rawdata.com', 'UNH', 10, 1),
-('rawdata@rawdata.com', 'MA', 10, 1),
-('rawdata@rawdata.com', 'BAC', 10, 1),
-('rawdata@rawdata.com', 'HD', 10, 1),
-('rawdata@rawdata.com', 'PG', 10, 1),
-('rawdata@rawdata.com', 'DIS', 10, 1),
-('rawdata@rawdata.com', 'XOM', 10, 1),
-('rawdata@rawdata.com', 'NKE', 10, 1),
-('rawdata@rawdata.com', 'NFLX', 10, 1),
-('rawdata@rawdata.com', 'VZ', 10, 1),
-('rawdata@rawdata.com', 'KO', 10, 1),
-('rawdata@rawdata.com', 'INTC', 10, 1),
-('rawdata@rawdata.com', 'ORCL', 10, 1),
-('rawdata@rawdata.com', 'PFE', 10, 1),
-('rawdata@rawdata.com', 'CVX', 10, 1),
-('rawdata@rawdata.com', 'UPS', 10, 1),
-('rawdata@rawdata.com', 'COST', 10, 1),
-('rawdata@rawdata.com', 'TXN', 10, 1),
-('rawdata@rawdata.com', 'MCD', 10, 1),
-('rawdata@rawdata.com', 'QCOM', 10, 1),
-('rawdata@rawdata.com', 'HON', 10, 1),
-('rawdata@rawdata.com', 'BMY', 10, 1),
-('rawdata@rawdata.com', 'NEE', 10, 1),
-('rawdata@rawdata.com', 'NVDA', 10, 1),
-('rawdata@rawdata.com', 'BA', 10, 1),
-('rawdata@rawdata.com', 'UBER', 10, 1),
-('rawdata@rawdata.com', 'FDX', 10, 1),
-('rawdata@rawdata.com', 'ATVI', 10, 1),
-('rawdata@rawdata.com', 'F', 10, 1),
-('rawdata@rawdata.com', 'SPG', 10, 1),
-('rawdata@rawdata.com', 'LUV', 10, 1),
-('rawdata@rawdata.com', 'O', 10, 1),
-('rawdata@rawdata.com', 'OHI', 10, 1);
+-- foreign key
+
+-- liked cNum이 comment cNum을 참조함
+alter table liked
+add constraint FK_liked_comment foreign key (cNum)
+references comment (cNum) on update CASCADE;
+
+-- liked writer가 member email을 참조함
+alter table liked
+add constraint FK_liked_member foreign key (writer)
+references member (email) on update CASCADE;
+
+-- comment writer가 member email을 참조함
+alter table comment
+add constraint FK_comment_member foreign key (writer)
+references member (email) on update CASCADE;
+
+-- report cNum이 comment의 cNum을 참조함
+alter table report
+add constraint FK_report_comment foreign key (cNum)
+references comment (cNum) on update CASCADE;
+
+-- report reporter가 member의 email을 참조함; reporter
+alter table report
+add constraint FK_report_member foreign key (reporter)
+references member (email) on update CASCADE;
+
+-- watch email이 member의 email을 참조함
+alter table watch
+add constraint FK_watch_member foreign key (email)
+references member (email) on update CASCADE;
+
+-- account email이 member의 email을 참조함
+alter table account
+add constraint FK_account_member foreign key (email)
+references member (email) on update CASCADE;
+
+-- account email이 member의 email을 참조함
+alter table account
+add constraint FK_account_member foreign key (email)
+references member (email) on update CASCADE;
+
+-- earning symbol이 stock의 symbol을 참조함
+alter table earning
+add constraint FK_earning_stock foreign key (symbol)
+references stock (symbol) on update CASCADE;
+
+-- earning symbol이 stock의 symbol을 참조함
+alter table earning
+add constraint FK_earning_stock foreign key (symbol)
+references stock (symbol) on update CASCADE;
+
+-- account symbol이 stock의 symbol을 참조함
+alter table account
+add constraint FK_account_stock foreign key (symbol)
+references stock (symbol) on update CASCADE;
+
+-- watch symbol이 stock의 symbol을 참조함
+alter table watch
+add constraint FK_watch_stock foreign key (symbol)
+references stock (symbol) on update CASCADE;
 
 
+-- rawdata
 
+-- stock
+INSERT INTO easystock.stock (symbol,fullName,description,sector,m_capitalization,per,eps,pxt_insiders,pxt_institutions,year_high,year_low,avg_target,cur_price) VALUES
+	 ('AAPL','Apple Inc','Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software, and online services. Apple is the world''s largest technology company by revenue (totalling $274.5 billion in 2020) and, since January 2021, the world''s most valuable company. As of 2021, Apple is the world''s fourth-largest PC vendor by unit sales, and fourth-largest smartphone manufacturer. It is one of the Big Five American information technology companies, along with Amazon, Google, Microsoft, and Facebook.','TECHNOLOGY',2335596610000,31.4600,4.4490,0.0660,58.5400,144.6300,92.4300,159.5900,145.40),
+	 ('AMZN','Amazon.com, Inc','Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence. It is one of the Big Five companies in the U.S. information technology industry, along with Google, Apple, Microsoft, and Facebook. The company has been referred to as one of the most influential economic and cultural forces in the world, as well as the world''s most valuable brand.','TRADE & SERVICES',1770671440000,66.8000,52.5600,13.6700,59.1600,3554.0000,2871.0000,4241.3300,3585.20),
+	 ('ATVI','Activision Blizzard, Inc','Activision Blizzard, Inc. is an American video game holding company based in Santa Monica, California. Activision Blizzard currently includes five business units: Activision Publishing, Blizzard Entertainment, King, Major League Gaming, and Activision Blizzard Studios.','TECHNOLOGY',73249391000,31.8500,2.9600,0.8090,89.6900,104.0300,70.8500,116.6600,91.17),
+	 ('BA','The Boeing Company','The Boeing Company is an American multinational corporation that designs, manufactures, and sells airplanes, rotorcraft, rockets, satellites, telecommunications equipment, and missiles worldwide. The company also provides leasing and product support services.','MANUFACTURING',140196446000,0.0000,-20.5400,0.0850,55.0600,278.5700,141.5800,267.5200,222.54),
+	 ('BABA','Alibaba Group Holding Limited','Alibaba Group Holding Limited, also known as Alibaba Group and Alibaba.com, is a Chinese multinational technology company specializing in e-commerce, retail, Internet, and technology. Founded on 28 June 1999 in Hangzhou, Zhejiang, the company provides consumer-to-consumer (C2C), business-to-consumer (B2C), and business-to-business (B2B) sales services via web portals, as well as electronic payment services, shopping search engines and cloud computing services. It owns and operates a diverse portfolio of companies around the world in numerous business sectors.','TRADE & SERVICES',603406991000,25.7200,8.4700,10.1800,35.6200,319.3200,204.3900,294.1600,211.08),
+	 ('BAC','Bank of America Corporation','The Bank of America Corporation is an American multinational investment bank and financial services holding company headquartered in Charlotte, North Carolina. Founded in San Francisco, Bank of America was formed through NationsBank''s acquisition of BankAmerica in 1998. It is the second largest banking institution in the United States, after JPMorgan Chase, and the eighth largest bank in the world. Bank of America is one of the Big Four banking institutions of the United States. It services approximately 10 percent of all American bank deposits, in direct competition with JPMorgan Chase, Citigroup and Wells Fargo. Its primary financial services revolve around commercial banking, wealth management, and investment banking.','FINANCE',352627524000,17.6600,2.3300,0.1150,72.9900,43.4900,21.9000,43.8700,38.46),
+	 ('BMY','Bristol-Myers Squibb Company','Bristol Myers Squibb (BMS) is an American multinational pharmaceutical company, headquartered in New York City. Bristol Myers Squibb manufactures prescription pharmaceuticals and biologics in several therapeutic areas, including cancer, AIDS, cardiovascular disease, diabetes, hepatitis, rheumatoid arthritis and psychiatric disorders.','LIFE SCIENCES',148171260000,0.0000,-2.7800,0.0680,74.9700,67.9900,55.1900,75.3700,67.16),
+	 ('COST','Costco Wholesale Corporation','Costco Wholesale Corporation (doing business as Costco Wholesale and also known simply as Costco) is an American multinational corporation which operates a chain of membership-only (needing a membership to shop there) big-box retail stores. As of 2020, Costco was the fifth largest retailer in the world, and the world''s largest retailer of choice and prime beef, organic foods, rotisserie chicken, and wine as of 2016.','TRADE & SERVICES',180311097000,0.0000,10.6400,0.2180,68.1300,414.3500,306.3400,415.0700,415.01),
+	 ('CVX','Chevron Corporation','Chevron Corporation is an American multinational energy corporation. One of the successor companies of Standard Oil, it is headquartered in San Ramon, California, and active in more than 180 countries. Chevron is engaged in every aspect of the oil and natural gas industries, including hydrocarbon exploration and production; refining, marketing and transport; chemicals manufacturing and sales; and power generation.','ENERGY & TRANSPORTATION',204509331000,0.0000,-4.2030,0.0370,68.1700,111.7400,62.5500,122.4800,99.82),
+	 ('DIS','The Walt Disney Company','The Walt Disney Company, commonly known as Disney, is an American diversified multinational mass media and entertainment conglomerate headquartered at the Walt Disney Studios complex in Burbank, California.','TRADE & SERVICES',321796473000,0.0000,-2.5000,0.1240,66.4200,203.0200,112.6100,206.9700,176.89);
+INSERT INTO easystock.stock (symbol,fullName,description,sector,m_capitalization,per,eps,pxt_insiders,pxt_institutions,year_high,year_low,avg_target,cur_price) VALUES
+	 ('F','Ford Motor Company','Ford Motor Company, commonly known as Ford, is an American multinational automaker that has its main headquarters in Dearborn, Michigan.','MANUFACTURING',59595186000,15.0200,0.9940,0.2290,55.3200,16.4500,5.7400,14.9800,14.19),
+	 ('FB','Facebook, Inc','Facebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California. It is one of the world''s most valuable companies. It is considered one of the Big Five companies in U.S. information technology, with Google, Apple, Microsoft and Amazon. Facebook offers other products and services beyond its social networking platform, including Facebook Messenger, Facebook Watch, and Facebook Portal. It also has acquired Instagram, WhatsApp, Oculus, Giphy and Mapillary, and has a 9.9% stake in Jio Platforms.','TECHNOLOGY',998337151000,30.1700,11.6700,0.5850,80.1400,358.7900,226.9000,386.4700,346.23),
+	 ('FDX','FedEx Corporation','FedEx Corporation, formerly Federal Express Corporation and later FDX Corporation, is an American multinational delivery services company headquartered in Memphis, Tennessee.','ENERGY & TRANSPORTATION',79438086000,15.3900,19.4500,7.6500,74.5300,319.1100,152.5700,345.6300,298.35),
+	 ('GOOG','Alphabet Inc','Alphabet Inc. is an American multinational conglomerate headquartered in Mountain View, California. It was created through a restructuring of Google on October 2, 2015, and became the parent company of Google and several former Google subsidiaries. The two co-founders of Google remained as controlling shareholders, board members, and employees at Alphabet. Alphabet is the world''s fourth-largest technology company by revenue and one of the world''s most valuable companies.','TECHNOLOGY',1701263573000,34.3100,75.0400,5.9500,68.1000,2576.9600,1406.5500,2625.0000,2652.01),
+	 ('HD','The Home Depot, Inc','The Home Depot, Inc., commonly known as Home Depot, is the largest home improvement retailer in the United States, supplying tools, construction products, and services. The company is headquartered in incorporated Cobb County, Georgia, with an Atlanta mailing address.','TRADE & SERVICES',343114023000,23.5200,13.7200,0.0640,72.4100,343.8900,240.8200,345.3100,326.36),
+	 ('HON','Honeywell International Inc','Honeywell International Inc. is an American publicly traded, multinational conglomerate headquartered in Charlotte, North Carolina. It primarily operates in four areas of business: aerospace, building technologies, performance materials and technologies (PMT), and safety and productivity solutions (SPS).','MANUFACTURING',153719144000,33.8800,6.5300,0.1190,77.1700,234.0200,138.2600,236.9900,231.85),
+	 ('INTC','Intel Corporation','Intel Corporation is an American multinational corporation and technology company headquartered in Santa Clara, California, in Silicon Valley. It is the world''s largest semiconductor chip manufacturer by revenue, and is the developer of the x86 series of microprocessors, the processors found in most personal computers (PCs).','MANUFACTURING',229196874000,12.7400,4.4560,0.0590,65.9300,68.0700,42.7700,64.5800,56.23),
+	 ('JNJ','Johnson & Johnson','Johnson & Johnson (J&J) is an American multinational corporation founded in 1886 that develops medical devices, pharmaceuticals, and consumer packaged goods. Its common stock is a component of the Dow Jones Industrial Average and the company is ranked No. 36 on the 2021 Fortune 500 list of the largest United States corporations by total revenue. Johnson & Johnson is one of the world''s most valuable companies, and is one of only two U.S.-based companies that has a prime credit rating of AAA, higher than that of the United States government.','LIFE SCIENCES',444991930000,29.8500,5.6600,0.0830,69.0200,171.6700,131.0900,187.3900,169.49),
+	 ('JPM','JPMorgan Chase & Co','JPMorgan Chase & Co. is an American multinational investment bank and financial services holding company headquartered in New York City. JPMorgan Chase is incorporated in Delaware. As a Bulge Bracket bank, it is a major provider of various investment banking and financial services. It is one of America''s Big Four banks, along with Bank of America, Citigroup, and Wells Fargo. JPMorgan Chase is considered to be a universal bank and a custodian bank. The J.P. Morgan brand is used by the investment banking, asset management, private banking, private wealth management, and treasury services divisions.','FINANCE',472323097000,12.3800,12.6100,0.8800,72.8200,166.4800,88.2700,167.4400,152.86),
+	 ('KO','The Coca-Cola Company','The Coca-Cola Company is an American multinational beverage corporation incorporated under Delaware''s General Corporation Law and headquartered in Atlanta, Georgia. The Coca-Cola Company has interests in the manufacturing, retailing, and marketing of nonalcoholic beverage concentrates and syrups.','MANUFACTURING',233606824000,32.4400,1.6700,0.6390,68.7000,56.0600,42.4600,59.5900,56.55);
+INSERT INTO easystock.stock (symbol,fullName,description,sector,m_capitalization,per,eps,pxt_insiders,pxt_institutions,year_high,year_low,avg_target,cur_price) VALUES
+	 ('LUV','Southwest Airlines Co','Southwest Airlines Co., typically referred to as Southwest, is one of the major airlines of the United States and the world''s largest low-cost carrier airline. It is headquartered in Dallas, Texas.','ENERGY & TRANSPORTATION',31733291000,0.0000,-4.9290,0.3140,80.2000,64.7500,30.2400,69.9800,53.13),
+	 ('MA','Mastercard Incorporated','Mastercard Incorporated is an American multinational financial services corporation headquartered in the Mastercard International Global Headquarters in Purchase, New York. The Global Operations Headquarters is located in O''Fallon, Missouri, a municipality of St. Charles County, Missouri. Throughout the world, its principal business is to process payments between the banks of merchants and the card-issuing banks or credit unions of the purchasers who use the Mastercard brand debit, credit and prepaid cards to make purchases. Mastercard Worldwide has been a publicly traded company since 2006.','TRADE & SERVICES',371672351000,57.5400,6.5200,11.1200,77.4800,401.5000,280.5100,429.9100,380.06),
+	 ('MCD','McDonald''s Corporation','McDonald''s Corporation is an American fast food company, founded in 1940 as a restaurant operated by Richard and Maurice McDonald, in San Bernardino, California, United States. They rechristened their business as a hamburger stand, and later turned the company into a franchise, with the Golden Arches logo being introduced in 1953 at a location in Phoenix, Arizona.','TRADE & SERVICES',174328644000,33.9000,6.8900,0.0520,68.9500,237.8100,178.4000,258.1900,235.93),
+	 ('MSFT','Microsoft Corporation','Microsoft Corporation is an American multinational technology company which produces computer software, consumer electronics, personal computers, and related services. Its best known software products are the Microsoft Windows line of operating systems, the Microsoft Office suite, and the Internet Explorer and Edge web browsers. Its flagship hardware products are the Xbox video game consoles and the Microsoft Surface lineup of touchscreen personal computers. Microsoft ranked No. 21 in the 2020 Fortune 500 rankings of the largest United States corporations by total revenue; it was the world''s largest software maker by revenue as of 2016. It is considered one of the Big Five companies in the U.S. information technology industry, along with Google, Apple, Amazon, and Facebook.','TECHNOLOGY',2091140383000,37.8400,7.3400,0.0720,72.0200,278.0000,194.8400,298.9200,281.40),
+	 ('NEE','NextEra Energy, Inc','NextEra Energy, Inc. is an American energy company with about 46 gigawatts of generating capacity, revenues of over $17 billion in 2017, and about 14,000 employees throughout the US and Canada. Its subsidiaries include Florida Power & Light (FPL), NextEra Energy Resources, NextEra Energy Partners, Gulf Power Company, and NextEra Energy Services.','ENERGY & TRANSPORTATION',145696506000,35.2000,2.1100,0.1260,78.6900,86.7700,59.6900,89.7000,75.88),
+	 ('NFLX','Netflix, Inc','Netflix, Inc. is an American over-the-top content platform and production company headquartered in Los Gatos, California. Netflix was founded in 1997 by Reed Hastings and Marc Randolph in Scotts Valley, California. The company''s primary business is a subscription-based streaming service offering online streaming from a library of films and television series, including those produced in-house.','TRADE & SERVICES',236768330000,64.6200,8.2600,1.4900,82.0800,583.9900,458.6000,613.6800,513.63),
+	 ('NKE','NIKE, Inc','Nike, Inc. is an American multinational corporation that is engaged in the design, development, manufacturing, and worldwide marketing and sales of footwear, apparel, equipment, accessories, and services. The company is headquartered near Beaverton, Oregon, in the Portland metropolitan area. It is the world''s largest supplier of athletic shoes and apparel and a major manufacturer of sports equipment.','MANUFACTURING',252384428000,44.8700,3.5600,0.2810,83.5400,159.9700,94.3300,178.7700,161.08),
+	 ('NVDA','NVIDIA Corporation','Nvidia Corporation is an American multinational technology company incorporated in Delaware and based in Santa Clara, California. It designs graphics processing units (GPUs) for the gaming and professional markets, as well as system on a chip units (SoCs) for the mobile computing and automotive market.','MANUFACTURING',510536024000,96.8700,8.4600,4.0250,67.4700,820.2100,390.6200,743.4100,194.10),
+	 ('O','Realty Income Corporation','Realty Income Corporation is a real estate investment trust that invests in free-standing, single-tenant commercial properties in the United States, Puerto Rico, and the United Kingdom that are subject to NNN Leases. The company is organized in Maryland with its headquarters in San Diego, California.','REAL ESTATE & CONSTRUCTION',25653805000,69.8600,0.9660,0.1640,71.7300,71.1000,53.8600,75.1700,70.18),
+	 ('OHI','Omega Healthcare Investors, Inc','Omega is a real estate investment trust that invests in the long-term healthcare industry, primarily skilled nursing and assisted living facilities. ','REAL ESTATE & CONSTRUCTION',8630651000,36.7800,0.9970,0.3840,72.0000,39.0000,26.8100,40.1400,37.44);
+INSERT INTO easystock.stock (symbol,fullName,description,sector,m_capitalization,per,eps,pxt_insiders,pxt_institutions,year_high,year_low,avg_target,cur_price) VALUES
+	 ('ORCL','Oracle Corporation','Oracle is an American multinational computer technology corporation headquartered in Austin, Texas. The company was formerly headquartered in Redwood Shores, California until December 2020 when it moved its headquarters to Texas. The company sells database software and technology, cloud engineered systems, and enterprise software products, particularly its own brands of database management systems.','TECHNOLOGY',228441440000,17.9800,4.5500,41.0300,48.9400,85.0300,53.0100,79.4900,89.69),
+	 ('PFE','Pfizer Inc','Pfizer Inc. is an American multinational pharmaceutical and biotechnology corporation headquartered on 42nd Street in Manhattan, New York City. The name of the company commemorates its co-founder, Charles Pfizer (1824-1906). Pfizer develops and produces medicines and vaccines for immunology, oncology, cardiology, endocrinology, and neurology. The company has several blockbuster drugs or products that each generate more than 1 billion USD in annual revenues.','LIFE SCIENCES',222396219000,20.1300,1.9740,0.0370,66.6000,42.2000,30.1600,42.9700,41.02),
+	 ('PG','The Procter & Gamble Company','The Procter & Gamble Company (P&G) is an American multinational consumer goods corporation headquartered in Cincinnati, Ohio, founded in 1837 by William Procter and James Gamble. It specializes in a wide range of personal health, consumer health, personal care, and hygiene products; these products are organized into several segments including Beauty; Grooming; Health Care; Fabric & Home Care; and Baby, Feminine, & Family Care. Before the sale of Pringles to Kellogg''s, its product portfolio also included food, snacks, and beverages.','LIFE SCIENCES',332714443000,24.9900,5.4400,0.1060,65.6700,145.1100,118.0000,147.7800,139.20),
+	 ('QCOM','QUALCOMM Incorporated','Qualcomm is an American multinational corporation headquartered in San Diego, California, and incorporated in Delaware. It creates semiconductors, software, and services related to wireless technology. It owns patents critical to the 5G, 4G, CDMA2000, TD-SCDMA and WCDMA mobile communications standards.','MANUFACTURING',160830243000,20.4200,6.9800,0.1320,74.9400,166.2900,87.4800,171.4400,142.17),
+	 ('SPG','Simon Property Group, Inc','Simon Property Group, Inc. is a real estate investment trust that invests in shopping malls, outlet centers, and community/lifestyle centers. It is the largest owner of shopping malls in the United States and is headquartered in Indianapolis, Indiana.','REAL ESTATE & CONSTRUCTION',42588512000,36.4700,3.5540,0.4850,90.5800,135.2300,55.8100,138.7100,127.93),
+	 ('TSLA','Tesla, Inc','Tesla, Inc. is an American electric vehicle and clean energy company based in Palo Alto, California. Tesla''s current products include electric cars, battery energy storage from home to grid-scale, solar panels and solar roof tiles, as well as other related products and services. In 2020, Tesla had the highest sales in the plug-in and battery electric passenger car segments, capturing 16% of the plug-in market (which includes plug-in hybrids) and 23% of the battery-electric (purely electric) market. Through its subsidiary Tesla Energy, the company develops and is a major installer of solar photovoltaic energy generation systems in the United States. Tesla Energy is also one of the largest global suppliers of battery energy storage systems, with 3 GWh of battery storage supplied in 2020.','MANUFACTURING',654004781000,680.2600,0.9980,19.4900,42.6900,895.9000,262.2700,655.1200,655.29),
+	 ('TSM','Taiwan Semiconductor Manufacturing','Taiwan Semiconductor Manufacturing Company, Limited is a Taiwanese multinational semiconductor contract manufacturing and design company. It is one of Taiwan''s largest companies, the world''s most valuable semiconductor company, and the world''s largest dedicated independent (pure-play) semiconductor foundry, with its headquarters and main operations located in the Hsinchu Science Park in Hsinchu, Taiwan. It is majority owned by foreign investors.','MANUFACTURING',616676786000,31.8400,3.7350,0.0080,17.7700,141.1300,59.6600,140.6200,117.87),
+	 ('TXN','Texas Instruments Incorporated','Texas Instruments Incorporated (TI) is an American technology company headquartered in Dallas, Texas, that designs and manufactures semiconductors and various integrated circuits, which it sells to electronics designers and manufacturers globally. It is one of the top 10 semiconductor companies worldwide based on sales volume.','MANUFACTURING',177510547000,29.1100,6.6000,0.2430,85.8000,196.5000,123.1100,201.1900,194.24),
+	 ('UBER','Uber Technologies, Inc','Uber Technologies, Inc., commonly known as Uber, is an American technology company. Its services include ride-hailing, food delivery (Uber Eats), package delivery, couriers, freight transportation, and, through a partnership with Lime, electric bicycle and motorized scooter rental. The company is based in San Francisco, California.','TRADE & SERVICES',92152480000,0.0000,-3.0050,1.2790,76.3500,64.0500,28.4800,69.1100,47.52),
+	 ('UNH','UnitedHealth Group Incorporated','UnitedHealth Group Incorporated is an American for-profit multinational managed healthcare and insurance company based in Minnetonka, Minnesota. It offers health care products and insurance services. In 2020, it was the second-largest healthcare company (behind CVS Health) by revenue with $257.1 billion, and the largest insurance company by net premiums. UnitedHealthcare revenues comprise 80% of the Group''s overall revenue.','FINANCE',386313847000,23.2700,17.5900,0.5890,89.0800,424.4300,282.8500,446.0400,414.64);
+INSERT INTO easystock.stock (symbol,fullName,description,sector,m_capitalization,per,eps,pxt_insiders,pxt_institutions,year_high,year_low,avg_target,cur_price) VALUES
+	 ('UPS','United Parcel Service, Inc','United Parcel Service is an American multinational shipping & receiving and supply chain management company founded in 1907.','ENERGY & TRANSPORTATION',184143839000,35.7200,5.9200,0.0090,70.0400,218.5400,110.4100,218.2300,212.45),
+	 ('V','Visa Inc','Visa Inc. is an American multinational financial services corporation headquartered in Foster City, California, United States. It facilitates electronic funds transfers throughout the world, most commonly through Visa-branded credit cards, debit cards and prepaid cards. Visa is one of the world''s most valuable companies.','TRADE & SERVICES',525074301000,49.3200,4.8380,0.1190,96.9300,238.7800,178.4200,267.2600,243.66),
+	 ('VZ','Verizon Communications Inc','Verizon Communications Inc. is an American multinational telecommunications conglomerate and a corporate component of the Dow Jones Industrial Average. The company is headquartered at 1095 Avenue of the Americas in Midtown Manhattan, New York City, but is incorporated in Delaware.','TECHNOLOGY',233665544000,12.3700,4.5620,0.0220,66.7200,60.6400,52.0600,60.3200,55.95),
+	 ('WMT','Walmart Inc','Walmart Inc. is an American multinational retail corporation that operates a chain of hypermarkets, discount department stores, and grocery stores from the United States, headquartered in Bentonville, Arkansas. It also owns and operates Sam''s Club retail warehouses.','TRADE & SERVICES',392609235000,32.4300,4.3200,49.2700,30.4800,151.8700,116.3600,163.3000,141.17),
+	 ('XOM','Exxon Mobil Corporation','Exxon Mobil Corporation, stylized as ExxonMobil, is an American multinational oil and gas corporation headquartered in Irving, Texas. It is the largest direct descendant of John D. Rockefeller''s Standard Oil, and was formed on November 30, 1999 by the merger of Exxon (formerly the Standard Oil Company of New Jersey) and Mobil (formerly the Standard Oil Company of New York). ExxonMobil''s primary brands are Exxon, Mobil, Esso, and ExxonMobil Chemical. ExxonMobil is incorporated in New Jersey.','ENERGY & TRANSPORTATION',267432722000,0.0000,-4.4680,0.1150,53.2700,64.9300,29.4400,66.1200,57.76);
+
+
+-- earning
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('AAPL','2021-04-28',1.4000,0.9888),
+	 ('AAPL','2021-01-27',1.6800,1.4158),
+	 ('AAPL','2020-10-29',0.7300,0.6987),
+	 ('AAPL','2020-07-30',0.6500,0.5100),
+	 ('AAPL','2020-04-30',0.6400,0.5600),
+	 ('AAPL','2020-01-28',1.2500,1.1400),
+	 ('AAPL','2019-10-30',0.7600,0.7100),
+	 ('AAPL','2019-07-30',0.5500,0.5300),
+	 ('AAPL','2019-04-30',0.6200,0.5900),
+	 ('AAPL','2019-01-29',1.0500,1.0400);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('AAPL','2018-11-01',0.7300,0.7000),
+	 ('AAPL','2018-07-31',0.5850,0.5450),
+	 ('AAPL','2018-05-01',0.6825,0.6725),
+	 ('AAPL','2018-02-01',0.9725,0.9650),
+	 ('AAPL','2017-11-02',0.5175,0.4675),
+	 ('AAPL','2017-08-01',0.4175,0.3925),
+	 ('AAPL','2017-05-02',0.5250,0.5050),
+	 ('AAPL','2017-01-31',0.8400,0.8025),
+	 ('AAPL','2016-10-25',0.4175,0.4150),
+	 ('AAPL','2016-07-26',0.3550,0.3450);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('AMZN','2021-04-29',15.7900,9.6416),
+	 ('AMZN','2021-02-02',14.0900,7.0414),
+	 ('AMZN','2020-10-29',12.3700,7.5312),
+	 ('AMZN','2020-07-30',10.3000,1.6017),
+	 ('AMZN','2020-04-30',5.0100,6.2489),
+	 ('AMZN','2020-01-30',6.4700,3.9736),
+	 ('AMZN','2019-10-24',4.2300,4.4899),
+	 ('AMZN','2019-07-25',5.2200,5.5432),
+	 ('AMZN','2019-04-25',7.0900,4.6755),
+	 ('AMZN','2019-01-31',6.0400,5.5141);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('AMZN','2018-10-25',5.7500,3.0878),
+	 ('AMZN','2018-07-26',5.0700,2.5434),
+	 ('AMZN','2018-04-26',3.2700,1.2178),
+	 ('AMZN','2018-02-01',2.1512,1.8317),
+	 ('AMZN','2017-10-26',0.5200,0.0145),
+	 ('AMZN','2017-07-27',0.4000,1.3969),
+	 ('AMZN','2017-04-27',1.4800,1.1020),
+	 ('AMZN','2017-02-02',1.5400,1.4208),
+	 ('AMZN','2016-10-27',0.5200,0.8093),
+	 ('AMZN','2016-07-28',1.7800,1.1170);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('ATVI','2021-05-04',0.8400,0.6947),
+	 ('ATVI','2021-02-04',1.2200,1.1762),
+	 ('ATVI','2020-10-29',0.7100,0.6493),
+	 ('ATVI','2020-08-04',0.9700,0.6865),
+	 ('ATVI','2020-05-05',0.5800,0.3784),
+	 ('ATVI','2020-02-06',1.2300,1.1922),
+	 ('ATVI','2019-11-07',0.3200,0.2325),
+	 ('ATVI','2019-08-08',0.3800,0.2640),
+	 ('ATVI','2019-05-02',0.3100,0.2501),
+	 ('ATVI','2019-02-12',1.2900,1.2896);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('ATVI','2018-11-08',0.5200,0.5009),
+	 ('ATVI','2018-08-02',0.4100,0.3506),
+	 ('ATVI','2018-05-03',0.3800,0.3459),
+	 ('ATVI','2018-02-08',0.9400,0.9277),
+	 ('ATVI','2017-11-02',0.6000,0.4941),
+	 ('ATVI','2017-08-03',0.4300,0.3042),
+	 ('ATVI','2017-05-04',0.3100,0.2131),
+	 ('ATVI','2017-02-09',0.9200,0.7389),
+	 ('ATVI','2016-11-03',0.5200,0.4223),
+	 ('ATVI','2016-08-04',0.5400,0.4227);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BA','2021-04-28',-1.5300,-1.0851),
+	 ('BA','2021-01-27',-15.2500,-1.6469),
+	 ('BA','2020-10-28',-1.3900,-2.2114),
+	 ('BA','2020-07-29',-4.7900,-2.5264),
+	 ('BA','2020-04-29',-1.7000,-1.4871),
+	 ('BA','2020-01-29',-2.3300,-1.1793),
+	 ('BA','2019-10-23',1.4500,2.1136),
+	 ('BA','2019-07-24',-5.8200,-6.6565),
+	 ('BA','2019-04-24',3.1600,3.1933),
+	 ('BA','2019-01-30',5.4800,4.5508);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BA','2018-10-24',3.5800,3.4635),
+	 ('BA','2018-07-25',3.3300,3.2678),
+	 ('BA','2018-04-25',3.6400,2.6140),
+	 ('BA','2018-01-31',3.0600,2.8798),
+	 ('BA','2017-10-25',2.7200,2.6591),
+	 ('BA','2017-07-26',2.5500,2.2941),
+	 ('BA','2017-04-26',2.0100,1.9097),
+	 ('BA','2017-01-25',2.4700,2.3346),
+	 ('BA','2016-10-26',3.5100,2.6185),
+	 ('BA','2016-07-27',2.7900,2.2420);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BABA','2021-05-13',1.5997,1.7655),
+	 ('BABA','2021-02-02',3.4125,3.2009),
+	 ('BABA','2020-11-05',2.7214,2.0917),
+	 ('BABA','2020-08-20',2.1427,1.9599),
+	 ('BABA','2020-05-22',1.2904,0.8560),
+	 ('BABA','2020-02-13',2.6071,2.2539),
+	 ('BABA','2019-11-01',1.8615,1.5110),
+	 ('BABA','2019-08-15',1.7844,1.4841),
+	 ('BABA','2019-05-15',1.2464,0.9452),
+	 ('BABA','2019-01-30',1.8162,1.7068);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BABA','2018-11-02',1.3932,1.1039),
+	 ('BABA','2018-08-23',1.1691,1.2134),
+	 ('BABA','2018-05-04',0.9009,0.8709),
+	 ('BABA','2018-02-01',1.6846,1.7029),
+	 ('BABA','2017-11-02',1.2966,1.0361),
+	 ('BABA','2017-08-17',1.1913,0.9344),
+	 ('BABA','2017-05-18',0.6315,0.6566),
+	 ('BABA','2017-01-24',1.3157,1.1252),
+	 ('BABA','2016-11-02',0.7787,0.6961),
+	 ('BABA','2016-08-11',0.7386,0.6284);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BAC','2021-04-15',0.8600,0.6473),
+	 ('BAC','2021-01-19',0.5900,0.5394),
+	 ('BAC','2020-10-14',0.5100,0.4981),
+	 ('BAC','2020-07-16',0.3700,0.2842),
+	 ('BAC','2020-04-15',0.4000,0.6009),
+	 ('BAC','2020-01-15',0.7400,0.6912),
+	 ('BAC','2019-10-16',0.7500,0.6839),
+	 ('BAC','2019-07-17',0.7400,0.7060),
+	 ('BAC','2019-04-16',0.7000,0.6562),
+	 ('BAC','2019-01-16',0.7000,0.6306);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BAC','2018-10-15',0.6600,0.6189),
+	 ('BAC','2018-07-16',0.6300,0.5767),
+	 ('BAC','2018-04-16',0.6200,0.5893),
+	 ('BAC','2018-01-17',0.4700,0.4454),
+	 ('BAC','2017-10-13',0.4800,0.4551),
+	 ('BAC','2017-07-18',0.4600,0.4360),
+	 ('BAC','2017-04-18',0.4100,0.3477),
+	 ('BAC','2017-01-13',0.4000,0.3770),
+	 ('BAC','2016-10-17',0.4100,0.3356),
+	 ('BAC','2016-07-18',0.3600,0.3293);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BMY','2021-04-29',1.7400,1.8109),
+	 ('BMY','2021-02-04',1.4600,1.4158),
+	 ('BMY','2020-11-05',1.6300,1.4911),
+	 ('BMY','2020-08-06',1.6300,1.4787),
+	 ('BMY','2020-05-07',1.7200,1.4482),
+	 ('BMY','2020-02-06',1.2200,1.1592),
+	 ('BMY','2019-10-31',1.1700,1.0691),
+	 ('BMY','2019-07-25',1.1800,1.0646),
+	 ('BMY','2019-04-25',1.1000,1.0839),
+	 ('BMY','2019-01-24',0.9400,0.8479);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('BMY','2018-10-25',1.0900,0.9131),
+	 ('BMY','2018-07-26',1.0100,0.8745),
+	 ('BMY','2018-04-26',0.9400,0.8479),
+	 ('BMY','2018-02-05',0.6800,0.6719),
+	 ('BMY','2017-10-26',0.7500,0.7719),
+	 ('BMY','2017-07-27',0.7400,0.7343),
+	 ('BMY','2017-04-27',0.8400,0.7394),
+	 ('BMY','2017-01-26',0.6300,0.6631),
+	 ('BMY','2016-10-27',0.7700,0.6530),
+	 ('BMY','2016-07-28',0.6900,0.6646);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('CVX','2021-04-30',0.9000,0.9431),
+	 ('CVX','2021-01-29',-0.0100,0.0880),
+	 ('CVX','2020-10-30',0.1100,-0.2679),
+	 ('CVX','2020-07-31',-1.5900,-0.9179),
+	 ('CVX','2020-05-01',1.2891,0.6651),
+	 ('CVX','2020-01-31',1.4900,1.4608),
+	 ('CVX','2019-11-01',1.5500,1.4612),
+	 ('CVX','2019-08-02',1.7700,1.8206),
+	 ('CVX','2019-04-26',1.4700,1.3334),
+	 ('CVX','2019-02-01',1.9500,1.8873);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('CVX','2018-11-02',2.4400,2.0615),
+	 ('CVX','2018-07-27',1.7800,2.0899),
+	 ('CVX','2018-04-27',1.9000,1.4894),
+	 ('CVX','2018-02-02',0.7200,1.2355),
+	 ('CVX','2017-10-27',0.8500,0.9735),
+	 ('CVX','2017-07-28',0.9100,0.8698),
+	 ('CVX','2017-04-28',1.2300,0.8697),
+	 ('CVX','2017-01-27',0.2100,0.6351),
+	 ('CVX','2016-10-28',0.4900,0.3924),
+	 ('CVX','2016-07-29',0.3500,0.3191);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('DIS','2021-05-13',0.7900,0.2613),
+	 ('DIS','2021-02-11',0.3200,-0.3377),
+	 ('DIS','2020-11-12',-0.2000,-0.6514),
+	 ('DIS','2020-08-04',0.0800,-0.6712),
+	 ('DIS','2020-05-05',0.6000,0.8952),
+	 ('DIS','2020-02-04',1.5300,1.4395),
+	 ('DIS','2019-11-07',1.0700,0.9640),
+	 ('DIS','2019-08-06',1.3500,1.7406),
+	 ('DIS','2019-05-08',1.6100,1.5703),
+	 ('DIS','2019-02-05',1.8400,1.5678);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('DIS','2018-11-08',1.4800,1.3489),
+	 ('DIS','2018-08-07',1.8700,1.9458),
+	 ('DIS','2018-05-08',1.8400,1.6985),
+	 ('DIS','2018-02-06',1.8900,1.6088),
+	 ('DIS','2017-11-09',1.0700,1.1184),
+	 ('DIS','2017-08-08',1.5800,1.5495),
+	 ('DIS','2017-05-09',1.5000,1.4111),
+	 ('DIS','2017-02-07',1.5500,1.4955),
+	 ('DIS','2016-11-10',1.1000,1.1560),
+	 ('DIS','2016-08-09',1.6200,1.6103);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('F','2021-04-28',0.8900,0.2112),
+	 ('F','2021-02-04',0.3400,-0.0842),
+	 ('F','2020-10-28',0.6500,0.1796),
+	 ('F','2020-07-30',-0.3500,-1.1620),
+	 ('F','2020-04-28',-0.2300,-0.0585),
+	 ('F','2020-02-04',0.1200,0.1687),
+	 ('F','2019-10-23',0.3400,0.2619),
+	 ('F','2019-07-24',0.2800,0.3076),
+	 ('F','2019-04-25',0.4400,0.2700),
+	 ('F','2019-01-23',0.3000,0.3021);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('F','2018-10-24',0.2900,0.2830),
+	 ('F','2018-07-25',0.2700,0.3032),
+	 ('F','2018-04-25',0.4300,0.4146),
+	 ('F','2018-01-24',0.3900,0.3940),
+	 ('F','2017-10-26',0.4300,0.3247),
+	 ('F','2017-07-26',0.5600,0.4298),
+	 ('F','2017-04-27',0.3900,0.3413),
+	 ('F','2017-01-26',0.3000,0.3124),
+	 ('F','2016-10-27',0.2600,0.2050),
+	 ('F','2016-07-28',0.5200,0.5995);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('FDX','2021-06-24',5.0100,5.0035),
+	 ('FDX','2021-03-18',3.4700,3.2374),
+	 ('FDX','2020-12-17',4.8300,4.0138),
+	 ('FDX','2020-09-15',4.8700,2.7175),
+	 ('FDX','2020-06-30',2.5300,1.5650),
+	 ('FDX','2020-03-17',1.4100,1.2705),
+	 ('FDX','2019-12-17',2.5100,2.7889),
+	 ('FDX','2019-09-17',3.0500,3.1544),
+	 ('FDX','2019-06-25',5.0100,4.8350),
+	 ('FDX','2019-03-19',3.0300,3.0960);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('FDX','2018-12-18',4.0300,3.9259),
+	 ('FDX','2018-09-17',3.4600,3.8046),
+	 ('FDX','2018-06-19',5.9100,5.7091),
+	 ('FDX','2018-03-20',3.7200,3.1118),
+	 ('FDX','2017-12-19',3.1800,2.8813),
+	 ('FDX','2017-09-19',3.3200,3.0883),
+	 ('FDX','2017-06-20',4.2500,3.8735),
+	 ('FDX','2017-03-21',2.3500,2.6165),
+	 ('FDX','2016-12-20',2.8000,2.9057),
+	 ('FDX','2016-09-20',2.9000,2.7830);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('GOOG','2021-04-27',26.2900,15.6602),
+	 ('GOOG','2021-02-02',22.3000,16.0105),
+	 ('GOOG','2020-10-29',16.4000,11.1964),
+	 ('GOOG','2020-07-30',10.1300,8.2091),
+	 ('GOOG','2020-04-28',9.8700,10.7620),
+	 ('GOOG','2020-02-03',15.3500,12.5938),
+	 ('GOOG','2019-10-28',10.9200,12.7090),
+	 ('GOOG','2019-07-25',14.2100,11.4710),
+	 ('GOOG','2019-04-29',11.9000,10.3995),
+	 ('GOOG','2019-02-04',12.7700,10.9778);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('GOOG','2018-10-25',13.0600,10.4613),
+	 ('GOOG','2018-07-23',11.7500,9.5405),
+	 ('GOOG','2018-04-23',9.4994,9.2878),
+	 ('GOOG','2018-02-01',9.7000,9.8995),
+	 ('GOOG','2017-10-26',9.5700,8.4592),
+	 ('GOOG','2017-07-24',8.9000,8.2892),
+	 ('GOOG','2017-04-27',10.0060,9.3552),
+	 ('GOOG','2017-01-26',9.3600,9.6114),
+	 ('GOOG','2016-10-27',9.0600,8.6021),
+	 ('GOOG','2016-07-28',8.4200,8.0364);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('HD','2021-05-18',3.8600,3.0495),
+	 ('HD','2021-02-23',2.7400,2.6198),
+	 ('HD','2020-11-17',3.1800,3.0353),
+	 ('HD','2020-08-18',4.0200,3.7200),
+	 ('HD','2020-05-19',2.0800,2.2564),
+	 ('HD','2020-02-25',2.2800,2.1057),
+	 ('HD','2019-11-19',2.5300,2.5268),
+	 ('HD','2019-08-20',3.1700,3.0770),
+	 ('HD','2019-05-21',2.2700,2.1896),
+	 ('HD','2019-02-26',2.2500,2.1612);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('HD','2018-11-13',2.5100,2.2665),
+	 ('HD','2018-08-14',3.0500,2.8513),
+	 ('HD','2018-05-15',2.0800,2.0506),
+	 ('HD','2018-02-20',1.6900,1.6420),
+	 ('HD','2017-11-14',1.8400,1.8218),
+	 ('HD','2017-08-15',2.2500,2.2172),
+	 ('HD','2017-05-16',1.6700,1.6137),
+	 ('HD','2017-02-21',1.4400,1.3356),
+	 ('HD','2016-11-15',1.6000,1.5803),
+	 ('HD','2016-08-16',1.9700,1.9669);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('HON','2021-04-23',1.9200,1.8014),
+	 ('HON','2021-01-29',2.0700,2.0000),
+	 ('HON','2020-10-30',1.5600,1.4865),
+	 ('HON','2020-07-24',1.2600,1.2395),
+	 ('HON','2020-05-01',2.2100,1.9446),
+	 ('HON','2020-01-31',2.0600,2.0422),
+	 ('HON','2019-10-17',2.0800,2.0101),
+	 ('HON','2019-07-18',2.1000,2.0833),
+	 ('HON','2019-04-18',1.9200,1.8366),
+	 ('HON','2019-02-01',1.9100,1.8905);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('HON','2018-10-19',2.0300,1.9914),
+	 ('HON','2018-07-20',2.1200,2.0102),
+	 ('HON','2018-04-20',1.9500,1.9001),
+	 ('HON','2018-01-26',1.8500,1.8405),
+	 ('HON','2017-10-20',1.7500,1.7425),
+	 ('HON','2017-07-21',1.8000,1.7778),
+	 ('HON','2017-04-21',1.7100,1.6242),
+	 ('HON','2017-01-27',1.7400,1.7403),
+	 ('HON','2016-10-21',1.6000,1.5998),
+	 ('HON','2016-07-22',1.6600,1.6412);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('INTC','2021-04-22',0.8200,1.0702),
+	 ('INTC','2021-01-21',1.4200,1.0379),
+	 ('INTC','2020-10-22',1.0200,1.0449),
+	 ('INTC','2020-07-23',1.1900,1.0379),
+	 ('INTC','2020-04-23',1.3100,1.2000),
+	 ('INTC','2020-01-23',1.5800,1.2258),
+	 ('INTC','2019-10-24',1.3500,1.1612),
+	 ('INTC','2019-07-25',0.9200,0.8408),
+	 ('INTC','2019-04-25',0.8700,0.8094),
+	 ('INTC','2019-01-24',1.1200,1.1671);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('INTC','2018-10-25',1.3800,1.1033),
+	 ('INTC','2018-07-26',1.0500,0.9527),
+	 ('INTC','2018-04-26',0.9300,0.6681),
+	 ('INTC','2018-01-25',-0.1500,0.8095),
+	 ('INTC','2017-10-26',0.9400,0.7305),
+	 ('INTC','2017-07-27',0.5800,0.5452),
+	 ('INTC','2017-04-27',0.6100,0.5666),
+	 ('INTC','2017-01-26',0.7300,0.6753),
+	 ('INTC','2016-10-18',0.6900,0.6687),
+	 ('INTC','2016-07-20',0.2700,0.2601);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('JNJ','2021-04-20',2.5900,2.3453),
+	 ('JNJ','2021-01-26',1.8600,1.8279),
+	 ('JNJ','2020-10-13',2.2000,1.9815),
+	 ('JNJ','2020-07-16',1.6700,1.5112),
+	 ('JNJ','2020-04-14',2.3000,1.9960),
+	 ('JNJ','2020-01-22',1.8800,1.8663),
+	 ('JNJ','2019-10-15',2.1200,2.0149),
+	 ('JNJ','2019-07-16',2.5800,2.4426),
+	 ('JNJ','2019-04-16',2.1000,2.0434),
+	 ('JNJ','2019-01-22',1.9700,1.9526);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('JNJ','2018-10-16',2.0500,2.0318),
+	 ('JNJ','2018-07-17',2.1000,2.0672),
+	 ('JNJ','2018-04-17',2.0600,2.0022),
+	 ('JNJ','2018-01-23',1.7400,1.7238),
+	 ('JNJ','2017-10-17',1.9000,1.8035),
+	 ('JNJ','2017-07-18',1.8300,1.7869),
+	 ('JNJ','2017-04-18',1.8300,1.7735),
+	 ('JNJ','2017-01-24',1.5800,1.5640),
+	 ('JNJ','2016-10-18',1.6800,1.6569),
+	 ('JNJ','2016-07-19',1.7400,1.6787);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('JPM','2021-04-14',4.5900,3.0604),
+	 ('JPM','2021-01-15',3.0700,2.6508),
+	 ('JPM','2020-10-13',3.0900,2.2354),
+	 ('JPM','2020-07-14',1.0800,1.2060),
+	 ('JPM','2020-04-14',2.8900,2.1996),
+	 ('JPM','2020-01-14',2.5700,2.3615),
+	 ('JPM','2019-10-15',2.6800,2.4542),
+	 ('JPM','2019-07-16',2.8200,2.4910),
+	 ('JPM','2019-04-12',2.6500,2.3501),
+	 ('JPM','2019-01-15',1.9800,2.1876);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('JPM','2018-10-12',2.3400,2.2619),
+	 ('JPM','2018-07-13',2.2900,2.2213),
+	 ('JPM','2018-04-13',2.2600,2.2881),
+	 ('JPM','2018-01-12',1.7600,1.6913),
+	 ('JPM','2017-10-12',1.7600,1.6566),
+	 ('JPM','2017-07-14',1.7085,1.5897),
+	 ('JPM','2017-04-13',1.6500,1.5077),
+	 ('JPM','2017-01-13',1.5800,1.4227),
+	 ('JPM','2016-10-14',1.5800,1.3886),
+	 ('JPM','2016-07-14',1.5500,1.4269);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('KO','2021-04-19',0.5500,0.5043),
+	 ('KO','2021-02-10',0.4700,0.4180),
+	 ('KO','2020-10-22',0.5500,0.4625),
+	 ('KO','2020-07-21',0.4200,0.4103),
+	 ('KO','2020-04-21',0.5100,0.4449),
+	 ('KO','2020-01-30',0.4400,0.4372),
+	 ('KO','2019-10-18',0.5600,0.5625),
+	 ('KO','2019-07-23',0.6300,0.6150),
+	 ('KO','2019-04-23',0.4800,0.4630),
+	 ('KO','2019-02-14',0.4300,0.4297);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('KO','2018-10-30',0.5800,0.5472),
+	 ('KO','2018-07-25',0.6100,0.6006),
+	 ('KO','2018-04-24',0.4700,0.4559),
+	 ('KO','2018-02-16',0.3900,0.3827),
+	 ('KO','2017-10-25',0.5000,0.4870),
+	 ('KO','2017-07-26',0.5900,0.5721),
+	 ('KO','2017-04-25',0.4300,0.4355),
+	 ('KO','2017-02-09',0.3700,0.3656),
+	 ('KO','2016-10-26',0.4900,0.4818),
+	 ('KO','2016-07-27',0.6000,0.5815);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('LUV','2021-04-22',-1.7200,-1.8510),
+	 ('LUV','2021-01-28',-1.2900,-1.6819),
+	 ('LUV','2020-10-22',-1.9900,-2.2450),
+	 ('LUV','2020-07-23',-2.6700,-2.7519),
+	 ('LUV','2020-04-28',-0.1500,-0.3189),
+	 ('LUV','2020-01-23',0.9800,1.0850),
+	 ('LUV','2019-10-24',1.2300,1.0823),
+	 ('LUV','2019-07-25',1.3700,1.3486),
+	 ('LUV','2019-04-25',0.7000,0.6187),
+	 ('LUV','2019-01-24',1.1700,1.0789);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('LUV','2018-10-25',1.0800,1.0779),
+	 ('LUV','2018-07-26',1.2600,1.2251),
+	 ('LUV','2018-04-26',0.7500,0.7387),
+	 ('LUV','2018-01-25',0.7700,0.7654),
+	 ('LUV','2017-10-26',0.8800,0.8729),
+	 ('LUV','2017-07-27',1.2400,1.1983),
+	 ('LUV','2017-04-27',0.6100,0.6279),
+	 ('LUV','2017-01-26',0.7500,0.6960),
+	 ('LUV','2016-10-26',0.9300,0.8766),
+	 ('LUV','2016-07-21',1.1900,1.2055);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('MA','2021-04-29',1.7400,1.5631),
+	 ('MA','2021-01-28',1.6400,1.5158),
+	 ('MA','2020-10-28',1.6000,1.6567),
+	 ('MA','2020-07-30',1.3600,1.1752),
+	 ('MA','2020-04-29',1.8300,1.7367),
+	 ('MA','2020-01-29',1.9600,1.8720),
+	 ('MA','2019-10-29',2.1500,2.0133),
+	 ('MA','2019-07-30',1.8900,1.8273),
+	 ('MA','2019-04-30',1.7800,1.6606),
+	 ('MA','2019-01-31',1.5500,1.5212);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('MA','2018-10-30',1.7800,1.6789),
+	 ('MA','2018-07-26',1.6600,1.5350),
+	 ('MA','2018-05-02',1.5000,1.2439),
+	 ('MA','2018-02-01',1.1400,1.1196),
+	 ('MA','2017-10-31',1.3400,1.2273),
+	 ('MA','2017-07-27',1.1000,1.0426),
+	 ('MA','2017-05-02',1.0100,0.9472),
+	 ('MA','2017-01-31',0.8600,0.8553),
+	 ('MA','2016-10-28',1.0800,0.9798),
+	 ('MA','2016-07-28',0.9600,0.9011);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('MCD','2021-04-29',1.9200,1.8225),
+	 ('MCD','2021-01-28',1.7000,1.7810),
+	 ('MCD','2020-11-09',2.2200,1.9000),
+	 ('MCD','2020-07-28',0.6600,0.7534),
+	 ('MCD','2020-04-30',1.4700,1.5447),
+	 ('MCD','2020-01-29',1.9700,1.9692),
+	 ('MCD','2019-10-22',2.1100,2.2071),
+	 ('MCD','2019-07-26',2.0500,2.0512),
+	 ('MCD','2019-04-30',1.7200,1.7626),
+	 ('MCD','2019-01-30',1.9700,1.8929);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('MCD','2018-10-23',2.1000,1.9921),
+	 ('MCD','2018-07-26',1.9900,1.9262),
+	 ('MCD','2018-04-30',1.7900,1.6697),
+	 ('MCD','2018-01-30',1.7100,1.5907),
+	 ('MCD','2017-10-24',1.7600,1.7662),
+	 ('MCD','2017-07-25',1.7300,1.6172),
+	 ('MCD','2017-04-25',1.4700,1.3347),
+	 ('MCD','2017-01-23',1.4250,1.4130),
+	 ('MCD','2016-10-21',1.6200,1.4827),
+	 ('MCD','2016-07-26',1.4500,1.3828);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('MSFT','2021-04-27',1.9500,1.7781),
+	 ('MSFT','2021-01-26',2.0300,1.6373),
+	 ('MSFT','2020-10-27',1.8200,1.5460),
+	 ('MSFT','2020-07-22',1.4600,1.3720),
+	 ('MSFT','2020-04-29',1.4000,1.2688),
+	 ('MSFT','2020-01-29',1.5100,1.3250),
+	 ('MSFT','2019-10-23',1.3800,1.2435),
+	 ('MSFT','2019-07-18',1.3700,1.2137),
+	 ('MSFT','2019-04-24',1.1400,0.9985),
+	 ('MSFT','2019-01-30',1.1000,1.0911);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('MSFT','2018-10-24',1.1400,0.9652),
+	 ('MSFT','2018-07-19',1.1300,1.0778),
+	 ('MSFT','2018-04-26',0.9500,0.8502),
+	 ('MSFT','2018-01-31',0.9600,0.8654),
+	 ('MSFT','2017-10-26',0.8400,0.7278),
+	 ('MSFT','2017-07-20',0.9800,0.7065),
+	 ('MSFT','2017-04-27',0.7300,0.6974),
+	 ('MSFT','2017-01-26',0.8400,0.7852),
+	 ('MSFT','2016-10-20',0.7600,0.6823),
+	 ('MSFT','2016-07-19',0.6900,0.5839);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NEE','2021-04-21',0.6700,0.6126),
+	 ('NEE','2021-01-26',0.4000,0.3840),
+	 ('NEE','2020-10-21',0.6650,0.6460),
+	 ('NEE','2020-07-24',0.6525,0.6261),
+	 ('NEE','2020-04-22',0.5950,0.5605),
+	 ('NEE','2020-01-24',0.3600,0.3694),
+	 ('NEE','2019-10-22',0.5975,0.5719),
+	 ('NEE','2019-07-24',0.5875,0.5778),
+	 ('NEE','2019-04-23',0.5500,0.5088),
+	 ('NEE','2019-01-25',0.3725,0.3840);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NEE','2018-10-23',0.5450,0.5384),
+	 ('NEE','2018-07-25',0.5275,0.5159),
+	 ('NEE','2018-04-24',0.4850,0.4571),
+	 ('NEE','2018-01-26',0.3125,0.3281),
+	 ('NEE','2017-10-26',0.4625,0.4418),
+	 ('NEE','2017-07-26',0.4650,0.4397),
+	 ('NEE','2017-04-21',0.4375,0.3977),
+	 ('NEE','2017-01-27',0.3025,0.3232),
+	 ('NEE','2016-10-31',0.4350,0.4172),
+	 ('NEE','2016-07-27',0.4175,0.3934);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NFLX','2021-04-20',3.7500,2.9885),
+	 ('NFLX','2021-01-19',1.1900,1.4011),
+	 ('NFLX','2020-10-20',1.7400,2.1407),
+	 ('NFLX','2020-07-16',1.5900,1.8304),
+	 ('NFLX','2020-04-21',1.5700,1.6366),
+	 ('NFLX','2020-01-21',1.3000,0.5243),
+	 ('NFLX','2019-10-16',1.4700,1.0465),
+	 ('NFLX','2019-07-17',0.6000,0.5549),
+	 ('NFLX','2019-04-16',0.7600,0.5745),
+	 ('NFLX','2019-01-17',0.3000,0.2354);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NFLX','2018-10-16',0.8900,0.6764),
+	 ('NFLX','2018-07-16',0.8500,0.7925),
+	 ('NFLX','2018-04-16',0.6400,0.6258),
+	 ('NFLX','2018-01-22',0.4100,0.4132),
+	 ('NFLX','2017-10-16',0.2900,0.3213),
+	 ('NFLX','2017-07-17',0.1500,0.1580),
+	 ('NFLX','2017-04-17',0.4000,0.3714),
+	 ('NFLX','2017-01-18',0.1500,0.1340),
+	 ('NFLX','2016-10-17',0.1200,0.0551),
+	 ('NFLX','2016-07-18',0.0900,0.0218);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NKE','2021-06-24',0.9300,0.5090),
+	 ('NKE','2021-03-18',0.9000,0.7520),
+	 ('NKE','2020-12-18',0.7800,0.6226),
+	 ('NKE','2020-09-22',0.9500,0.5009),
+	 ('NKE','2020-06-25',-0.5100,0.0429),
+	 ('NKE','2020-03-24',0.7800,0.5638),
+	 ('NKE','2019-12-19',0.7000,0.5816),
+	 ('NKE','2019-09-24',0.8600,0.7070),
+	 ('NKE','2019-06-27',0.6200,0.6561),
+	 ('NKE','2019-03-21',0.6800,0.6466);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NKE','2018-12-20',0.5200,0.4610),
+	 ('NKE','2018-09-25',0.6700,0.6305),
+	 ('NKE','2018-06-28',0.6900,0.6369),
+	 ('NKE','2018-03-22',0.6800,0.5281),
+	 ('NKE','2017-12-21',0.4600,0.4047),
+	 ('NKE','2017-09-26',0.5700,0.4795),
+	 ('NKE','2017-06-29',0.6000,0.4986),
+	 ('NKE','2017-03-21',0.6800,0.5267),
+	 ('NKE','2016-12-20',0.5000,0.4305),
+	 ('NKE','2016-09-27',0.7300,0.5585);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NVDA','2021-05-26',3.6600,3.2846),
+	 ('NVDA','2021-02-24',3.1000,2.8089),
+	 ('NVDA','2020-11-18',2.9100,2.5482),
+	 ('NVDA','2020-08-19',2.1800,1.9699),
+	 ('NVDA','2020-05-21',1.8000,1.6843),
+	 ('NVDA','2020-02-13',1.8900,1.6745),
+	 ('NVDA','2019-11-14',1.7800,1.5727),
+	 ('NVDA','2019-08-15',1.2400,1.1456),
+	 ('NVDA','2019-05-16',0.8800,0.8098),
+	 ('NVDA','2019-02-14',0.8000,0.7513);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('NVDA','2018-11-15',1.8400,1.9183),
+	 ('NVDA','2018-08-16',1.9400,1.8459),
+	 ('NVDA','2018-05-10',2.0500,1.6601),
+	 ('NVDA','2018-02-08',1.7200,1.3237),
+	 ('NVDA','2017-11-09',1.3300,1.0741),
+	 ('NVDA','2017-08-10',1.0100,0.8156),
+	 ('NVDA','2017-05-09',0.8500,0.8131),
+	 ('NVDA','2017-02-09',1.1300,0.9785),
+	 ('NVDA','2016-11-10',0.9400,0.6823),
+	 ('NVDA','2016-08-11',0.5300,0.4775);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('O','2021-05-03',0.7200,0.7438),
+	 ('O','2021-02-22',0.8300,0.8336),
+	 ('O','2020-11-02',0.8200,0.8414),
+	 ('O','2020-08-03',0.8400,0.8234),
+	 ('O','2020-05-04',0.8200,0.8477),
+	 ('O','2020-02-19',0.8500,0.8366),
+	 ('O','2019-11-04',0.8200,0.8276),
+	 ('O','2019-08-05',0.8100,0.8133),
+	 ('O','2019-05-01',0.8100,0.8028),
+	 ('O','2019-02-20',0.7300,0.7442);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('O','2018-10-31',0.8100,0.7933),
+	 ('O','2018-08-01',0.7900,0.7914),
+	 ('O','2018-05-08',0.7900,0.7811),
+	 ('O','2018-02-21',0.6100,0.6549),
+	 ('O','2017-10-25',0.7700,0.7661),
+	 ('O','2017-07-26',0.7500,0.7626),
+	 ('O','2017-04-25',0.7100,0.7370),
+	 ('O','2017-02-22',0.7700,0.7499),
+	 ('O','2016-10-26',0.7300,0.7275),
+	 ('O','2016-07-27',0.7000,0.7193);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('OHI','2021-05-03',0.8500,0.8158),
+	 ('OHI','2021-02-04',0.8100,0.7985),
+	 ('OHI','2020-10-29',0.8200,0.7868),
+	 ('OHI','2020-08-05',0.8100,0.7567),
+	 ('OHI','2020-05-04',0.7900,0.7761),
+	 ('OHI','2020-02-05',0.7800,0.7666),
+	 ('OHI','2019-11-05',0.7600,0.7600),
+	 ('OHI','2019-08-06',0.7700,0.7600),
+	 ('OHI','2019-05-07',0.7600,0.7329),
+	 ('OHI','2019-02-11',0.7300,0.7583);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('OHI','2018-11-05',0.7700,0.7480),
+	 ('OHI','2018-08-03',0.7600,0.7330),
+	 ('OHI','2018-05-07',0.7800,0.7420),
+	 ('OHI','2018-02-13',0.7900,0.7725),
+	 ('OHI','2017-10-30',0.7900,0.8567),
+	 ('OHI','2017-07-26',0.8700,0.8529),
+	 ('OHI','2017-05-03',0.8600,0.8614),
+	 ('OHI','2017-02-08',0.8800,0.8567),
+	 ('OHI','2016-10-31',0.8300,0.8423),
+	 ('OHI','2016-08-02',0.8700,0.8306);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('ORCL','2021-06-15',1.5400,1.3319),
+	 ('ORCL','2021-03-10',1.1600,1.1096),
+	 ('ORCL','2020-12-10',1.0600,0.9988),
+	 ('ORCL','2020-09-10',0.9300,0.8629),
+	 ('ORCL','2020-06-16',1.2000,1.1521),
+	 ('ORCL','2020-03-12',0.9700,0.9598),
+	 ('ORCL','2019-12-12',0.9000,0.8866),
+	 ('ORCL','2019-09-11',0.8100,0.8081),
+	 ('ORCL','2019-06-19',1.1600,1.0743),
+	 ('ORCL','2019-03-14',0.8700,0.8413);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('ORCL','2018-12-17',0.8000,0.7816),
+	 ('ORCL','2018-09-17',0.7100,0.6843),
+	 ('ORCL','2018-06-19',0.9900,0.9416),
+	 ('ORCL','2018-03-19',0.8300,0.7229),
+	 ('ORCL','2017-12-14',0.7000,0.6818),
+	 ('ORCL','2017-09-14',0.6200,0.6038),
+	 ('ORCL','2017-06-21',0.8900,0.7836),
+	 ('ORCL','2017-03-15',0.6900,0.6174),
+	 ('ORCL','2016-12-15',0.6100,0.5996),
+	 ('ORCL','2016-09-15',0.5500,0.5793);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('PFE','2021-05-04',0.9300,0.7774),
+	 ('PFE','2021-02-02',0.4200,0.4648),
+	 ('PFE','2020-10-27',0.7200,0.7131),
+	 ('PFE','2020-07-28',0.7800,0.6603),
+	 ('PFE','2020-04-28',0.8000,0.7274),
+	 ('PFE','2020-01-28',0.5500,0.5758),
+	 ('PFE','2019-10-29',0.7500,0.6194),
+	 ('PFE','2019-07-29',0.8000,0.7549),
+	 ('PFE','2019-04-30',0.8500,0.7520),
+	 ('PFE','2019-01-29',0.6400,0.6335);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('PFE','2018-10-30',0.7800,0.7459),
+	 ('PFE','2018-07-31',0.8100,0.7439),
+	 ('PFE','2018-05-01',0.7700,0.7432),
+	 ('PFE','2018-01-30',0.6200,0.5612),
+	 ('PFE','2017-10-31',0.6700,0.6462),
+	 ('PFE','2017-08-01',0.6700,0.6588),
+	 ('PFE','2017-05-02',0.6900,0.6714),
+	 ('PFE','2017-01-31',0.4700,0.5059),
+	 ('PFE','2016-11-01',0.6100,0.6199),
+	 ('PFE','2016-08-02',0.6400,0.6225);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('PG','2021-04-20',1.2600,1.1876),
+	 ('PG','2021-01-20',1.6400,1.5074),
+	 ('PG','2020-10-20',1.6300,1.4188),
+	 ('PG','2020-07-30',1.1600,1.0141),
+	 ('PG','2020-04-17',1.1700,1.1300),
+	 ('PG','2020-01-23',1.4200,1.3708),
+	 ('PG','2019-10-22',1.3700,1.2417),
+	 ('PG','2019-07-30',1.1000,1.0513),
+	 ('PG','2019-04-23',1.0600,1.0379),
+	 ('PG','2019-01-23',1.2500,1.2087);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('PG','2018-10-19',1.1200,1.0920),
+	 ('PG','2018-07-31',0.9400,0.8994),
+	 ('PG','2018-04-19',1.0000,0.9835),
+	 ('PG','2018-01-23',1.1900,1.1414),
+	 ('PG','2017-10-20',1.0900,1.0770),
+	 ('PG','2017-07-27',0.8500,0.7825),
+	 ('PG','2017-04-26',0.9600,0.9381),
+	 ('PG','2017-01-20',1.0800,1.0612),
+	 ('PG','2016-10-25',1.0300,0.9771),
+	 ('PG','2016-08-02',0.7900,0.7450);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('QCOM','2021-04-28',1.9000,1.6654),
+	 ('QCOM','2021-02-03',2.1700,2.1014),
+	 ('QCOM','2020-11-04',1.4500,1.1805),
+	 ('QCOM','2020-07-29',0.8600,0.7133),
+	 ('QCOM','2020-04-29',0.8800,0.8025),
+	 ('QCOM','2020-02-05',0.9900,0.8523),
+	 ('QCOM','2019-11-06',0.7800,0.7126),
+	 ('QCOM','2019-07-31',0.8000,0.7660),
+	 ('QCOM','2019-05-01',0.7700,0.7085),
+	 ('QCOM','2019-01-30',1.2000,1.0865);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('QCOM','2018-11-07',0.9000,0.8284),
+	 ('QCOM','2018-07-25',0.7500,0.7081),
+	 ('QCOM','2018-04-25',0.8000,0.6965),
+	 ('QCOM','2018-01-31',0.9800,0.9121),
+	 ('QCOM','2017-11-01',0.9200,0.8122),
+	 ('QCOM','2017-07-19',0.8300,0.8063),
+	 ('QCOM','2017-04-19',1.3400,1.1964),
+	 ('QCOM','2017-01-25',1.1900,1.1831),
+	 ('QCOM','2016-11-02',1.2800,1.1110),
+	 ('QCOM','2016-07-20',1.1600,0.9741);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('SPG','2021-05-10',2.4800,2.2684),
+	 ('SPG','2021-02-08',2.1700,2.2293),
+	 ('SPG','2020-11-09',2.0500,2.2944),
+	 ('SPG','2020-08-10',2.1200,2.2279),
+	 ('SPG','2020-05-11',2.7800,2.8855),
+	 ('SPG','2020-02-04',2.9600,2.9512),
+	 ('SPG','2019-10-30',3.0500,3.0554),
+	 ('SPG','2019-07-31',2.9900,2.9883),
+	 ('SPG','2019-04-30',3.0400,3.0204),
+	 ('SPG','2019-02-01',3.2300,3.2321);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('SPG','2018-10-25',3.0500,3.0076),
+	 ('SPG','2018-07-30',2.9800,2.9008),
+	 ('SPG','2018-04-27',2.8700,2.8329),
+	 ('SPG','2018-01-31',3.1200,3.1169),
+	 ('SPG','2017-10-27',2.8900,2.8747),
+	 ('SPG','2017-08-01',2.4700,2.4387),
+	 ('SPG','2017-04-27',2.7400,2.7697),
+	 ('SPG','2017-01-31',2.5300,2.5122),
+	 ('SPG','2016-10-26',2.7000,2.6778),
+	 ('SPG','2016-07-27',2.6300,2.6205);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('TSLA','2021-04-26',0.9300,0.7787),
+	 ('TSLA','2021-01-27',0.8000,1.0514),
+	 ('TSLA','2020-10-21',0.7600,0.6042),
+	 ('TSLA','2020-07-22',0.4360,-0.0321),
+	 ('TSLA','2020-04-29',0.2281,-0.0415),
+	 ('TSLA','2020-01-29',0.4128,0.3506),
+	 ('TSLA','2019-10-23',0.3720,-0.0463),
+	 ('TSLA','2019-07-24',-0.2240,-0.0794),
+	 ('TSLA','2019-04-24',-0.5800,-0.1873),
+	 ('TSLA','2019-01-30',0.3860,0.4035);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('TSLA','2018-10-24',0.5800,-0.0181),
+	 ('TSLA','2018-08-01',-0.6120,-0.5639),
+	 ('TSLA','2018-05-02',-0.6700,-0.7051),
+	 ('TSLA','2018-02-07',-0.6080,-0.6297),
+	 ('TSLA','2017-11-01',-0.5840,-0.4580),
+	 ('TSLA','2017-08-02',-0.2660,-0.3837),
+	 ('TSLA','2017-05-03',-0.2660,-0.1603),
+	 ('TSLA','2017-02-22',-0.1380,-0.0981),
+	 ('TSLA','2016-10-26',0.1420,0.0045),
+	 ('TSLA','2016-08-03',-0.2120,-0.1246);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('TSM','2021-04-15',0.9600,0.9339),
+	 ('TSM','2021-01-14',0.9700,0.9523),
+	 ('TSM','2020-10-15',0.9000,0.8081),
+	 ('TSM','2020-07-16',0.7800,0.7088),
+	 ('TSM','2020-04-16',0.7529,0.6910),
+	 ('TSM','2020-01-16',0.7466,0.7139),
+	 ('TSM','2019-10-17',0.6200,0.6045),
+	 ('TSM','2019-07-18',0.4100,0.4078),
+	 ('TSM','2019-04-18',0.3800,0.3749),
+	 ('TSM','2019-01-17',0.6300,0.6178);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('TSM','2018-10-18',0.5600,0.5521),
+	 ('TSM','2018-07-19',0.4700,0.4640),
+	 ('TSM','2018-04-19',0.5900,0.6029),
+	 ('TSM','2018-01-18',0.6400,0.6258),
+	 ('TSM','2017-10-19',0.5700,0.5617),
+	 ('TSM','2017-07-13',0.4207,0.4254),
+	 ('TSM','2017-04-13',0.5571,0.5320),
+	 ('TSM','2017-01-12',0.6100,0.5850),
+	 ('TSM','2016-10-13',0.5900,0.5750),
+	 ('TSM','2016-07-14',0.4300,0.4070);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('TXN','2021-04-27',1.9203,1.6076),
+	 ('TXN','2021-01-26',1.8553,1.3443),
+	 ('TXN','2020-10-20',1.5032,1.2913),
+	 ('TXN','2020-07-21',1.5685,0.9165),
+	 ('TXN','2020-04-21',1.2958,1.0153),
+	 ('TXN','2020-01-22',1.1725,1.0390),
+	 ('TXN','2019-10-22',1.4750,1.4380),
+	 ('TXN','2019-07-23',1.3298,1.2632),
+	 ('TXN','2019-04-23',1.2900,1.1675),
+	 ('TXN','2019-01-23',1.3290,1.2727);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('TXN','2018-10-23',1.6546,1.5772),
+	 ('TXN','2018-07-24',1.4467,1.3486),
+	 ('TXN','2018-04-24',1.2901,1.1539),
+	 ('TXN','2018-01-23',1.1079,1.1206),
+	 ('TXN','2017-10-24',1.3127,1.1670),
+	 ('TXN','2017-07-25',1.0978,0.9950),
+	 ('TXN','2017-04-25',0.9635,0.8484),
+	 ('TXN','2017-01-24',0.9297,0.8577),
+	 ('TXN','2016-10-26',1.0100,0.9122),
+	 ('TXN','2016-07-25',0.8231,0.7744);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('UNH','2021-04-15',5.3100,4.3812),
+	 ('UNH','2021-01-20',2.5200,2.4107),
+	 ('UNH','2020-10-14',3.5100,3.0837),
+	 ('UNH','2020-07-15',7.1200,5.2354),
+	 ('UNH','2020-04-15',3.7200,3.6514),
+	 ('UNH','2020-01-15',3.9000,3.7775),
+	 ('UNH','2019-10-15',3.8800,3.7620),
+	 ('UNH','2019-07-18',3.6000,3.4626),
+	 ('UNH','2019-04-16',3.7300,3.6028),
+	 ('UNH','2019-01-15',3.2800,3.2165);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('UNH','2018-10-16',3.4100,3.2957),
+	 ('UNH','2018-07-17',3.1400,3.0401),
+	 ('UNH','2018-04-17',3.0400,2.9080),
+	 ('UNH','2018-01-16',2.5900,2.5156),
+	 ('UNH','2017-10-17',2.6600,2.5672),
+	 ('UNH','2017-07-18',2.4600,2.3786),
+	 ('UNH','2017-04-18',2.3700,2.1718),
+	 ('UNH','2017-01-17',2.1100,2.0721),
+	 ('UNH','2016-10-18',2.1700,2.0798),
+	 ('UNH','2016-07-19',1.9600,1.8892);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('UPS','2021-04-27',2.7700,1.7199),
+	 ('UPS','2021-02-02',2.6600,2.1469),
+	 ('UPS','2020-10-28',2.2800,1.8996),
+	 ('UPS','2020-07-30',2.1300,1.0780),
+	 ('UPS','2020-04-28',1.1500,1.2315),
+	 ('UPS','2020-01-30',2.1100,2.1082),
+	 ('UPS','2019-10-22',2.0700,2.0577),
+	 ('UPS','2019-07-24',1.9600,1.9298),
+	 ('UPS','2019-04-25',1.3900,1.4288),
+	 ('UPS','2019-01-31',1.9400,1.9062);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('UPS','2018-10-24',1.8200,1.8176),
+	 ('UPS','2018-07-25',1.9400,1.9275),
+	 ('UPS','2018-04-26',1.5500,1.5437),
+	 ('UPS','2018-02-01',1.6700,1.6630),
+	 ('UPS','2017-10-26',1.4500,1.4480),
+	 ('UPS','2017-07-27',1.5800,1.4654),
+	 ('UPS','2017-04-27',1.3200,1.2881),
+	 ('UPS','2017-01-31',1.6300,1.6899),
+	 ('UPS','2016-10-27',1.4400,1.4394),
+	 ('UPS','2016-07-29',1.4300,1.4266);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('V','2021-04-27',1.3800,1.2703),
+	 ('V','2021-01-28',1.4200,1.2762),
+	 ('V','2020-10-28',1.1200,1.0987),
+	 ('V','2020-07-28',1.0600,1.0361),
+	 ('V','2020-04-30',1.3900,1.3534),
+	 ('V','2020-01-30',1.4600,1.4653),
+	 ('V','2019-10-24',1.4700,1.4301),
+	 ('V','2019-07-23',1.3700,1.3239),
+	 ('V','2019-04-24',1.3100,1.2389),
+	 ('V','2019-01-30',1.3000,1.2506);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('V','2018-10-24',1.2100,1.1986),
+	 ('V','2018-07-25',1.2000,1.0924),
+	 ('V','2018-04-25',1.1100,1.0150),
+	 ('V','2018-02-01',1.0800,0.9807),
+	 ('V','2017-10-25',0.9000,0.8489),
+	 ('V','2017-07-20',0.8600,0.8082),
+	 ('V','2017-04-20',0.8600,0.7907),
+	 ('V','2017-02-02',0.8600,0.7820),
+	 ('V','2016-10-24',0.7800,0.7282),
+	 ('V','2016-07-21',0.6900,0.6700);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('VZ','2021-04-21',1.3100,1.2891),
+	 ('VZ','2021-01-26',1.2100,1.1714),
+	 ('VZ','2020-10-21',1.2500,1.2147),
+	 ('VZ','2020-07-24',1.1800,1.1478),
+	 ('VZ','2020-04-24',1.2600,1.2235),
+	 ('VZ','2020-01-30',1.1300,1.1451),
+	 ('VZ','2019-10-25',1.2500,1.2359),
+	 ('VZ','2019-08-01',1.2300,1.1987),
+	 ('VZ','2019-04-23',1.2000,1.1638),
+	 ('VZ','2019-01-29',1.1200,1.0854);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('VZ','2018-10-23',1.2200,1.1858),
+	 ('VZ','2018-07-24',1.2000,1.1458),
+	 ('VZ','2018-04-24',1.1700,1.1134),
+	 ('VZ','2018-01-23',0.8600,0.8787),
+	 ('VZ','2017-10-19',0.9800,0.9736),
+	 ('VZ','2017-07-27',0.9600,0.9572),
+	 ('VZ','2017-04-20',0.9500,0.9615),
+	 ('VZ','2017-01-24',0.8600,0.8939),
+	 ('VZ','2016-10-20',1.0100,0.9897),
+	 ('VZ','2016-07-26',0.9400,0.9313);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('WMT','2021-05-18',1.6900,1.2067),
+	 ('WMT','2021-02-18',1.3900,1.5108),
+	 ('WMT','2020-11-17',1.3400,1.1880),
+	 ('WMT','2020-08-18',1.5600,1.2570),
+	 ('WMT','2020-05-19',1.1800,1.0877),
+	 ('WMT','2020-02-18',1.3800,1.4351),
+	 ('WMT','2019-11-14',1.1600,1.0906),
+	 ('WMT','2019-08-15',1.2700,1.2176),
+	 ('WMT','2019-05-16',1.1300,1.0197),
+	 ('WMT','2019-02-19',1.4100,1.3343);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('WMT','2018-11-15',1.0800,1.0152),
+	 ('WMT','2018-08-16',1.2900,1.2170),
+	 ('WMT','2018-05-17',1.1400,1.1230),
+	 ('WMT','2018-02-20',1.3300,1.3705),
+	 ('WMT','2017-11-16',1.0000,0.9727),
+	 ('WMT','2017-08-17',1.0800,1.0669),
+	 ('WMT','2017-05-18',1.0000,0.9631),
+	 ('WMT','2017-02-21',1.3000,1.2876),
+	 ('WMT','2016-11-17',0.9800,0.9589),
+	 ('WMT','2016-08-18',1.0700,1.0265);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('XOM','2021-04-30',0.6500,0.6009),
+	 ('XOM','2021-02-02',0.0300,0.0200),
+	 ('XOM','2020-10-30',-0.1800,-0.2493),
+	 ('XOM','2020-07-31',-0.7000,-0.5980),
+	 ('XOM','2020-05-01',0.5300,0.0487),
+	 ('XOM','2020-01-31',0.4100,0.4534),
+	 ('XOM','2019-11-01',0.6800,0.6630),
+	 ('XOM','2019-08-02',0.6100,0.7060),
+	 ('XOM','2019-04-26',0.5500,0.7286),
+	 ('XOM','2019-02-01',1.5009,1.0929);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('XOM','2018-11-02',1.4600,1.2226),
+	 ('XOM','2018-07-27',0.9200,1.2739),
+	 ('XOM','2018-04-27',1.0900,1.1041),
+	 ('XOM','2018-02-02',0.8800,1.0286),
+	 ('XOM','2017-10-27',0.9300,0.8659),
+	 ('XOM','2017-07-28',0.7800,0.8521),
+	 ('XOM','2017-04-28',0.9500,0.8667),
+	 ('XOM','2017-01-31',0.8880,0.7030),
+	 ('XOM','2016-10-28',0.6300,0.5964),
+	 ('XOM','2016-07-29',0.4100,0.6357);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('UBER','2021-05-05',0.4547,-0.3470),
+	 ('UBER','2021-02-10',-0.4043,-0.4200),
+	 ('UBER','2020-11-05',-0.4329,-0.4955),
+	 ('UBER','2020-08-06',-0.6521,-0.7240),
+	 ('UBER','2020-05-07',-1.3994,-0.7049),
+	 ('UBER','2020-02-06',-0.4917,-0.5202),
+	 ('UBER','2019-11-04',-0.4370,-0.5420),
+	 ('UBER','2019-08-08',-0.4800,-0.9235),
+	 ('UBER','2019-05-30',-2.1890,-2.2875),
+	 ('COST','2021-05-27',2.7500,2.2782);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('COST','2021-03-04',2.1400,2.4324),
+	 ('COST','2020-12-10',2.2900,2.0388),
+	 ('COST','2020-09-24',3.0400,2.8623),
+	 ('COST','2020-05-28',2.3600,1.8745),
+	 ('COST','2020-03-05',2.1000,2.0642),
+	 ('COST','2019-12-12',1.7300,1.7160),
+	 ('COST','2019-05-30',1.8900,1.8311),
+	 ('COST','2019-03-07',2.0100,1.6885),
+	 ('COST','2018-12-13',1.6100,1.6216),
+	 ('COST','2018-05-31',1.7000,1.6768);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('COST','2018-03-07',1.4200,1.4333),
+	 ('COST','2017-12-14',1.3600,1.3477),
+	 ('COST','2017-05-25',1.4000,1.3103),
+	 ('COST','2017-03-02',1.1700,1.3581),
+	 ('COST','2016-12-07',1.1700,1.1927),
+	 ('COST','2016-09-29',1.7700,1.7272),
+	 ('COST','2016-05-26',1.2400,1.2208),
+	 ('COST','2016-03-03',1.2400,1.2808),
+	 ('COST','2015-12-08',1.0900,1.1700),
+	 ('FB','2021-04-28',3.3000,2.3417);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('FB','2021-01-27',3.8800,3.2358),
+	 ('FB','2020-10-29',2.4000,1.9113),
+	 ('FB','2020-07-30',1.8000,1.3719),
+	 ('FB','2020-04-29',1.7100,1.7036),
+	 ('FB','2020-01-29',2.5600,2.5688),
+	 ('FB','2019-10-30',2.1200,1.8785),
+	 ('FB','2019-07-24',1.9900,1.8750),
+	 ('FB','2019-04-24',1.8900,1.5988),
+	 ('FB','2019-01-30',2.3800,2.1766),
+	 ('FB','2018-10-30',1.7600,1.4444);
+INSERT INTO easystock.earning (symbol,reportedDate,reportedEPS,estimatedEPS) VALUES
+	 ('FB','2018-07-25',1.7400,1.6965),
+	 ('FB','2018-04-25',1.6900,1.3448),
+	 ('FB','2018-01-31',2.2100,1.9680),
+	 ('FB','2017-11-01',1.5900,1.2800),
+	 ('FB','2017-07-26',1.3200,1.1238),
+	 ('FB','2017-05-03',1.3589,1.1199),
+	 ('FB','2017-02-01',1.4100,1.3128),
+	 ('FB','2016-11-02',1.0900,0.9664),
+	 ('FB','2016-07-27',0.9700,0.8173);
+
+
+-- account
+	
+INSERT INTO easystock.account (email,symbol,avg_h_price,h_qty,cur_price) VALUES
+	 ('rawdata@rawdata.com','AAPL',10.00,1,145.40),
+	 ('rawdata@rawdata.com','MSFT',10.00,1,281.40),
+	 ('rawdata@rawdata.com','AMZN',10.00,1,3585.20),
+	 ('rawdata@rawdata.com','GOOG',10.00,1,2652.01),
+	 ('rawdata@rawdata.com','FB',10.00,1,346.23),
+	 ('rawdata@rawdata.com','TSLA',10.00,1,655.29),
+	 ('rawdata@rawdata.com','TSM',10.00,1,117.87),
+	 ('rawdata@rawdata.com','BABA',10.00,1,211.08),
+	 ('rawdata@rawdata.com','V',10.00,1,243.66),
+	 ('rawdata@rawdata.com','JPM',10.00,1,152.86);
+INSERT INTO easystock.account (email,symbol,avg_h_price,h_qty,cur_price) VALUES
+	 ('rawdata@rawdata.com','JNJ',10.00,1,169.49),
+	 ('rawdata@rawdata.com','WMT',10.00,1,141.17),
+	 ('rawdata@rawdata.com','UNH',10.00,1,414.64),
+	 ('rawdata@rawdata.com','MA',10.00,1,380.06),
+	 ('rawdata@rawdata.com','BAC',10.00,1,38.46),
+	 ('rawdata@rawdata.com','HD',10.00,1,326.36),
+	 ('rawdata@rawdata.com','PG',10.00,1,139.20),
+	 ('rawdata@rawdata.com','DIS',10.00,1,176.89),
+	 ('rawdata@rawdata.com','XOM',10.00,1,57.76),
+	 ('rawdata@rawdata.com','NKE',10.00,1,161.08);
+INSERT INTO easystock.account (email,symbol,avg_h_price,h_qty,cur_price) VALUES
+	 ('rawdata@rawdata.com','NFLX',10.00,1,513.63),
+	 ('rawdata@rawdata.com','VZ',10.00,1,55.95),
+	 ('rawdata@rawdata.com','KO',10.00,1,56.55),
+	 ('rawdata@rawdata.com','INTC',10.00,1,56.23),
+	 ('rawdata@rawdata.com','ORCL',10.00,1,89.69),
+	 ('rawdata@rawdata.com','PFE',10.00,1,41.02),
+	 ('rawdata@rawdata.com','CVX',10.00,1,99.82),
+	 ('rawdata@rawdata.com','UPS',10.00,1,212.45),
+	 ('rawdata@rawdata.com','COST',10.00,1,415.01),
+	 ('rawdata@rawdata.com','TXN',10.00,1,194.24);
+INSERT INTO easystock.account (email,symbol,avg_h_price,h_qty,cur_price) VALUES
+	 ('rawdata@rawdata.com','MCD',10.00,1,235.93),
+	 ('rawdata@rawdata.com','QCOM',10.00,1,142.17),
+	 ('rawdata@rawdata.com','HON',10.00,1,231.85),
+	 ('rawdata@rawdata.com','BMY',10.00,1,67.16),
+	 ('rawdata@rawdata.com','NEE',10.00,1,75.88),
+	 ('rawdata@rawdata.com','BA',10.00,1,222.54),
+	 ('rawdata@rawdata.com','UBER',10.00,1,47.52),
+	 ('rawdata@rawdata.com','FDX',10.00,1,298.35),
+	 ('rawdata@rawdata.com','ATVI',10.00,1,91.17),
+	 ('rawdata@rawdata.com','F',10.00,1,14.19);
+INSERT INTO easystock.account (email,symbol,avg_h_price,h_qty,cur_price) VALUES
+	 ('rawdata@rawdata.com','SPG',10.00,1,127.93),
+	 ('rawdata@rawdata.com','LUV',10.00,1,53.13),
+	 ('rawdata@rawdata.com','O',10.00,1,70.18),
+	 ('rawdata@rawdata.com','OHI',10.00,1,37.44),
+	 ('rawdata@rawdata.com','NVDA',10.00,1,194.10);
 
 
