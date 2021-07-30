@@ -5,7 +5,8 @@
 #### -OS : Windows10 64bit / Language : Java 1.8, JavaScript ES5 / Framework : SpringMVC / Tools : Eclipse / DB: MySQL 5.7.34 / WAS : Tomcat 8.5 / Library : Bootstrap 4.5, Jquery 3.6, Chartjs 2.4 & 3.4.1, GU, Junit 4.13, quartz 2.3.2, Logback 1.2.3, Mybatis 3.5.3 / API : Alpha Vintage, TradingView...
 #### -Alpha Vintage 업로드 코드 상 무료 API 적용(개별 종목 daily & monthly 차트 분당 5회만 요청 가능)
 
-![sc1](https://user-images.githubusercontent.com/62887609/127588059-8ac9e7ed-bbc5-4f55-8ff7-95b222cf3d5e.png)
+
 ![sc2](https://user-images.githubusercontent.com/62887609/127588062-f81e8daf-d5fd-4f1e-9e16-1621c81b4d45.png)
 ![sc3](https://user-images.githubusercontent.com/62887609/127588063-b51ed417-83ff-4e5d-9bad-23c922983295.png)
+![sc1](https://user-images.githubusercontent.com/62887609/127588059-8ac9e7ed-bbc5-4f55-8ff7-95b222cf3d5e.png)
 ![sc4](https://user-images.githubusercontent.com/62887609/127588064-1db9d81b-5c08-49b3-b102-70b79c22ec7e.png)
