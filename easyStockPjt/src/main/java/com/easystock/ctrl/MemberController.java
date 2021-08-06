@@ -55,6 +55,8 @@ public class MemberController {
 	@PostMapping("/join")
 	public String join(MemberVO mvo, Model model) {
 		
+		System.out.println("test");
+		
 		// 암호화 처리 후 DB 저장
 		BCryptPasswordEncoder pwEnc = new BCryptPasswordEncoder();
 		String encPwd = pwEnc.encode(mvo.getPwd());
