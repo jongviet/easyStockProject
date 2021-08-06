@@ -1,4 +1,4 @@
-const alpha = alphavantage({ key: '72FY7BZXTG91TJBV' });
+const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
     
 $("#inputBtn").on("click", function() {
 	$(function() {

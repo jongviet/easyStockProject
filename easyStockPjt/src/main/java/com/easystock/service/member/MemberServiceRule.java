@@ -36,5 +36,6 @@ public interface MemberServiceRule {
 	public int newBuy(AccountVO avo);
 	public int additionalBuy(AccountVO new_avo);
 	public int sell(AccountVO avo);
+	public String getEncPwd(MemberVO mvo);
 	
 }

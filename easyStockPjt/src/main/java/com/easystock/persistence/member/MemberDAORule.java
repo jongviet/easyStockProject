@@ -50,4 +50,5 @@ public interface MemberDAORule {
 	public int delTester_comment();
 	public int delTester_report();
 	public int delTester_watch();
+	public String getEncPwd(MemberVO mvo);
 }

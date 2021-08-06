@@ -32,6 +32,11 @@ public class MemberDAO implements MemberDAORule {
 	public int selectEmail(String email) {
 		return sql.selectOne(NS+"e_chk", email);
 	}
+	
+	@Override
+	public String getEncPwd(MemberVO mvo) {
+		return sql.selectOne(NS+"getEncPwd", mvo);
+	}
 
 	@Override
 	public MemberVO selectOne(MemberVO mvo) {

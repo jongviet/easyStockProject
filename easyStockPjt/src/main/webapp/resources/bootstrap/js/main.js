@@ -1,4 +1,4 @@
-const alpha = alphavantage({ key: '72FY7BZXTG91TJBV' });
+const alpha = alphavantage({ key: 'EKPQ647LZ3NMCEIZ' });
 
 $(document).ready(function() {
 	var ctx = document.getElementById("myChartTwo");

@@ -35,6 +35,11 @@ public class MemberService implements MemberServiceRule {
 	public MemberVO login(MemberVO mvo) {
 		return mdao.selectOne(mvo);
 	}
+	
+	@Override
+	public String getEncPwd(MemberVO mvo) {
+		return mdao.getEncPwd(mvo);
+	}
 
 	@Transactional
 	@Override
@@ -166,6 +171,7 @@ public class MemberService implements MemberServiceRule {
 			return mdao.updateAccount_sell(avo);
 		}
 	}
+
 
 
 }

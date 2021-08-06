@@ -8,6 +8,10 @@
 		select * from member where email = #{email} and pwd = #{pwd}
 	</select>
 	
+	<select id="getEncPwd" parameterType="mvo" resultType="String">
+		select pwd from member where email = #{email}
+	</select>
+	
 	<select id="e_chk" parameterType="String" resultType="int">
 		select count(email) from member where email = #{email}
 	</select>

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +54,13 @@ public class MemberController {
 
 	@PostMapping("/join")
 	public String join(MemberVO mvo, Model model) {
+		
+		// 암호화 처리 후 DB 저장
+		BCryptPasswordEncoder pwEnc = new BCryptPasswordEncoder();
+		String encPwd = pwEnc.encode(mvo.getPwd());
+		mvo.setPwd(encPwd);
+		
+		
 		int result = msv.join(mvo);
 		if (result > 0) {
 			model.addAttribute("msg", "회원가입 완료");
@@ -63,29 +71,36 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public String login(MemberVO mvo, HttpSession ses, Model model) {
-		MemberVO member = msv.login(mvo);
 
-		if (member != null) {
+		// 암호화 처리된 pw와 비교
+		BCryptPasswordEncoder pwEnc = new BCryptPasswordEncoder();
+		String curEncPwd = msv.getEncPwd(mvo);
 
-			ses.setAttribute("ses", member.getEmail());
-			String[] array = member.getEmail().split("@");
-			String ses_id = array[0];
-			ses.setAttribute("ses_id", ses_id);
-			ses.setMaxInactiveInterval(15 * 60);
+		if (pwEnc.matches(mvo.getPwd(), curEncPwd)) {
+			MemberVO member = mvo;
 
-			model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
-			model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
+			if (member != null) {
 
-			if (msv.hasWatchList(mvo.getEmail()) > 0) {
-				model.addAttribute("w_list", msv.chk_w_list(mvo.getEmail()));
+				// 1.세션 처리
+				ses.setAttribute("ses", member.getEmail());
+				String[] array = member.getEmail().split("@");
+				String ses_id = array[0];
+				ses.setAttribute("ses_id", ses_id);
+				ses.setMaxInactiveInterval(15 * 60);
+
+				// 2.예수금, 보유종목, 관심종목 현황
+				model.addAttribute("deposit", msv.chkDeposit(mvo.getEmail()));
+				model.addAttribute("h_list", msv.chk_h_list(mvo.getEmail()));
+
+				if (msv.hasWatchList(mvo.getEmail()) > 0) {
+					model.addAttribute("w_list", msv.chk_w_list(mvo.getEmail()));
+				}
+				return "main";
 			}
-			return "main";
-
-		} else {
-			model.addAttribute("msg", "아이디나 비밀번호가 올바르지 않습니다.");
-			model.addAttribute("url", "/");
-			return "detour";
-		}
+		} 
+		model.addAttribute("msg", "아이디나 비밀번호가 올바르지 않습니다.");
+		model.addAttribute("url", "/");
+		return "detour";
 	}
 
 	@GetMapping("/logout")
